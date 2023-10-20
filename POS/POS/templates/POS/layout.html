@@ -1,0 +1,593 @@
+
+{% load static tailwind_tags %}
+<html x-data="data()" lang="en">
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</head>
+<body class="w-full ">
+    <div class="flex h-screen bg-gray-50 w-full"  :class="{ 'overflow-hidden': isSideMenuOpen }">
+        
+        <!-- Desktop sidebar -->
+        <aside class="  z-50 flex-shrink-0 hidden lg:w-[20%] md:w-[30%] overflow-x-hidden pl-2 overflow-y-auto bg-gray-800 md:flex">
+            <div class="w-full">
+                <div class="text-white w-full">
+                    <div class="flex p-2  w-full">
+                        <div class="flex py-3 px-2 items-center">
+                             <p class="ml-2 font-semibold uppercase ">
+                            {{pharmacy_name}}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="">
+                            <img class=" h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-indigo-600"
+                                src="{% static 'img/profile/profile.jpg'%}" alt="">
+
+                        </div>
+                       
+                    </div>
+                    <p class="w-full justify-center items-center flex"> Administrator
+                    
+                  
+                     
+                    </p>
+                    <div>
+                        <ul class="mt-6 leading-10">
+                            <li class="relative px-2 py-1 ">
+                                <div class="mt-6 flex flex-col justify-start items-center  pl-4 w-full border-gray-600 border-b  pb-2 ">
+                                    <a href="{% url 'tenant:dashboard'%}" class="flex jusitfy-start items-center space-x-4 w-full  focus:outline-none    text-white rounded  cursor-pointer">
+                                        <i class="mdi mdi-home text-gray-400 text-lg"></i>
+                                      <p class="text-sm leading-4 ">Dashboard</p>
+                                    </a>
+                                 
+                                  </div>
+                            </li>
+                            <li class="relative px-2 py-1 flex" >
+                               
+                                <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                  
+                                    <button onclick="showMenu1(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                        <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                        <i class="mdi mdi-package text-gray-400 text-lg "></i>
+                                      <p class="text-sm leading-5   " id="menu1button">Product</p>
+                                    </div>
+                                      <svg id="icon1" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                      </svg>
+                                      
+                                    </button>
+                                    <div id="menu1" class=" justify-start  flex-row flex    w-full md:w-auto items-start pb-1 hidden  pl-10  ">
+                                        <div class="h-full w-[1px]  bg-white"></div>
+                                        <div>
+                                            <button class=" hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                                <a class="flex justify-start items-center space-x-6 " href="{% url 'product:categorypage' %}">
+                                               
+                                                <i class="mdi  mdi-plus-box text-gray-400 text-lg  "></i>
+                                                <p class="text-sm leading-4   ">Add Category</p>
+                                            </a>
+                                              </button>
+                                             
+                                              <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                                <i class="mdi  mdi-view-module-outline text-gray-400 text-lg "></i>
+                                                <p class="text-sm leading-4  ">Product Category</p>
+                                              </button>
+                                              <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                                <a class="flex justify-start items-center space-x-6 " href="{% url 'product:unitpage' %}">
+                                                 <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                                 <p class="text-sm leading-4   ">Item Unit</p>
+                                             </a>
+                                               </button>  
+                                              
+                                              
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                       <a class="flex justify-start items-center space-x-6 " href="">
+                                        <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Add Product</p>
+                                    </a>
+                                      </button>
+
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                        <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4  ">Product list</p>
+                                      </button>
+                                    
+                                    
+                    
+                                    </div>
+                                </div>
+                                  </div>
+                            </li>
+                            <li class="relative px-2 py-1 flex" >
+                               
+                                <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                  
+                                    <button onclick="showMenu2(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                        <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                        <i class="mdi mdi-stocking text-gray-400 text-lg "></i>
+                                      <Product class="text-sm leading-5  " id="menu2button">Inventory</p>
+                                    </div>
+                                      <svg id="icon2" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                      </svg>
+                                      
+                                    </button>
+                                    <div id="menu2" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
+                                        <div class="h-full w-[1px]  bg-white"></div>
+                                        <div>
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                       
+                                        <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Add Inventory</p>
+                                      </button>
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                        <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4  ">Inventory history</p>
+                                      </button>
+                                     
+                                
+                                    </div>
+                                </div>
+                                  </div>
+                            </li>
+
+                            <li class="relative px-2 py-1 flex" >
+                               
+                              <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                
+                                  <button onclick="showMenu3(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                      <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                      <i class="mdi mdi-point-of-sale text-gray-400 text-lg "></i>
+                                    <Product class="text-sm leading-5  " id="menu3button">sales</p>
+                                  </div>
+                                    <svg id="icon3" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    
+                                  </button>
+                                  <div id="menu3" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
+                                      <div class="h-full w-[1px]  bg-white"></div>
+                                      <div>
+                                    <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                     
+                                      <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                      <p class="text-sm leading-4   ">add sale</p>
+                                    </button>
+                                    <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                      <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                      <p class="text-sm leading-4  ">sale history</p>
+                                    </button>
+                                   
+                              
+                                  </div>
+                              </div>
+                                </div>
+                          </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile sidebar -->
+        <!-- Backdrop -->
+
+
+        <aside
+            class="fixed inset-y-0 z-50 h-screen flex-shrink-0 w-64  overflow-y-auto rounded-r-xl  bg-gray-900 dark:bg-gray-800 md:hidden"
+            x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
+            @keydown.escape="closeSideMenu">
+            <div>
+                <div class="w-full h-screen ">
+                    <div class="text-white w-full">
+                        <div class="flex p-2  w-full">
+                            <div class="flex py-3 px-2 items-center">
+                                 <p class="ml-2 font-semibold uppercase ">
+                                {{pharmacy_name}}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="">
+                                <img class=" h-20 w-20 rounded-full sm:block object-cover mr-2 border-4 border-indigo-600" src="{% static 'img/profile/profile.jpg'%}" alt=""/>
+    
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mt-3 leading-10">
+                                <ul>
+                                <li class="relative px-2 py-1 ">
+                                    <div class="mt-6 flex flex-col justify-start items-center  pl-4 w-full border-gray-600 border-b  pb-2 ">
+                                        <a class="flex jusitfy-start items-center space-x-4 w-full  focus:outline-none    text-white rounded  cursor-pointer">
+                                            <i class="mdi mdi-home text-gray-400 text-lg"></i>
+                                          <p class="text-sm leading-4 ">Dashboard</p>
+                                        </a>
+                                     
+                                      </div>
+                                </li>
+                                <li class="relative px-2 py-1 flex" >
+                                   
+                                    <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                      
+                                        <button onclick="showMenu1mobile(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  " >
+                                            <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                            <i class="mdi mdi-package text-gray-400 text-lg "></i>
+                                          <p class="text-sm leading-5  " id="menu1buttonmobile">Product</p>
+                                        </div>
+                                          <svg id="icon1mobile" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                          </svg>
+                                          
+                                        </button>
+
+
+                                        <div id="menu1mobile" class=" justify-start  hidden flex-row flex  w-full md:w-auto items-start pb-1  pl-10  ">
+                                            <div class="h-full w-[1px]  bg-white"></div>
+                                            <div>
+                                              <button class=" hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                              <a class="flex justify-start items-center space-x-6  w-full" >
+                                               
+                                                <i class="mdi  mdi-plus-box text-gray-400 text-lg  "></i>
+                                                <p class="text-sm leading-4   ">Add Category</p>
+                                           
+                                              </a>
+                                              
+                                            </button>
+                                              <button class="flex justify-start items-center
+                                              space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                                <i class="mdi  mdi-view-module-outline text-gray-400 text-lg "></i>
+                                                <p class="text-sm leading-4  ">Product Category</p>
+                                              </button>
+                                              <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                                <a class="flex justify-start items-center space-x-6 " href="">
+                                                 <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                                 <p class="text-sm leading-4   ">Item Unit</p>
+                                             </a>
+                                               </button>  
+                                              
+                                              
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                       <a class="flex justify-start items-center space-x-6 " href="">
+                                        <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Add Product</p>
+                                    </a>
+                                      </button>
+
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                        <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4  ">Product list</p>
+                                      </button>
+                                        
+                                    
+                                        </div>
+                                    </div>
+                                      </div>
+                                </li>
+                                <li class="relative px-2 py-1 flex" >
+                                   
+                                    <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                        
+                                      
+                                        <button onclick="showMenu2(true)" class="focus:outline-none  focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                            <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                            <i class="mdi mdi-package text-gray-400 text-lg "></i>
+                                          <p class="text-sm leading-5  ">Stock</p>
+                                        </div>
+                                          <svg id="icon2" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                          </svg>
+                                          
+                                        </button>
+                                        <div id="menu2" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
+                                            <div class="h-full w-[1px]  bg-white"></div>
+                                            <div>
+                                          <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                           
+                                            <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                            <p class="text-sm leading-4   ">Add Product</p>
+                                          </button>
+                                          <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                            <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                            <p class="text-sm leading-4  ">Product list</p>
+                                          </button>
+                                          <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                            <i class="mdi  mdi-view-module-outline text-gray-400 text-lg "></i>
+                                            <p class="text-sm leading-4  ">Product Category</p>
+                                          </button>
+                                          
+                                        
+                                    
+                                        </div>
+                                    </div>
+                                      </div>
+                                </li>
+                               
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex flex-col flex-1   overflow-y-auto   ">
+            <header class="z-20 py-4   bg-gray-50 fixed  md:w-[70%] max-md:w-full  lg:w-[80%] ">
+                <div class="flex items-center justify-between max-vs:h-14  h-8 px-6 mx-auto">
+                    <!-- Mobile hamburger -->
+                    <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+                        @click="toggleSideMenu" aria-label="Menu">
+                       
+                        <x-heroicon-o-menu class="w-6 h-6 text-white" />
+                        <i class="mdi  mdi-menu text-gray-400 text-xl  "></i>
+                    </button>
+<div class="w-full max-vs:flex-col flex flex-row justify-center items-center max-vs:py-3">
+                    <!-- Search Input -->
+                    <div class="flex justify-center  items-center mt-2 mr-4 max-vs:mr-0   max-vs:mt-5 ">
+                        <div class="relative flex w-full  flex-wrap items-stretch mb-3 ">
+                            <input type="search" placeholder="Search"  class="form-input w-full px-3 py-2  placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline  pr-10" />
+                            <span
+                                class="z-10 h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 -mt-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+<div class="flex  justify-center items-center  flex-col lg:flex-row mx-2 w-full">
+                    <h3 class="text-lg max-vs:text-sm font-semibold text-center text-gray-900  ">Welcome back!</h3>
+                    <p class="mt-[1px]  mx-[1px]"> {{user.first_name}}</p>
+
+                </div>
+            </div>
+                    <ul class="flex items-center flex-shrink-0 space-x-6 max-vs:space-x-2">
+
+                        <!-- Notifications menu -->
+                        <li class="relative">
+                            <button
+                                class="p-2 max-vs:p-1 align-middle rounded-full px-3 max-vs:px-2 hover:text-white bg-indigo-700 focus:outline-none "
+                                @click="toggleNotificationsMenu" @keydown.escape="closeNotificationsMenu"
+                                aria-label="Notifications" aria-haspopup="true">
+                                <div class="flex items-cemter">
+                                    
+                                    <i class="mdi mdi-bell text-gray-50 text-xl max-vs:text-base"></i>
+                                </div>
+                                <!-- Notification badge -->
+                                <span aria-hidden="true"
+                                    class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-0 -translate-y-0 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"></span>
+                            </button>
+                            <template x-if="isNotificationsMenuOpen">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @click.away="closeNotificationsMenu" @keydown.escape="closeNotificationsMenu"
+                                    class="absolute right-0  w-72   max-vs:-mr-20  py-2  px-1 mt-2 space-y-2 text-gray-600 bg-gray-600 border border-indigo-200 rounded-md shadow-md">
+                                    <li class="flex  border-b border-gray-200 py-1 mb-1">
+                                        <a class="text-white inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-200 hover:text-gray-800"
+                                            href="#">
+                                            <span>Out of stock</span>
+                                            <span
+                                                class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-200 rounded-full dark:text-red-100 dark:bg-red-600">
+                                                1
+                                            </span>
+                                        </a>
+                                    </li>
+
+
+                                       <li class="flex  border-b border-gray-200 py-1 mb-1">
+                                        <a class="text-white inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-200 hover:text-gray-800"
+                                            href="#">
+                                            <span>About to expire</span>
+                                            <span
+                                                class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-200 rounded-full dark:text-red-100 dark:bg-red-600">
+                                                3
+                                            </span>
+                                        </a>
+                                    </li>
+
+
+                                       <li class="flex  border-b border-gray-200 py-1 mb-1">
+                                        <a class="text-white inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-200 hover:text-gray-800"
+                                            href="#">
+                                            <span>Messages</span>
+                                            <span
+                                                class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-200 rounded-full dark:text-red-100 dark:bg-red-600">
+                                                5
+                                            </span>
+                                        </a>
+                                    </li>
+
+
+                                  
+
+
+
+                                    
+                                </ul>
+                            </template>
+                        </li>
+
+                        <!-- Profile menu -->
+                        <li class="relative">
+                            <button
+                                class="p-2    max-vs:p-1  max-vs:px-2  align-middle rounded-full hover:text-white bg-indigo-700 px-3 focus:outline-none "
+                                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account"
+                                aria-haspopup="true">
+                                <div class="flex items-center">
+                                    <i class="mdi mdi-account text-gray-50 text-xl max-vs:text-base"></i>
+                                    
+                                </div>
+                            </button>
+                            <template x-if="isProfileMenuOpen">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @click.away="closeProfileMenu" @keydown.escape="closeProfileMenu"
+                                    class="absolute right-0 w-56   p-2 mt-2 space-y-2 text-gray-600 bg-gray-600 border border-indigo-200 rounded-md shadow-md"
+                                    aria-label="submenu">
+                                    <li class="flex border-b border-gray-200 pb-1">
+                                        <a class=" text-white inline-flex items-center w-full px-2   py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800"
+                                            href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="flex border-b border-gray-200 pb-1">
+                                      <a class=" text-white inline-flex items-center w-full px-2   py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800"
+                                          href="#">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
+                                              viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                          </svg>
+                                          <span>Add User</span>
+                                      </a>
+                                  </li>
+
+                                    <li class="flex">
+                                        <a class="text-white inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800"
+                                            href="{% url 'tenant:logout' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            <span>Logout</span>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </template>
+                        </li>
+                    </ul>
+
+                </div>
+            </header>
+            {% block body%}
+            
+            {% endblock %}
+        </div>
+    </div>
+    <script>
+        function data() {
+          
+            return {
+               
+                isSideMenuOpen: false,
+                toggleSideMenu() {
+                    this.isSideMenuOpen = !this.isSideMenuOpen
+                },
+                closeSideMenu() {
+                    this.isSideMenuOpen = false
+                },
+                isNotificationsMenuOpen: false,
+                toggleNotificationsMenu() {
+                    this.isNotificationsMenuOpen = !this.isNotificationsMenuOpen
+                },
+                closeNotificationsMenu() {
+                    this.isNotificationsMenuOpen = false
+                },
+                isProfileMenuOpen: false,
+                toggleProfileMenu() {
+                    this.isProfileMenuOpen = !this.isProfileMenuOpen
+                },
+                closeProfileMenu() {
+                    this.isProfileMenuOpen = false
+                },
+                isPagesMenuOpen: false,
+                togglePagesMenu() {
+                    this.isPagesMenuOpen = !this.isPagesMenuOpen
+                },
+               
+            }
+        }
+    </script>
+    <script>
+        let icon1 = document.getElementById("icon1");
+        let icon1mobile = document.getElementById("icon1mobile");
+            let menu1mobile = document.getElementById("menu1mobile");
+            let menu1buttonmobile = document.getElementById("menu1buttonmobile");
+    
+            const showMenu1 = (flag) => {
+              if (flag) {
+              
+                    icon1.classList.toggle("rotate-180");
+                menu1.classList.toggle("hidden");
+                menu1button.classList.toggle("text-indigo-400");
+              
+             
+                    icon1mobile.classList.toggle("rotate-180");
+                menu1mobile.classList.toggle("hidden");
+                menu1buttonmobile.classList.toggle("text-indigo-400");
+    
+               
+    
+              }
+              
+            };
+    
+            const showMenu1mobile = (flag) => {
+              if (flag) {
+              
+                icon1mobile.classList.toggle("rotate-180");
+                menu1mobile.classList.toggle("hidden");
+                menu1buttonmobile.classList.toggle("text-indigo-400");
+    
+               
+    
+              }
+              
+            };
+    
+    
+            let icon2 = document.getElementById("icon2");
+            
+            let menu2 = document.getElementById("menu2");
+            let menu2button = document.getElementById("menu2button");
+            const showMenu2 = (flag) => {
+              if (flag) {
+                icon2.classList.toggle("rotate-180");
+                menu2.classList.toggle("hidden");
+                menu2button.classList.toggle("text-indigo-400");
+              }
+            };
+    
+            let icon3 = document.getElementById("icon3");
+            
+            const showMenu3 = (flag) => {
+              if (flag) {
+                icon3.classList.toggle("rotate-180");
+                menu3.classList.toggle("hidden");     
+                menu3button.classList.toggle("text-indigo-400");
+              }
+            };
+            
+            let Main = document.getElementById("Main");
+            let open = document.getElementById("open");
+            let close = document.getElementById("close");
+            
+            const showNav = (flag) => {
+              if (flag) {
+                Main.classList.toggle("-translate-x-full");
+                Main.classList.toggle("translate-x-0");
+                open.classList.toggle("hidden");
+                close.classList.toggle("hidden");
+              }
+            };
+            </script>
+               <style>
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css');
+            </style>
+        </body>
+        </html>

@@ -1,0 +1,198 @@
+
+
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body class="w-full h-full ">
+    <div class="h-[115vh] md:flex">
+        <div
+            class="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
+            <div class="lg:w-[80%]">
+                <h1 class="text-white font-bold text-3xl font-sans">SAMSOFT PHARMACIES</h1>
+                <p class="text-white mt-1">The most popular peer to peer lending at SEA</p>
+                <button type="submit" class="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2">Read More</button>
+            </div>
+            <div class="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+        </div>
+        <div class="flex md:w-1/2 justify-center  items-center bg-white h-full   overflow-hidden">
+            <form  class="w-[90%] h-full  flex justify-center items-center flex-col  " method="post"  action="{% url 'auth:signup_process'%}">
+                <div>
+                    {% csrf_token%}
+                <div class="flex -mx-3">
+                    <div class="w-1/2 px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">First name</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                                {{userform.first_name}}
+                        </div>
+                    </div>
+                    <div class="w-1/2 px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">other name(s)</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                            {{userform.last_name}}            
+                        </div>
+                    </div>
+                </div>
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Email</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                         {{userform.email}}          
+                        </div>
+                    </div>
+                </div>
+              
+
+                <div class="flex -mx-3">
+                    <div class="w-1/2 px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Business Phone number</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-phone-outline text-gray-400 text-lg"></i></div>
+                            {{pharmacyform.contact}}
+                                                </div>
+                    </div>
+                    <div class="w-1/2 px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Personal phone number</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-phone-outline text-gray-400 text-lg"></i></div>
+                        {{userform.phone_number}}         
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Business name</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-google-my-business text-gray-400 text-lg"></i></div>
+                            {{pharmacyform.name}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Business address</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi mdi-map-marker text-gray-400 text-lg"></i></div>
+                            {{pharmacyform.address}}        
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Password</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                            <input type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-300" placeholder="************" name="password" required>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 mb-4">
+                        <label for="" class="text-xs font-semibold px-1">Repeat Password</label>
+                        <div class="flex">
+                            <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                            <input required type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300" placeholder="************" name="confirmpassword">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                
+                   </div>
+                   
+                <div class="flex -mx-3">
+                    <div class="w-full px-3 ">
+                        <button type="submit" class="block w-full max-w-xs mx-auto text-sm bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">JOIN US</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+    
+ 
+
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css');
+    </style>
+<!-- component -->
+<script src="https://cdn.tailwindcss.com/"></script>
+
+{% if messages %}
+{%for message in messages%}
+
+
+<!-- Modal  -->
+<div class="w-full h-full" id="modal-box" >
+  <div id="modal-bg" class="w-full h-full bg-gray-700 top-0 absolute hidden"></div>
+  <div class="sm:w-[385px]  z-50  sm:min-w-[40vw] min-w-[80vw] min-h-[50vh] flex flex-col items-center gap-2 -translate-y-1/2 p-6 bg-[#FFFFEB] rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
+    {%if message.tags == "success"%}
+    <svg xmlns="http://www.w3.org/2000/svg" class="text-[#059669] mx-auto h-11 rounded-full bg-[#edf6f1] w-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 13l4 4L19 7" />
+    </svg>
+    {%else%}
+    <i class="mdi mdi-cancel  text-red-400 text-lg"></i>
+    
+    {%endif%}
+ 
+    <span class="text-2xl font-medium text-center">
+        {%if message.tags == "success"%}
+      Registration successful!
+      {% else %}
+      Error
+     {%endif%}
+      </span>
+    <p class="text-center flex justify-center items-center">
+       
+        {{message}}
+        </p>
+        
+        <br>
+        {% if message.tags == "success" %}
+        You will receive an email once your account has been verified.</p>
+        {%endif%}
+    <button id="modal-close" type="reset" class="p-3 bg-[#4F46E5] rounded-lg w-full text-white">OK</button>
+  </div>
+</div>
+
+<script>
+    const modalbg = document.getElementById('modal-bg');
+    
+    const modalBox = document.getElementById('modal-box');
+    const modalClose = document.getElementById('modal-close');
+    modalbg.addEventListener("click", function() {
+      modalBox.classList.toggle('hidden')
+      modalbg.classList.toggle('hidden')
+    });
+ 
+    modalClose.addEventListener("click", function() {
+      modalBox.classList.toggle('hidden')
+      modalbg.classList.toggle('hidden')
+    });
+    </script>
+
+    {%endfor%}
+    {%endif%}
+
+</body>
+</html>
