@@ -66,19 +66,22 @@
                                         <div class="h-full w-[1px]  bg-white"></div>
                                         <div>
                                             <button class=" hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
-                                                <a class="flex justify-start items-center space-x-6 " href="{% url 'product:categorypage' %}">
+                                                <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'product:categorypage' %}">
                                                
                                                 <i class="mdi  mdi-plus-box text-gray-400 text-lg  "></i>
-                                                <p class="text-sm leading-4   ">Add Category</p>
+                                                <p class="text-sm leading-4   "> Category</p>
                                             </a>
                                               </button>
                                              
                                               <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
-                                                <i class="mdi  mdi-view-module-outline text-gray-400 text-lg "></i>
-                                                <p class="text-sm leading-4  ">Product Category</p>
+                                                <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'product:subcategorypage' %}">
+                                                <i class="mdi  mdi-view-module-outline text-gray-400 text-lg " ></i>
+
+                                                <p class="text-sm leading-4  "> Subcategory</p>
+                                                </a>
                                               </button>
                                               <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
-                                                <a class="flex justify-start items-center space-x-6 " href="{% url 'product:unitpage' %}">
+                                                <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'product:unitpage' %}">
                                                  <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
                                                  <p class="text-sm leading-4   ">Item Unit</p>
                                              </a>

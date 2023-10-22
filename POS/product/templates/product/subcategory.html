@@ -18,7 +18,7 @@
 {%if messages%}
 {% for message in messages%}
 {% if message.tags == 'success'%}
-    <div class="rounded-3xl  border h-fit border-indigo-700  mx-4 mb-4 ">
+
       
         <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800 absolute z-50  right-5" role="alert">
            
@@ -75,8 +75,13 @@
 <div class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
     <div class="text-gray-700 my-2">Add Category</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
+    {% if edit %}
+    <form method="post" action="{% url 'product:edit_subcategory_process' subcategory_item.id%}" class="flex w-full   items- h-full  overflow-hidden">
+{%else%}
+<form method="post" action="{% url 'product:subcategory_process'%}" class="flex w-full   items- h-full  overflow-hidden">
+    {%endif%}
 
-    <form method="post" action="{% url 'product:subcategory_process'%}" class="flex w-full   items- h-full  overflow-hidden">
+
         {% csrf_token %}
         <div  class=" w-full h-full  flex justify-start items-start flex-col  ">
             <div class="flex w-full  items-start justify-start">
@@ -150,8 +155,8 @@
                             {{subcategory.code}}
                         </td>
                        
-                        <td class="px-6 py-4">
-                            <a href="#" class=" flex flex-row "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i><i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </a>
+                        <td class="px-6 py-4  flex flex-row">
+                            <a href="{% url 'product:edit_subcategory' subcategory.id %}" class=" flex flex-row "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i>  </a>   <a href="{% url 'product:delete_subcategory' subcategory.id%}"><i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i></a>
                         </td>
                     </tr>
                     {%endfor%}
@@ -182,6 +187,39 @@
 }
 </style>
 <script>
+(function(){
+  function id(v){ return document.getElementById(v); }
+  function loadbar() {
+    var ovrl = id("overlay"),
+        prog = id("progress"),
+        stat = id("progstat"),
+        img = document.images,
+        c = 0,
+        tot = img.length;
+    if(tot == 0) return doneLoading();
+
+    function imgLoaded(){
+      c += 1;
+      var perc = ((100/tot*c) << 0) +"%";
+      prog.style.width = perc;
+      
+      if(c===tot) return doneLoading();
+    }
+    function doneLoading(){
+      ovrl.style.opacity = 0;
+      setTimeout(function(){ 
+        ovrl.style.display = "none";
+      }, 1200);
+    }
+    for(var i=0; i<tot; i++) {
+      var tImg     = new Image();
+      tImg.onload  = imgLoaded;
+      tImg.onerror = imgLoaded;
+      tImg.src     = img[i].src;
+    }    
+  }
+  document.addEventListener('DOMContentLoaded', loadbar, false);
+}());
 
 document.getElementById("close").addEventListener("click",()=>{
     modal=document.getElementById("alert")
