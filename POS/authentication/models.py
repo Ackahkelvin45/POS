@@ -19,4 +19,4 @@ class User(AbstractUser):
     pharmacys=models.ManyToManyField("main.Pharmacy",related_name="admin")
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username'] 

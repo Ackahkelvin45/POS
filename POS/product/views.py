@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django_tenants.utils import get_tenant, schema_context
 from django.contrib import messages
 from .models import Unit, Subcategory,Category
-from .forms import SubcategoryForm,CategoryForm,UnitForm
+from .forms import SubcategoryForm, CategoryForm, UnitForm
+import pandas as pd
 
 
 
@@ -13,10 +14,21 @@ from .forms import SubcategoryForm,CategoryForm,UnitForm
 def showAddCategory(request):
     context = {
         "categorys": Category.objects.all().order_by('-id'),
-         'form':CategoryForm,
+         'form': CategoryForm,
+        
     }
-    return render(request, 'product/addcategory.html',context=context)
+    return render(request, 'product/addcategory.html', context=context)
+  
 
+def showCategoryList(request):
+    context = {
+        "categorys": Category.objects.all().order_by('-id'),
+        
+        
+    }
+
+    return render(request, 'product/categorylist.html', context=context)
+  
 
 def showAddSubCategory(request):
     context = {
@@ -24,6 +36,15 @@ def showAddSubCategory(request):
         'form':SubcategoryForm,
     }
     return render(request, 'product/subcategory.html',context=context)
+
+
+
+def showSubCategoryList(request):
+    context = {
+        "subcategorys": Subcategory.objects.all().order_by('-id'),
+        
+    }
+    return render(request, 'product/subcategorylist.html',context=context)
 
 
 def showAddProduct(request):
@@ -39,6 +60,11 @@ def showAddUnit(request):
     return render(request, 'product/unit.html',context=context)
 
 
+def showUnitList(request):
+    context = {
+        'units':Unit.objects.all().order_by('-id')
+    }
+    return render(request, 'product/unitlist.html',context=context)
 
         
 def add_unit_process(request):
@@ -210,4 +236,57 @@ def add_unit(request):
 
 
         
-    
+def create_categories_from_excel(request):
+    try :
+        if request.method == 'POST':
+                excel_file = request.FILES['excel_file']
+                if excel_file.name.endswith('.xls') or excel_file.name.endswith('.xlsx'):
+                    df = pd.read_excel(excel_file)
+                    for index, row in df.iterrows():
+                        name = row['name']
+                        code = row['code']
+                        Category.objects.create(name=name, code=code)
+                    messages.success(request, 'Category Added Successfully')
+                    return redirect("product:categorypage")
+    except Exception as e:
+        messages.error(request, f'{str(e)}')
+        return redirect("product:categorypage")
+
+
+def create_subcategories_from_excel(request):
+    try :
+        if request.method == 'POST':
+                excel_file = request.FILES['excel_file']
+                if excel_file.name.endswith('.xls') or excel_file.name.endswith('.xlsx'):
+                    df = pd.read_excel(excel_file)
+                    for index, row in df.iterrows():
+                        name = row['name']
+                        code = row['code']
+                        Subcategory.objects.create(name=name, code=code)
+                    messages.success(request, 'Subcategory Added Successfully')
+                    return redirect("product:subcategorypage")
+    except Exception as e:
+        messages.error(request, f'{str(e)}')
+        return redirect("product:subcategorypage")
+
+
+
+
+
+
+
+def create_units_from_excel(request):
+    try :
+        if request.method == 'POST':
+                excel_file = request.FILES['excel_file']
+                if excel_file.name.endswith('.xls') or excel_file.name.endswith('.xlsx'):
+                    df = pd.read_excel(excel_file)
+                    for index, row in df.iterrows():
+                        name = row['name']
+                        shorthand = row['shorthand']
+                        Unit.objects.create(name=name, shorthand=shorthand)
+                    messages.success(request, 'Unit Added Successfully')
+                    return redirect("product:unitpage")
+    except Exception as e:
+        messages.error(request, f'{str(e)}')
+        return redirect("product:unitpage")

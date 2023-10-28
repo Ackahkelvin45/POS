@@ -41,8 +41,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 SHARED_APPS = [
-    
-    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,14 +54,14 @@ SHARED_APPS = [
     'main',
     'POS',
     "authentication",
-    
-   
 ]
 
 
 TENANT_APPS = [
     'tenant',
     'product',
+    'users',
+    'suppliers',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

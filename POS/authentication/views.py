@@ -9,6 +9,7 @@ from main.forms import PharmacyForm
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django_tenants.utils import tenant_context
 
 
 # Create your views here.
@@ -40,19 +41,24 @@ def signupprocess(request):
 
         if password1 == password2:
             if userform.is_valid() and pharmacyform.is_valid():
+                pharmacy = pharmacyform.save(commit=False)
                 user = userform.save()
-                pharmacy=pharmacyform.save(commit=False)
-                user.set_password(password1)
-                user.save()
-                user.is_admin = True
-                user.is_superuser = True
-                user.is_admin=True  
-                pharmacy.owner = user
                 pharmacy.is_mainbranch = True       
                 name = pharmacy.name.replace("-", "")
                 name = name.replace(" ", "")
                 pharmacy.schema_name=name
                 pharmacy.save()
+                user.set_password(password1)
+                user.save()
+                with tenant_context(pharmacy):
+                    user.is_admin = True
+                    user.is_superuser = True
+                    user.is_staff=True
+                    user.save()
+                with schema_context('public'):
+                    user.is_superuser = False
+                    user.save()
+                pharmacy.owner = user
                 pharmacy.workers.add(user)
                 pharmacy.save()    
                 domain = Domain(domain=name + ".localhost", tenant=pharmacy, is_primary=True)

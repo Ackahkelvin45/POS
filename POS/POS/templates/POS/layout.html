@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="w-full ">
     <div class="flex h-screen bg-gray-50 w-full"  :class="{ 'overflow-hidden': isSideMenuOpen }">
@@ -108,6 +109,50 @@
                             </li>
                             <li class="relative px-2 py-1 flex" >
                                
+                              <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                                
+                                  <button onclick="showMenu5(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                      <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                      <i class="mdi mdi-nature-people text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-5   " id="menu1button">Suppliers</p>
+                                  </div>
+                                    <svg id="icon5" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    
+                                  </button>
+                                  <div id="menu5" class=" justify-start  flex-row flex    w-full md:w-auto items-start pb-1 hidden  pl-10  ">
+                                      <div class="h-full w-[1px]  bg-white"></div>
+                                      <div>
+                                          <button class=" hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                              <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'suppliers:add_supplier' %}">
+                                             
+                                              <i class="mdi  mdi-plus-box text-gray-400 text-lg  "></i>
+                                              <p class="text-sm leading-4   "> Add Suppliers</p>
+                                          </a>
+                                            </button>
+                                           
+                                            <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                              <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'product:subcategorypage' %}">
+                                              <i class="mdi  mdi-view-module-outline text-gray-400 text-lg " ></i>
+
+                                              <p class="text-sm leading-4  "> Suppliers List</p>
+                                              </a>
+                                            </button>
+                                            
+                                            
+                                 
+
+                                 
+                                  
+                                  
+                  
+                                  </div>
+                              </div>
+                                </div>
+                          </li>
+                            <li class="relative px-2 py-1 flex" >
+                               
                                 <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
                                   
                                     <button onclick="showMenu2(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
@@ -146,7 +191,7 @@
                                   <button onclick="showMenu3(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
                                       <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
                                       <i class="mdi mdi-point-of-sale text-gray-400 text-lg "></i>
-                                    <Product class="text-sm leading-5  " id="menu3button">sales</p>
+                                    <p class="text-sm leading-5  " id="menu3button">sales</p>
                                   </div>
                                     <svg id="icon3" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                       <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -165,12 +210,48 @@
                                       <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
                                       <p class="text-sm leading-4  ">sale history</p>
                                     </button>
-                                   
-                              
+                                  
                                   </div>
                               </div>
                                 </div>
                           </li>
+
+
+
+
+                          <li class="relative px-2 py-1 flex" >
+                               
+                            <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                              
+                                <button onclick="showMenu4(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
+                                    <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
+                                      <i class="mdi mdi-tools text-gray-400 text-lg "></i>
+                                      <p class="text-sm leading-5  " id="menu4button">settings</p>
+
+                                    </div>
+                                  <svg id="icon4" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  </svg>
+                                  
+                                </button>
+                                <div id="menu4" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
+                                    <div class="h-full w-[1px]  bg-white"></div>
+                                    <div>
+                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                    <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'users:permissions'%}">
+                                    <i class="mdi  mdi-security text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-4   ">Permissions</p>
+                                    </a>
+                                  </button>
+                                  
+                                 
+                              
+                                </div>
+                            </div>
+                              </div>
+                        </li>
+
+                       
                         </ul>
                     </div>
                 </div>
@@ -448,7 +529,7 @@
 
                                     <li class="flex border-b border-gray-200 pb-1">
                                       <a class=" text-white inline-flex items-center w-full px-2   py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800"
-                                          href="#">
+                                          href="{% url 'users:usersadd'%}">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
                                               viewBox="0 0 24 24" stroke="currentColor">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -566,6 +647,18 @@
               }
             };
     
+            let icon5 = document.getElementById("icon5");
+            
+            const showMenu5 = (flag) => {
+              if (flag) {
+                icon5.classList.toggle("rotate-180");
+                menu5.classList.toggle("hidden");     
+                menu5button.classList.toggle("text-indigo-400");
+              }
+            };
+
+
+            
             let icon3 = document.getElementById("icon3");
             
             const showMenu3 = (flag) => {
@@ -573,6 +666,16 @@
                 icon3.classList.toggle("rotate-180");
                 menu3.classList.toggle("hidden");     
                 menu3button.classList.toggle("text-indigo-400");
+              }
+            };
+
+            let icon4 = document.getElementById("icon4");
+            
+            const showMenu4 = (flag) => {
+              if (flag) {
+                icon4.classList.toggle("rotate-180");
+                menu4.classList.toggle("hidden");     
+                menu4button.classList.toggle("text-indigo-400");
               }
             };
             
