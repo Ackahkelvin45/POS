@@ -9,6 +9,7 @@ urlpatterns = [
     path("subcategory_list/", views.showSubCategoryList, name="subcategorylist"),
     path("add_sub_category/", views.showAddSubCategory, name="subcategorypage"),
     path("add_product/", views.showAddProduct, name="productpage"),
+    path("add_product_process/", views.addProductProcess, name="addProduct"),
     path("add_unit/", views.showAddUnit, name="unitpage"),
     path("unit_list/", views.showUnitList, name="unitlist"),
     path("add_unit_process/", views.add_unit_process, name="add_unit"),

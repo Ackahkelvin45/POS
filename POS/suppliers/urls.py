@@ -4,8 +4,8 @@ from . import views
 
 app_name = "suppliers"
 
-urlpatterns=[
-
-path("add/", views.showAddSuppliers, name='add_supplier'),
-path("add_process/",views.addSuppliersProcess,name='add_supplier_process'),
+urlpatterns = [
+    path("add/", views.showAddSuppliers, name="add_supplier"),
+    path("add_process/", views.addSuppliersProcess, name="add_supplier_process"),
+    path("list/", views.supplierslist, name="suppliers_list"),
 ]

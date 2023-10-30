@@ -56,22 +56,25 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a 
+            href="{% url 'suppliers:add_supplier'%}"
+            type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Supplier</span>
-             </button>
+             </a>
 
-             <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'suppliers:suppliers_list'%}"
+             type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Supplier list</span>
-             </button>
+             </a>
         </div>
      <!-- component -->
 <!-- component -->
 <div class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
-    <div class="text-gray-700 my-2">User list</div>
+    <div class="text-gray-700 my-2">Suppliers list</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
     <div class="px-10 max-vs:px-2">
@@ -84,26 +87,38 @@
                        Name
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Shorthand
+                            Phone number
                         </th>
                         
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>  
+                        <th scope="col" class="px-6 py-3">
+                            Website
+                        </th>  
                         <th scope="col" class="px-6 py-3">
                             Action
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for unit in units%}
+                    {% for supplier in suppliers%}
                     <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                           {{unit.name}}
+                           {{supplier.first_name }} {{ supplier.other_names}}
                         </th>
                         <td class="px-6 py-4">
-                            {{unit.shorthand}}
+                            {{supplier.phone_number_1}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{supplier.email}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{supplier.website}}
                         </td>
                        
                         <td class="px-6 py-4 flex flex-row ">
-                            <a href="{% url 'product:edit_unit' unit.id%}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <a href="{% url 'product:delete_unit' unit.id%}"> <i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </a>
+                            <a href="{% url 'product:edit_unit' supplier.id%}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <a href="{% url 'product:delete_unit' supplier.id%}"> <i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </a>
                         </td>
                     </tr>
                    
