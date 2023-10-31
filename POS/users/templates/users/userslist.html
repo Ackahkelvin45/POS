@@ -77,11 +77,11 @@
     <div class="px-10 max-vs:px-2">
     
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-10 ">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 myTable hover stripe row-border">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                          Unit
+                        Username
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Shorthand
@@ -93,17 +93,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for unit in units%}
+                    {% for usert in users%}
                     <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                           {{unit.name}}
+                           {{user.username}}
                         </th>
                         <td class="px-6 py-4">
                             {{unit.shorthand}}
                         </td>
                        
                         <td class="px-6 py-4 flex flex-row ">
-                            <a href="{% url 'product:edit_unit' unit.id%}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <a href="{% url 'product:delete_unit' unit.id%}"> <i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </a>
+                            <a " class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <a > <i class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </a>
                         </td>
                     </tr>
                    
