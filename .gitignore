@@ -1,0 +1,69 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django-related
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+static/
+
+# Secret key
+secret_key.txt
+
+# Development-related
+*.sqlite3
+*.db
+*.db.sqlite3
+*.env
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore local settings
+local_settings.py
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore backup and temporary files
+*.bak
+*.swp
+*~
+
+# Ignore migrations (if using South or Django 1.6 and below)
+/migrations/
+
+# Ignore Django Tenant-specific files
+*.schema
+*.yaml
+*.sql
+
+# Ignore PostgreSQL-specific files
+*.pgsql
+*.pgdump
+
+# Ignore files generated during the creation of migrations
+*.py[m|c]
+
+# Ignore Django generated files
+*.pyi
+
+# Ignore Celery files
+celerybeat-schedule
+celerybeat.pid
+
+# Ignore all files in the 'instance' folder (assuming this is where your instance-specific settings are stored)
+instance/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
