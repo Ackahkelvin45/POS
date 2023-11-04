@@ -204,12 +204,12 @@
   }
   document.addEventListener('DOMContentLoaded', loadbar, false);
 }());
-
+if (document.getElementById("close")){
 document.getElementById("close").addEventListener("click",()=>{
     modal=document.getElementById("alert")
     modal.classList.add("hidden")
 })
-      
+}
 </script>
 <style>
     /* preloader.css */

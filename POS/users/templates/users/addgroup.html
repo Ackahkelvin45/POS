@@ -57,17 +57,17 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'users:groupadd'%}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'users:usersadd' %}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Group</span>
         </a>
 
-             <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'users:permissions'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Permission List</span>
-             </button>
+             </a>
         </div>
 
 <form method="post" action="{% url 'users:add_group_process'%}"   class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">

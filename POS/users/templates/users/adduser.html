@@ -57,17 +57,17 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'product:subcategorypage'%}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'users:usersadd' %}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add User</span>
         </a>
 
-             <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{%url 'users:userslist'%}"  class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">User list</span>
-             </button>
+             </a>
         </div>
      <!-- component -->
 <!-- component -->
@@ -83,7 +83,12 @@
   <div class="relative flex flex-col min-w-0 break-words w-full mb-6 srounded-lg  border-0">
 
     <div class="flex-auto   pt-0">
+      {% if edit %}
+      <form method="post" action="{% url 'users:edit_user_process' user.id %}">
+      {%else%}
       <form method="post" action="{% url 'users:add_user_process'%}">
+      {%endif%}
+      
         {% csrf_token %}
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 ">
@@ -133,7 +138,7 @@
                   Permission
                 </label>
 <select class="w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300" required name="permission">
-  <option value=""></option>
+  <option value="">-------</option>
 {% for group in groups%}
 <option value="{{group.id}}">{{group.name}}</option>
 {%endfor%}
@@ -151,7 +156,7 @@
                 <label class="block uppercase text-blueGray-600 text-xs font-semibold mb-2" htmlfor="grid-password">
                   Confirm Password
                 </label>
-                <input  name="password2" required  class="w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300"/>        </div>
+                <input  name="password2" required type="password" autocomplete="off"     class="w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300"/>        </div>
             </div>
             </div>
           </div>
@@ -227,10 +232,12 @@
 }());
 
 
+if (document.getElementById("close")){
 document.getElementById("close").addEventListener("click",()=>{
     modal=document.getElementById("alert")
     modal.classList.add("hidden")
 })
+}
       
 
       

@@ -24,6 +24,7 @@ secret_key.txt
 # Ignore virtual environment
 venv/
 env/
+vscode/
 
 # Ignore local settings
 local_settings.py

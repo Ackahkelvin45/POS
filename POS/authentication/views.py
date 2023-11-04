@@ -9,7 +9,7 @@ from main.forms import PharmacyForm
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django_tenants.utils import tenant_context
+from django_tenants.utils import tenant_context,schema_context
 
 
 # Create your views here.
@@ -50,14 +50,14 @@ def signupprocess(request):
                 pharmacy.save()
                 user.set_password(password1)
                 user.save()
-                with tenant_context(pharmacy):
+                with schema_context(pharmacy.name):
+
                     user.is_admin = True
                     user.is_superuser = True
                     user.is_staff=True
                     user.save()
-                with schema_context('public'):
-                    user.is_superuser = False
-                    user.save()
+                
+               
                 pharmacy.owner = user
                 pharmacy.workers.add(user)
                 pharmacy.save()    

@@ -1,0 +1,93 @@
+{% load  filterstring %}
+<style>
+   tbody tr {
+                
+                border: 1px solid #4b4b4b;
+                
+            }
+         
+                           thead tr {
+                
+                border: 1px solid #222222;
+            }
+            tbody tr td  {
+                
+                text-align: center;
+                padding: 5px;
+    
+                
+                
+            }
+
+            thead tr  th {
+                
+              text-align: center;
+                padding: 3px;
+            }
+            </style>
+
+            <div style="text-align: center;">
+              <div style="font-weight: 600 ; font-size: 17px;">{{pharmacy.name}}</div>
+              <div  style="font-weight: 300; font-size: 13px; ">{{pharmacy.address}}</div>
+              <h2></h2>
+            </div>
+           
+
+             
+            
+<div class="container">
+  <div style="text-align: center ; font-size: 16px; text-decoration: underline;">Supplier list</div>
+
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th scope="col">Supplier Name</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Email</th>
+        <th scope="col">Address</th>
+        <th scope="col">Opening Balance</th>
+   
+      </tr>
+    </thead>
+  
+    <tbody>
+      {% for supplier in suppliers%}
+      <tr style="word-wrap: break-word;white-space: initial;">
+        <th>
+        {% for chunk in supplier.company_name|chunk_string %}
+        {{ chunk }}<br>
+      {% endfor %}
+        </th>
+        <td data-title="Released"  ><div style="overflow-x: hidden;">
+      
+          {{supplier.phone_number_1 }}
+          <br>
+          {{supplier.phone_number_2 }}
+        </div></td>
+        <td data-title="Studio">
+          {% for chunk in supplier.email|chunk_string %}
+          {{ chunk }}<br>
+        {% endfor %}
+        </td>
+       
+        <td data-title="Domestic Gross" data-type="currency">
+          {% for chunk in supplier.address|chunk_string %}
+          {{ chunk }}<br>
+        {% endfor %},
+        {% for chunk in supplier.city|chunk_string %}
+        {{ chunk }}<br>
+      {% endfor %}
+        </td>
+        <td data-title="International Gross" data-type="currency">{{supplier.opening_balance}}</td>
+       
+      </tr>
+      {%endfor%}
+
+    </tbody>
+  </table>
+</div>
+<script>
+  document.getElementById('printButton').addEventListener('click', function() {
+      window.print();
+  });
+  </script>

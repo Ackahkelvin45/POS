@@ -5,6 +5,11 @@ from django.contrib.auth.models import Group
 
 
 
+class CustomModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return getattr(obj, "name", str(obj))
+    
+
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -16,8 +21,12 @@ class UserForm(forms.ModelForm):
             "last_name": forms.TextInput(attrs={'class': "w-full max-md:w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300",  "required": "True"}),
             "email": forms.TextInput(attrs={"class": "w-full max-md:w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300", "required": "True"}),
             "phone_number" :forms.TextInput(attrs={"class":"w-full max-md:w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300","required":"True"}),
-            'username':forms.TextInput(attrs={"class":"w-full max-md:w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300","required":"True"})
+            'username': forms.TextInput(attrs={"class": "w-full max-md:w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300", "required": "True"}),
+            
         }
+
+           
+
 
 
 class GroupForm(forms.ModelForm):

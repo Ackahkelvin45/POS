@@ -13,11 +13,10 @@
 </div>
 
 <div class="mt-20 max-vs:mt-[6.6rem]  ">
-   
     {%if messages%}
 {% for message in messages%}
 {% if message.tags == 'success'%}
-   
+
       
         <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800 absolute z-50  right-5" role="alert">
            
@@ -57,28 +56,86 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'product:categorypage'%}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'product:productpage'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Add subcategory</span>
-        </a>
+                <span class="pl-2 mx-1 text-xs text-white">Add Product</span>
+             </a>
 
-             <a href="{% url 'product:categorylist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'product:productlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Category list</span>
+                <span class="pl-2 mx-1 text-xs text-white">Product list</span>
              </a>
         </div>
      <!-- component -->
 <!-- component -->
-<div class=" px-8 max-vs:px-2  mx-4">
-    <div class="text-gray-700 my-2"> Category List</div>
+<div class="  px-8 max-vs:px-2  mx-4">
+    <!--menu bar-->
+    <div class=" my-3 w-full flex flex-row bg-slate-200 border  border-slate-400 px-2 py-2">
+<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+    <span class="group-hover:underline">Preview All</span>
+
+   
+
+</span>
+<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+    <span class="group-hover:underline">Preview Barcode</span>
+
+   
+
+</span>
+
+<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+    <span class="group-hover:underline ">Update quantity</span>
+
+   
+
+</span>
+
+<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+<a href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
+    <span class="group-hover:underline ">Export as pdf</span>
+
+   
+
+</a>
+
+<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+<a href="{% url 'product:export_products_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
+    <span class="group-hover:underline ">download as csv</span>
+
+   
+
+</a>
+
+<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+    <i class="mdi mdi-refresh-circle text-gray-700 text-xs"></i>
+    <span class="group-hover:underline text-red-500">Reset qty to zero</span>
+
+   
+
+</span>
+
+
+
+
+
+    </div>
+    <div class="text-gray-700 my-2">Product List</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
 
-  
-    </div>
 
+    </div>
     <div class="px-10 max-vs:px-2">
     
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-10 ">
@@ -86,47 +143,66 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                       Name
+                           Product Image
+                           </th>
+                        <th scope="col" class="px-6 py-3">
+                         Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Category
                         </th>
                         
                         <th scope="col" class="px-6 py-3">
-                           Code
+                            Subctegory
                         </th>
-                        
+                        <th scope="col" class="px-6 py-3">
+                            Selling price
+                        </th>
                         <th scope="col" class="px-6 py-3">
                             Action
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {%for category in categorys%}
+                    {% for product in products%}
                     <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            {% if product.product_image.url %}
+                           <img src="{{product.product_image.url}}" style="height:60px; width: 60px;"/>
+                           {%else%}
+                           <img src="{% static 'img/profile/image.png' %}" style="height:60px; width: 60px;"/>
+
+                           {%endif%}
+                        </td>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {{category.name}}
+                           {{product.name}}
                         </th>
                         <td class="px-6 py-4">
-                            {{category.code}}
+                            {{product.category.name}}
                         </td>
-                       
-                        <td class="px-6 py-4 flex flex-row">
-                            <a href="{% url 'product:edit_category' category.id  %}" class="  "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i></a> <button class="delete-item"  data-url="{% url 'product:delete_category' category.id%}"><i  data-url="{% url 'product:delete_category' category.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
+                        <td class="px-6 py-4">
+                            {{product.subcategory.name}}
+                        </td>
+                        <td class="px-6 py-4">
+                            ₵ {{product.selling_price}}
+                        </td>
+                        <td class="px-6 py-4 flex flex-row justify-center items-center ">
+ 
+                            <a href="{% url 'product:editproduct' product.id %}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'product:delete_product' product.id%}" class="delete-item"> <i data-url="{% url 'product:delete_product' product.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
                         </td>
                     </tr>
-                    {%endfor%}
                    
-                  
-                    
-                  
+                 {%endfor%}
                 
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
-</div>
-<div>
-    
-    
 
+
+
+    </div>
 </div>
 </div>
 <style>
@@ -144,8 +220,7 @@
 }
 </style>
 <script>
-
-(function(){
+   (function(){
   function id(v){ return document.getElementById(v); }
   function loadbar() {
     var ovrl = id("overlay"),
@@ -178,7 +253,56 @@
   }
   document.addEventListener('DOMContentLoaded', loadbar, false);
 }());
+if (document.getElementById("close")){
+document.getElementById("close").addEventListener("click",()=>{
+    modal=document.getElementById("alert")
+    modal.classList.add("hidden")
+})
+}
+      
 
+$(document).ready( function () {
+    $('.myTable').DataTable();
+} );
+
+
+
+</script>
+
+<script>
+    
+    let deletestudent=document.getElementsByClassName("delete-item")
+   for  (var i=0;i<deletestudent.length;i++){
+   deletestudent[i].addEventListener("click",(item)=>{
+    Swal.fire({
+        icon: 'warning',
+        text: "Do you want to delete this?",
+        confirmButtonColor: '#26A69A',
+        confirmButtonText:"Yes,I'm sure",
+        showDenyButton:true,
+        denyButtonText:"No",
+        color:"white",
+        background: 'rgba(0, 0, 0, 0.7)',
+        allowEscapeKey: false,
+        dangerMode:true,
+  
+      }).then((e)=>{
+        if (e.isConfirmed){
+        url=item.target.getAttribute("data-url")
+       
+       console.log("url",url)
+       window.location.href=url
+        }
+        else{
+            console.log("denied")
+        }
+      })
+    })
+   }
+
+
+
+   
 if (document.getElementById("close")){
 
 
@@ -188,56 +312,8 @@ document.getElementById("close").addEventListener("click",(item)=>{
 
 
 })
-      
-
-
 }
-
-$(document).ready( function () {
-    $('.myTable').DataTable();
-} );
-
-
-
-
-
- 
-      
-
-</script>
-<script>
-    
-  let deletestudent=document.getElementsByClassName("delete-item")
- for  (var i=0;i<deletestudent.length;i++){
- deletestudent[i].addEventListener("click",(item)=>{
-  Swal.fire({
-      icon: 'warning',
-      text: "Do you want to delete this?",
-      confirmButtonColor: '#26A69A',
-      confirmButtonText:"Yes,I'm sure",
-      showDenyButton:true,
-      denyButtonText:"No",
-      color:"white",
-      background: 'rgba(0, 0, 0, 0.7)',
-      allowEscapeKey: false,
-      dangerMode:true,
-
-    }).then((e)=>{
-      if (e.isConfirmed){
-      url=item.target.getAttribute("data-url")
-     
-     console.log("url",url)
-     window.location.href=url
-      }
-      else{
-          console.log("denied")
-      }
-    })
-  })
- }
-</script>  
-
-
+  </script> 
 <style>
     /* preloader.css */
 

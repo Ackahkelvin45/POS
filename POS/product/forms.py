@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Subcategory, Unit, Product
+from .models import Category, Subcategory, Unit, Product_Item,Package
 from suppliers.models import Supplier
 
 
@@ -66,25 +66,6 @@ class UnitForm(forms.ModelForm):
         }
 
 
-# class ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         fields = [
-#             "code",
-#             "name",
-#             "category",
-#             "subcategory",
-#             "unit",
-#             "supplier",
-#             "notes",
-#             "cost_price",
-#             "profit_margin",
-#             "selling_price",
-#             "min_stock_level",
-#             "expire_date",
-#             "image",
-#         ]
-
 
 class CustomModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -98,7 +79,7 @@ class CustomModelChoiceField1(forms.ModelChoiceField):
 
 class ProductForm(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Product_Item
         fields = "__all__"
 
         widgets = {
@@ -109,52 +90,62 @@ class ProductForm(forms.ModelForm):
             ),
             "name": forms.TextInput(
                 attrs={
-                    "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
             ),
             "category": forms.Select(
                 attrs={
-                    "class": "w-full  pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full  pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
             ),
             "subcategory": forms.Select(
                 attrs={
-                    "class": "w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
             ),
             "item_unit": forms.Select(
                 attrs={
-                    "class": "w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
             ),
             "supplier": forms.Select(
                 attrs={
-                    "class": "w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
             ),
             "notes": forms.Textarea(
                 attrs={
                     "rows": 5,
                     "class": "w-full pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
-                    "placeholder": "business name",
+                    
                 }
             ),
-            "cost_price": forms.TextInput(
+            "cost_price": forms.NumberInput(
+                attrs={
+                    "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                    'step': 0.1,'id':'unit_cost_price'
+                }
+            ),
+             "markup": forms.NumberInput(
+                attrs={
+                    "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                    'step': 0.1,'id':'markup','disabled':True
+                }
+            ),
+
+           
+            "selling_price": forms.NumberInput(
                 attrs={
                     "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    ,'step': 0.1,'id':"unit_selling_price",'disabled':True
                 }
             ),
-            "selling_price": forms.TextInput(
+            "profit_margin": forms.NumberInput(
                 attrs={
                     "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
-                }
+                    ,'step': 0.1,'id':"profit_forecast"   ,'disabled':True             }
             ),
-            "profit_margin": forms.TextInput(
-                attrs={
-                    "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
-                }
-            ),
-            "minimum_stock_level": forms.TextInput(
+            "minimum_stock_level": forms.NumberInput(
                 attrs={
                     "class": "w-full pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
                 }
@@ -165,7 +156,7 @@ class ProductForm(forms.ModelForm):
                     "type": "date",
                 }
             ),
-            "product_image": forms.FileInput(
+            "product_image": forms.ClearableFileInput(
                 attrs={"id": "dropzone-file", "class": "hidden"}
             ),
         }
@@ -175,12 +166,81 @@ class ProductForm(forms.ModelForm):
 
         # Customize choices for category, subcategory, item_unit, and supplier
         self.fields["category"] = CustomModelChoiceField(
-            queryset=Category.objects.all()
+            queryset=Category.objects.all(),
+            widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),
+
         )
         self.fields["subcategory"] = CustomModelChoiceField(
-            queryset=Subcategory.objects.all()
+            queryset=Subcategory.objects.all(),
+             widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),
         )
-        self.fields["item_unit"] = CustomModelChoiceField(queryset=Unit.objects.all())
+        self.fields["item_unit"] = CustomModelChoiceField(queryset=Unit.objects.all(),
+         widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),)
         self.fields["supplier"] = CustomModelChoiceField1(
-            queryset=Supplier.objects.all()
+            queryset=Supplier.objects.all(),
+             widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",'required':False}),
         )
+
+
+
+
+
+class PackageForm(forms.ModelForm):
+    class Meta:
+        model = Package
+        fields = "__all__"
+        
+        widgets = {
+            
+      
+            "package_name": forms.TextInput(
+                attrs={
+                    "class": " w-[40%] pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                }
+            ),
+              "number_of_products_item": forms.NumberInput(
+                attrs={
+                    "class": "w-[60%] pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                }
+            ),
+            
+              "cost_price": forms.NumberInput(
+                attrs={
+                    "class": "w-[40%] pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    ,'step': 0.1,         }
+            ),
+            "selling_price": forms.NumberInput(
+                attrs={
+                    "class": "w-[40%] pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300" ,'step': 0.1,         }
+            
+                
+            ),
+             "product": forms.Select(
+                attrs={
+                    "class": "w-[40%] pl-4 pr-3  rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300" ,'step': 0.1,         }
+            
+                
+            ),
+             "unit": forms.Select(
+                attrs={
+                    "class": " w-[10%]  pl-4 pr-3 py-2 rounded-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                }
+            ),
+
+        }
+
+        def __init__(self, *args, **kwargs):
+            super(PackageForm, self).__init__(*args, **kwargs)
+
+            
+            self.fields["unit"] = CustomModelChoiceField(
+                queryset=Unit.objects.all(),
+                widget=forms.Select(attrs={"class": "select w-[10%]  pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),
+
+            )
+
+            self.fields["product"] = CustomModelChoiceField(
+                queryset=Unit.objects.all(),
+                widget=forms.Select(attrs={"class": " select w-[40%] pl-4 pr-3  rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),
+
+            )

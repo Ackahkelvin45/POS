@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django_tenants.utils import get_tenant
 from main.models import User
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -34,6 +35,9 @@ def login_process(request):
         if user is not None:            
                 login(request,user)                             
                 return redirect("tenant:dashboard")
+        else:
+            messages.error(request,'Incorrect username or password. Please try again.')
+            return redirect("tenant:login")
                 
 
 

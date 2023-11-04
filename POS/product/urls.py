@@ -8,8 +8,12 @@ urlpatterns = [
     path("category_list/", views.showCategoryList, name="categorylist"),
     path("subcategory_list/", views.showSubCategoryList, name="subcategorylist"),
     path("add_sub_category/", views.showAddSubCategory, name="subcategorypage"),
-    path("add_product/", views.showAddProduct, name="productpage"),
+    path("add/", views.showAddProduct, name="productpage"),
+     path("edit/<int:pk>/", views.editProduct, name="editproduct"),
+    path("list/", views.showProducts, name="productlist"),
+    path("add_product_process/<int:pk>/", views.edit_product_process, name="edit_product_process"),
     path("add_product_process/", views.addProductProcess, name="addProduct"),
+     path("delete_product/<int:pk>/", views.delete_product, name="delete_product"),
     path("add_unit/", views.showAddUnit, name="unitpage"),
     path("unit_list/", views.showUnitList, name="unitlist"),
     path("add_unit_process/", views.add_unit_process, name="add_unit"),
@@ -21,7 +25,9 @@ urlpatterns = [
     path("add_subcategory_process/", views.add_subcategory, name="subcategory_process"),
     path(
         "subcategory_list/", views.showSubCategoryList, name="subcategory_list"
-    ),  # changed from subcategory_process to subcategory_list
+    ),
+    
+    # changed from subcategory_process to subcategory_list
     path("edit_subcategory/<int:pk>/", views.edit_subcategory, name="edit_subcategory"),
     path(
         "edit_subcategory_process/<int:pk>/",
@@ -56,4 +62,12 @@ urlpatterns = [
         views.create_units_from_excel,
         name="create_unit_from_excel",
     ),
+
+    path('add_package/', views.showAddPackage, name='add_package'),
+    path('add_package_process/', views.addPackage, name='add_package_process'),
+    path('export-products-pdf/', views.export_products_as_pdf, name='export_products_as_pdf'),
+    path('export/products/excel/', views.export_products_to_excel, name='export_products_to_excel'),
+
+
+
 ]

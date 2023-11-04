@@ -39,7 +39,9 @@ class Pharmacy(TenantMixin):
                 )
         email.fail_silently = False
         email.send()
-
+        
+    def save_with_default_behavior(self, *args, **kwargs):
+        super(Pharmacy, self).save(*args, **kwargs)
         
     def save(self, *args, **kwargs):
         if self.pk is not None:
@@ -48,5 +50,7 @@ class Pharmacy(TenantMixin):
                 self.send_verification_email()
 
         super().save(*args, **kwargs)
- 
+
+  
+
    

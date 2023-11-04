@@ -1,26 +1,36 @@
 from django.shortcuts import render,redirect
 from .forms import UserForm,GroupForm
 from django.contrib.auth.models import Group,Permission
-from django_tenants.utils import tenant_context
+from django_tenants.utils import tenant_context,schema_context
 from django_tenants.utils import get_tenant
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from authentication.models import User
+
 
 
 # Create your views here.
 
 
 def displayUsers(request):
-    return render(request, 'users/userslist.html')
+    tenant = get_tenant(request)
+
+    context = {
+                "users": tenant.workers.all(),
+                
+            }
+    return render(request, 'users/userslist.html',context=context)
 
 
 
 def addUserpage(request):
-    context = {
-        "userform": UserForm,
-        'groups':Group.objects.all(),
-    }
-    return render(request, 'users/adduser.html', context=context)
+    tenant = get_tenant(request)
+    with schema_context(tenant.schema_name):
+        context = {
+            "userform": UserForm,
+            'groups':Group.objects.all(),
+        }
+        return render(request, 'users/adduser.html', context=context)
     
 
 
@@ -34,7 +44,7 @@ def addUserProcess(request):
         userform = UserForm(request.POST)
         if password1==password2:
             if userform.is_valid():
-                with tenant_context(tenant):
+                with schema_context(tenant.schema_name):
                     user = userform.save()
                     user.set_password(password1)
                     if permission != "":
@@ -42,25 +52,75 @@ def addUserProcess(request):
                         if group.name == "Administrator":
                             user.is_admin = True
                             user.is_staff=True
-                            user.groups.add(group)
-                            user.save()
-                            tenant.workers.add(user)
-                        messages.success(request, "User has been successfully")
-                        return redirect("users:usersadd")
+                        user.groups.add(group)
+                        user.save()
+                        tenant.workers.add(user)
+                        tenant.save_with_default_behavior()
+                        messages.success(request, "User has been Created successfully")
+                        return redirect("users:userslist")
             messages.error(request, str(userform.errors))
             return redirect("users:usersadd")
         messages.error(request, "passwords must match")
         return redirect("users:usersadd")
 
 
+
+def edit_user_page(request, pk):
+    context = {
+        "userform": UserForm(instance=(User.objects.get(id=pk))),
+        'groups': Group.objects.all(),
+        'edit':True,
+        'user':User.objects.get(id=pk)
+    }
+    return render(request, 'users/adduser.html', context=context)
+            
+
+def editUserProcess(request,pk):
+    if request.method == 'POST':
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        permission = request.POST.get('permission')
+        tenant=get_tenant(request)
+        user = User.objects.get(id=pk)
         
+        userform = UserForm(request.POST,instance=user)
+        if password1==password2:
+            if userform.is_valid():
+                with schema_context(tenant.schema_name):
+                    user = userform.save()
+                    user.set_password(password1)
+                    if permission != "":
+                        group = Group.objects.get(pk=permission)
+                        if group.name == "Administrator":
+                            user.is_admin = True
+                            user.is_staff=True
+                        user.groups.add(group)
+                        user.save()
+                        messages.success(request, "User has been Edited successfully")
+                        return redirect("users:userslist")
+            messages.error(request, str(userform.errors))
+            return redirect("users:usersadd")
+        messages.error(request, "passwords must match")
+        return redirect("users:usersadd")
+
+def deleteUser(request, pk):
+    user = User.objects.get(id=pk)
+    tenant=get_tenant(request)
+    if user == tenant.owner:
+        messages.error(request, "Cannot delete Pharmacy Owner")
+        return redirect("users:userslist")
+    user.delete()
+    messages.success(request, "User has been Deleted successfully")
+    return redirect("users:userslist")
 
 def showPermissions(request):
-    context = {
-        "groups":Group.objects.all()
-    }
+    tenant=get_tenant(request)
+    with schema_context(tenant.schema_name):
+        context = {
+            "groups":Group.objects.all()
+        }
 
-    return render(request,'users/permissions.html',context=context)
+        return render(request,'users/permissions.html',context=context)
 
 def editPermissions(request, pk):
        # Get the content types to exclude
@@ -140,14 +200,16 @@ def addGroupProcess(request):
     if request.method=='POST':
         groupform = GroupForm(request.POST)
         if groupform.is_valid():
-            group=groupform.save()
-            permissions = request.POST.getlist('permissions[]')
-            for permission in permissions:
-                if permission !="":
-                    permissionitem = Permission.objects.get(pk=permission)
-                    group.permissions.add(permissionitem)
-            group.save()
-            messages.success(request, "Group Added Succesfully")
-            return redirect("users:groupadd")
-        messages.success(request, f"{str(groupform.error)}")
+            tenant=get_tenant(request)
+            with schema_context(tenant.schema_name):
+                group=groupform.save()
+                permissions = request.POST.getlist('permissions[]')
+                for permission in permissions:
+                    if permission !="":
+                        permissionitem = Permission.objects.get(pk=permission)
+                        group.permissions.add(permissionitem)
+                group.save()
+                messages.success(request, "Group Added Succesfully")
+                return redirect("users:permissions")
+        messages.success(request, f"{str(groupform.errors)}")
         return redirect("users:groupadd")

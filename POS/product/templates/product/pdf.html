@@ -1,0 +1,81 @@
+{% load  filterstring %}
+<style>
+   tbody tr {
+                
+                border: 1px solid #4b4b4b;
+                
+            }
+         
+                           thead tr {
+                
+                border: 1px solid #222222;
+            }
+            tbody tr td  {
+                
+                text-align: center;
+                padding: 5px;
+    
+                
+                
+            }
+
+            thead tr  th {
+                
+              text-align: center;
+                padding: 3px;
+            }
+            </style>
+
+            <div style="text-align: center;">
+              <div style="font-weight: 600 ; font-size: 17px;">SAMSOFT PHARMACIES</div>
+              <div  style="font-weight: 300; font-size: 13px; ">Kumasi,Ghana</div>
+              <h2></h2>
+            </div>
+           
+
+             
+            
+<div class="container">
+  <div style="text-align: center ; font-size: 16px; text-decoration: underline;">Product list</div>
+
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th scope="col">Product Image</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Category</th>
+        <th scope="col">Sub Category</th>
+        <th scope="col">Cost Price</th>
+        <th scope="col">Selling price</th>
+        <th scope="col">Expiry Date</th>
+        <th scope="col">Available Quantity</th>
+      </tr>
+    </thead>
+  
+    <tbody>
+      {% for product in products%}
+      <tr style="word-wrap: break-word;white-space: initial;">
+        <th scope="row"><img src="..{{product.product_image.url}}" style="height: 30px; width: 30px;"/>
+        </th>
+        <th data-title="Released"  ><div style="overflow-x: hidden;">
+          {% for chunk in product.name|chunk_string %}
+          {{ chunk }}<br>
+        {% endfor %}</div></th>
+        <td data-title="Studio">{{product.name}}</td>{{product.category.name}}</td>
+        <td data-title="Domestic Gross" data-type="currency">{{product.subcategory.name}}</td>
+        <td data-title="International Gross" data-type="currency">{{product.cost_price}}</td>
+        <td data-title="Budget" data-type="currency">{{product.selling_price}}</td>
+        <td data-title="Budget" data-type="currency"><td>
+        <td data-title="Budget" data-type="currency"></td>
+
+      </tr>
+      {%endfor%}
+
+    </tbody>
+  </table>
+</div>
+<script>
+  document.getElementById('printButton').addEventListener('click', function() {
+      window.print();
+  });
+  </script>

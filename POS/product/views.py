@@ -2,9 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django_tenants.utils import get_tenant, schema_context
 from django.contrib import messages
-from .models import Unit, Subcategory, Category
-from .forms import SubcategoryForm, CategoryForm, UnitForm, ProductForm
+from django.http import HttpResponse
+from .models import Unit, Subcategory, Category,Product_Item,Package
+from .forms import SubcategoryForm, CategoryForm, UnitForm, ProductForm,PackageForm
 import pandas as pd
+from io import BytesIO
+from django.http import FileResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+
 
 
 # Create your views here.
@@ -42,14 +50,10 @@ def showSubCategoryList(request):
 
 
 def showAddProduct(request):
-    categories = Category.objects.all()
-    subcategories = Subcategory.objects.all()
-    item_unit = Unit.objects.all()
+
     # suppliers = Supplier.objects.all()
     context = {
-        "categories": categories,
-        "subcategories": subcategories,
-        "item_units": item_unit,
+   
         "form": ProductForm,
     }
 
@@ -58,17 +62,57 @@ def showAddProduct(request):
 
 def addProductProcess(request):
     if request.method == "POST":
-        productform = ProductForm(request.POST)
-        print(productform)
-    #     print("here")
-    #     if productform.is_valid():
-    #         product = productform.save()
-    #         messages.success(request, "Product Added Successfully")
-    #         return redirect("product:productpage")
-    #     messages.error(request, str(productform.errors))
-    return redirect("product:productpage")
+        productform = ProductForm(request.POST,request.FILES)
+        if productform.is_valid():
+            product = productform.save()
+            messages.success(request, "Product Added Successfully")
+            return redirect("product:productlist")
+        messages.error(request, str(productform.errors))
+        return redirect("product:productpage")
 
 
+def showProducts(request):
+    context = {
+        'products':Product_Item.objects.all().order_by("-id")
+    }
+
+    return render(request, "product/productlist.html", context=context)
+
+
+def editProduct(request, pk):
+    product = Product_Item.objects.get(id=pk)
+    # suppliers = Supplier.objects.all()
+    context = {
+        
+        "form": ProductForm(instance=product),
+        'edit': True,
+        'product':product
+    }
+
+    return render(request, "product/addproduct.html", context=context)
+
+def edit_product_process(request, pk):
+     if request.method == "POST":
+        product = Product_Item.objects.get(id=pk)
+        productform = ProductForm(request.POST,request.FILES,instance=product)
+        if productform.is_valid():
+            product = productform.save()
+            messages.success(request, "Product  Edited Successfully")
+            return redirect("product:productlist")
+        messages.error(request, str(productform.errors))
+        return redirect("product:productpage")
+
+
+
+def delete_product(request, pk):
+    if Product_Item.objects.filter(id=pk).exists():
+        product = Product_Item.objects.get(id=pk)
+        product.delete()
+        messages.success(request, "Product Deleted Successfully")
+        return redirect("product:productlist")
+    messages.error(request, "Error Try Agian")
+    return redirect("product:productlist")
+    
 def showAddUnit(request):
     context = {"form": UnitForm, "units": Unit.objects.all().order_by("-id")}
     return render(request, "product/unit.html", context=context)
@@ -110,9 +154,9 @@ def edit_unit_process(request, pk):
             if unitform.is_valid():
                 unit = unitform.save()
                 messages.success(request, "Unit Edited Successfully")
-                return redirect("product:unitpage")
+                return redirect("product:unitlist")
             messages.error(request, str(unitform.errors))
-            return redirect("product:unitpage")
+            return redirect("product:unitlist")
 
 
 def delete_unit(request, pk):
@@ -120,9 +164,9 @@ def delete_unit(request, pk):
         unit = Unit.objects.get(id=pk)
         unit.delete()
         messages.success(request, "Unit Deleted Successfully")
-        return redirect("product:unitpage")
+        return redirect("product:unitlist")
     messages.error(request, "Error Try Agian")
-    return redirect("product:unitpage")
+    return redirect("product:unitlist")
 
 
 def add_subcategory(request):
@@ -141,9 +185,9 @@ def delete_subcategory(request, pk):
         subcategory = Subcategory.objects.get(id=pk)
         subcategory.delete()
         messages.success(request, "Subcategory Deleted Successfully")
-        return redirect("product:subcategorypage")
+        return redirect("product:subcategory_list")
     messages.error(request, "Error Try Agian")
-    return redirect("product:subcategorypage")
+    return redirect("product:subcategory_list")
 
 
 def edit_subcategory(request, pk):
@@ -166,9 +210,9 @@ def edit_subcategory_process(request, pk):
             if subcategoryform.is_valid():
                 subcategory = subcategoryform.save()
                 messages.success(request, "Subcategory Edited Successfully")
-                return redirect("product:subcategorypage")
+                return redirect("product:subcategory_list")
             messages.error(request, str(subcategoryform.errors))
-            return redirect("product:subcategorypage")
+            return redirect("product:subcategory_list")
 
 
 def add_category(request):
@@ -187,9 +231,9 @@ def delete_category(request, pk):
         category = Category.objects.get(id=pk)
         category.delete()
         messages.success(request, "Category Deleted Successfully")
-        return redirect("product:categorypage")
+        return redirect("product:categorylist")
     messages.error(request, "Error Try Agian")
-    return redirect("product:categorypage")
+    return redirect("product:categorylist")
 
 
 def edit_category(request, pk):
@@ -212,9 +256,9 @@ def edit_category_process(request, pk):
             if categoryform.is_valid():
                 category = categoryform.save()
                 messages.success(request, "Category Edited Successfully")
-                return redirect("product:categorypage")
+                return redirect("product:categorylist")
             messages.error(request, str(categoryform.errors))
-            return redirect("product:categorypage")
+            return redirect("product:categorylist")
 
 
 def add_unit(request):
@@ -239,7 +283,7 @@ def create_categories_from_excel(request):
                     code = row["code"]
                     Category.objects.create(name=name, code=code)
                 messages.success(request, "Category Added Successfully")
-                return redirect("product:categorypage")
+                return redirect("product:categorylist")
     except Exception as e:
         messages.error(request, f"{str(e)}")
         return redirect("product:categorypage")
@@ -256,7 +300,7 @@ def create_subcategories_from_excel(request):
                     code = row["code"]
                     Subcategory.objects.create(name=name, code=code)
                 messages.success(request, "Subcategory Added Successfully")
-                return redirect("product:subcategorypage")
+                return redirect("product:subcategory_list")
     except Exception as e:
         messages.error(request, f"{str(e)}")
         return redirect("product:subcategorypage")
@@ -273,7 +317,127 @@ def create_units_from_excel(request):
                     shorthand = row["shorthand"]
                     Unit.objects.create(name=name, shorthand=shorthand)
                 messages.success(request, "Unit Added Successfully")
-                return redirect("product:unitpage")
+                return redirect("product:unitlist")
     except Exception as e:
         messages.error(request, f"{str(e)}")
         return redirect("product:unitpage")
+
+
+
+
+
+def showAddPackage(request):
+    context = {
+        "packageform": PackageForm,
+        'packages':Package.objects.all(),
+    }
+    return render(request, 'product/addpackage.html', context=context)
+
+
+
+
+    
+
+def addPackage(request):
+    if request.method == 'POST':
+        packageform = PackageForm(request.POST)
+        if packageform.is_valid():
+            package = packageform.save()
+            messages.success(request, "Package Added Successfully")
+            return redirect("product:add_package")
+        messages.error(request, str(packageform.errors))
+        return redirect("product:unitpage")
+        
+
+
+
+def export_products_as_pdf(request):
+    # Query your product data
+    products = Product_Item.objects.all()
+    tenant=get_tenant(request)
+
+    # Create an HTML template context
+    context = {
+        'products': products,
+        'pharmacy':tenant
+    }
+
+    # Render the HTML template
+    template = get_template('product/pdf.html')
+    html = template.render(context)
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
+
+    # Generate the PDF
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('PDF generation error')
+
+    return response
+  
+
+
+
+
+
+
+
+
+
+def export_products_to_excel(request):
+    # Query the data you want to export
+    products = Product_Item.objects.all()
+
+    # Create a DataFrame from the queryset
+    data = {
+        'Product Name': [product.name for product in products],
+        'Category': [product.category for product in products],
+        'Cost Price': [product.cost_price for product in products],
+        'Selling Price': [product.selling_price for product in products],
+        # Add more fields as needed
+    }
+
+    df = pd.DataFrame(data)
+
+    # Create a BytesIO object to store the Excel file in memory
+    output = BytesIO()
+
+    # Use pandas to write the Excel file to the BytesIO object using openpyxl engine
+    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Products')
+
+    # Set up the response
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=products.xlsx'
+
+    return response
+
+    # Query the data you want to export
+    products = Product_Item.objects.all()
+
+    # Create a DataFrame from the queryset
+    data = {
+        'Product Name': [product.name for product in products],
+        'Category': [product.category for product in products],
+        'Cost Price': [product.cost_price for product in products],
+        'Selling Price': [product.selling_price for product in products],
+        # Add more fields as needed
+    }
+
+    df = pd.DataFrame(data)
+
+    # Create a BytesIO object to store the Excel file in memory
+    output = BytesIO()
+
+    # Use pandas to write the Excel file to the BytesIO object
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Products', index=False)
+    writer.save()
+    writer.close()
+
+    # Set up the response
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=products.xlsx'
+
+    return response
