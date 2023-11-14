@@ -6,7 +6,10 @@ from django_tenants.utils import get_tenant
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from authentication.models import User
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4c06f3e6412e08eb08a5f31a74fb0b63f4e12c52
 
 
 # Create your views here.
@@ -14,11 +17,19 @@ from authentication.models import User
 
 def displayUsers(request):
     tenant = get_tenant(request)
+<<<<<<< HEAD
 
     context = {
                 "users": tenant.workers.all(),
                 
             }
+=======
+    with tenant_context(tenant):
+        context = {
+            'users':User.objects.all()
+        }
+
+>>>>>>> 4c06f3e6412e08eb08a5f31a74fb0b63f4e12c52
     return render(request, 'users/userslist.html',context=context)
 
 
