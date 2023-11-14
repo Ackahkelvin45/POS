@@ -56,81 +56,24 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'product:productpage'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'purchases:order'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Add Product</span>
+                <span class="pl-2 mx-1 text-xs text-white">Add Purchase Order</span>
              </a>
 
-             <a href="{% url 'product:productlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'purchases:purchaseorderlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Product list</span>
+                <span class="pl-2 mx-1 text-xs text-white">Purchase Order list</span>
              </a>
         </div>
      <!-- component -->
 <!-- component -->
 <div class="  px-8 max-vs:px-2  mx-4">
     <!--menu bar-->
-    <div class=" my-3 w-full flex flex-row bg-slate-200 border  border-slate-400 px-2 py-2">
-<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
-    <span class="group-hover:underline">Preview All</span>
-
-   
-
-</span>
-<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
-    <span class="group-hover:underline">Preview Barcode</span>
-
-   
-
-</span>
-
-<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
-    <span class="group-hover:underline ">Update quantity</span>
-
-   
-
-</span>
-
-<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<a href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
-    <span class="group-hover:underline ">Export as pdf</span>
-
-   
-
-</a>
-
-<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<a href="{% url 'product:export_products_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
-    <span class="group-hover:underline ">download as csv</span>
-
-   
-
-</a>
-
-<span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-    <i class="mdi mdi-refresh-circle text-gray-700 text-xs"></i>
-    <span class="group-hover:underline text-red-500">Reset qty to zero</span>
-
-   
-
-</span>
-
-
-
-
-
-    </div>
-    <div class="text-gray-700 my-2">Product List</div>
+  
+    <div class="text-gray-700 my-2">Purchase Order List</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
 
@@ -143,20 +86,26 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                           Product Image
+                           Purchase Order Number
                            </th>
                         <th scope="col" class="px-6 py-3">
-                         Name
+                      Created By
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Category
+                          Supplier
                         </th>
                         
                         <th scope="col" class="px-6 py-3">
-                            Subctegory
+                         Total Cost Price
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Selling price
+                            Discount
+                          </th>
+                        <th scope="col" class="px-6 py-3">
+                          Date
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Completed
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Action
@@ -164,31 +113,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in products%}
+                    {% for purchaseorder in purchaseorders%}
                     <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                        <td class="px-6 py-4">
-                            {% if product.product_image %}
-                           <img src="{{product.product_image.url}}" style="height:60px; width: 60px;"/>
-                           {%else%}
-                           <img src="{% static 'img/profile/image.png' %}" style="height:60px; width: 60px;"/>
-
-                           {%endif%}
-                        </td>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                           {{product.name}}
+                        <th class="px-6 py-4">
+                            {{purchaseorder.order_number}}
                         </th>
-                        <td class="px-6 py-4">
-                            {{product.category.name}}
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{purchaseorder.creator.first_name}} {{purchaseorder.creator.last_name}}
                         </td>
                         <td class="px-6 py-4">
-                            {{product.subcategory.name}}
+                            {{purchaseorder.supplier.company_name}}
                         </td>
                         <td class="px-6 py-4">
-                            ₵ {{product.selling_price}}
+                            ₵     {{purchaseorder.total_cost_price}}
                         </td>
-                        <td class="px-6 py-4 flex flex-row justify-center items-center ">
- 
-                            <a href="{% url 'product:editproduct' product.id %}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'product:delete_product' product.id%}" class="delete-item"> <i data-url="{% url 'product:delete_product' product.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
+                      
+                        <td class="px-6 py-4">
+                            {{purchaseorder.discount}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{purchaseorder.date_created}}
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="text-red-600 text-sm">Pending</span>
+                        </td>
+                        <td class="px-6 py-4 flex flex-col justify-start items-start  ">
+                            <div class="mb-2">
+                                <a href="{% url 'purchases:preview_as_pdf2' purchaseorder.id %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+                                    <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+                                    <span class="group-hover:underline">Preview </span>
+                                
+                                   
+                                
+                                </a>
+                            </div>
+                            <div class="">
+                              <a href="{% url 'purchases:recieve_order' purchaseorder.id%}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+                                  <i class="mdi  mdi-table-arrow-down  text-green-500 text-xs"></i>
+                                  <span class="group-hover:underline">recieve order</span>
+                              
+                                 
+                              
+                              </a>
+                          </div>
+ <div class="flex flex-row justify-center items-cente mt-2 ">
+                            <a href="{% url 'purchases:editpurchaseorder' purchaseorder.id %}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="delete-item"> <i data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
+                        </div>
+                      
                         </td>
                     </tr>
                    

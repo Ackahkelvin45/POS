@@ -63,6 +63,8 @@ TENANT_APPS = [
     'tenant',
     'users',
     'suppliers',
+    'purchases',
+    'stock',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

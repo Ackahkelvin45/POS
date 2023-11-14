@@ -37,8 +37,6 @@ def addSuppliersProcess(request):
 
 def supplierslist(request):
     context = {"suppliers": Supplier.objects.all().order_by("-id")}
-    print(context)
-
     return render(request, "suppliers/supplierslist.html", context=context)
 
 

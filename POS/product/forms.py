@@ -80,7 +80,7 @@ class CustomModelChoiceField1(forms.ModelChoiceField):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product_Item
-        fields = "__all__"
+        fields = ("code","name",'category',"subcategory","item_unit","supplier","notes","cost_price","markup","selling_price","profit_margin","minimum_stock_level","expiry_date","product_image")
 
         widgets = {
             "code": forms.TextInput(
@@ -110,7 +110,7 @@ class ProductForm(forms.ModelForm):
             ),
             "supplier": forms.Select(
                 attrs={
-                    "class": " w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-full pl-4 pr-3 py-2 rounded-l-lg border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",'required':False
                 }
             ),
             "notes": forms.Textarea(
@@ -157,7 +157,7 @@ class ProductForm(forms.ModelForm):
                 }
             ),
             "product_image": forms.ClearableFileInput(
-                attrs={"id": "dropzone-file", "class": "hidden"}
+                attrs={"id": "dropzone-file", "class": "hidden",'required':False}
             ),
         }
 

@@ -1,0 +1,116 @@
+{% load  filterstring %}
+<style>
+   tbody tr {
+                
+                border: 1px solid #4b4b4b;
+                
+            }
+            tfoot tr {
+                
+                border: 1px solid #4b4b4b;
+                background-color:#e4e4e4;
+                
+            }
+                           thead tr {
+                
+                border: 1px solid #222222;
+            }
+            tbody tr td  {
+                
+                text-align: center;
+                padding: 5px;
+    
+                
+                
+            }
+
+            tfoot tr td  {
+                
+                text-align: center;
+                padding: 2px;
+    
+                
+                
+            }
+
+            thead tr  th {
+                
+              text-align: center;
+                padding: 3px;
+            }
+            </style>
+
+            <div style="text-align: center;">
+              <h2 style="font-weight: 600 ; font-size: 17px; text-transform:uppercase;">{{pharmacy.name}}</h2>
+              <span >
+                <span style="font-size: 13px;">Loc:</span>
+              <span  style="font-weight: 300; font-size: 13px; ">{{pharmacy.address}}</sp>
+              </span>
+            <div >
+              <span style="font-size: 13px;">Tel:</span>
+            <span  style="font-weight: 300; font-size: 13px; ">{{pharmacy.contact}}</sp>
+          </div>
+              <h2></h2>
+            </div>
+           
+
+             
+            
+<div  >
+
+  <div style="display:flex;flex-direction:row; width:100%;margin-top:20px" >
+    <div>
+      <span style="font-weight:400;font-size:larger;">Purchase Order Number:</span>
+      <span>{{purchaseorder.order_number}}</span>
+    </div>
+    <div>
+      <span style="font-weight:400;font-size:larger;">Supplier:{{purchaseorder.supplier.company_name}}</span>
+    </div>
+    <div>
+      <span style="font-weight:400;font-size:larger;">Date:{{purchaseorder.date_created}}</span>
+    </div>
+    <div>
+      <span style="font-weight:400;font-size:larger;">Created By:{{purchaseorder.creator.first_name}} {{purchaseorder.creator.other_names}}</span>
+    </div>
+  </div>
+
+  <table class="responsive-table">
+    <thead>
+      <tr>
+     
+        <th scope="col">Product Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Cost Price</th>
+        <th scope="col">Total Cost Price</th>
+
+      </tr>
+    </thead>
+  
+    <tbody>
+      {% for product in ordered_products%}
+      <tr >
+  
+        <th data-title="Released"  ><div style="overflow-x: hidden;">
+          {% for chunk in product.product.name|chunk_string %}
+          {{ chunk }}<br>
+        {% endfor %}</div></th>
+        <td>{{product.quantity}}</td>
+        <td data-title="Domestic Gross" data-type="currency">{{product.cost_unit_price}}</td>
+        <td data-title="International Gross" data-type="currency">{{product.total_cost_price}}</td>
+ 
+      </tr>
+      {%endfor%}
+      <tfoot>
+        <td>total Quantity:{{purchaseorder.total_quantity}}</td>
+        <td>total Cost Price:GHS {{purchaseorder.total_cost_price}}</td>
+        <td>discount:{{purchaseorder.discount}}%</td>
+      </tfoot>
+
+    </tbody>
+  </table>
+</div>
+<script>
+  document.getElementById('printButton').addEventListener('click', function() {
+      window.print();
+  });
+  </script>
