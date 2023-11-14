@@ -48,7 +48,6 @@ def export_suppliers_as_pdf(request):
 
     # Create an HTML template context
     context = {
-<<<<<<< HEAD
         'suppliers': suppliers,
         "pharmacy":tenant
     }
@@ -67,11 +66,7 @@ def export_suppliers_as_pdf(request):
         return HttpResponse('PDF generation error')
 
     return response
-=======
-        'suppliers':Supplier.objects.all ().order_by('-id')
-    }
 
-    return render(request,'suppliers/supplierslist.html',context=context)
 
 
 
@@ -110,4 +105,3 @@ def edit_supplier_process(request, pk):
                 return redirect("suppliers:supplierlist")
             messages.error(request, str(supplierform.errors))
             return redirect("suppliers:supplierlist")
->>>>>>> 4c06f3e6412e08eb08a5f31a74fb0b63f4e12c52
