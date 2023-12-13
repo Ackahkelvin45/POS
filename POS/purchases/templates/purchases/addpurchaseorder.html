@@ -63,7 +63,7 @@
                
              </a>
 
-             <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'purchases:purchaseorderlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Purchase order list</span>
@@ -233,6 +233,17 @@
            
         
         </a>
+        {% if purchase_order.supplier%}
+        <span class="h-5 mx-1 mt-1 bg-gray-500 w-[1px] "></span>
+        <a href="{% url 'purchases:send_purhase_order_as_email' purchase_order.id %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer  justify-center items-center ">
+            <i class="mdi mdi-email  text-gray-700 text-lg"></i>
+            <span class="group-hover:underline ">send as email to supplier </span>
+
+        
+           
+        
+        </a>
+        {%endif%}
     
      
         <span class="h-5 mx-1 bg-gray-500 w-[1px] mt-1"></span>
@@ -246,7 +257,7 @@
         </a>
         
         <span class="h-5 mx-1 mt-1 bg-gray-500 w-[1px] "></span>
-        <a href="{% url 'product:export_products_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer  justify-center items-center ">
+        <a href="" class="flex flex-row text-xs text-gray-500  group cursor-pointer  justify-center items-center ">
             <i class="mdi mdi-application-export text-gray-700 text-lg"></i>
             <span class="group-hover:underline ">download as csv</span>
 
@@ -254,6 +265,7 @@
            
         
         </a>
+     
         
 
         

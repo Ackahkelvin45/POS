@@ -1,3 +1,4 @@
+
 from django.shortcuts import render,redirect,get_object_or_404
 from product.models import Product_Item, Package
 from suppliers.models import Supplier
@@ -14,9 +15,11 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django_tenants.utils import get_tenant
-from stock.forms import RecievestockForm
-from product.models import Product_Item
 from django.urls import reverse
+from stock.models import StockEntry
+from  settings.models import EmailBackend
+from django.core.mail import EmailMessage
+
 
 # Create your views here.
 
@@ -24,11 +27,14 @@ from django.urls import reverse
 def showOrderPage(request):
     
     purchase_order = request.session.get('active_purchase_order')
+    tenant = get_tenant(request)
+    print(tenant.name)
     
     
    
     
-    if   purchase_order:
+    if purchase_order:
+        
         purchase_order_item = PurchaseOrder.objects.get(pk=purchase_order)
         context = {
         'products': Product_Item.objects.all(),
@@ -123,6 +129,8 @@ def purchase_item(request):
         if form.is_valid():
             ordered_product = form.save(commit=False)
             ordered_product.product = product
+            ordered_product.calculate_total_cost_price()
+            ordered_product.calculate_quantity()
 
            
             if purchase_order:
@@ -270,9 +278,8 @@ def delete_purchaseorder(request):
     
 
 def view_purchase_order_list(request):
-    purchase_orders = PurchaseOrder.objects.all()
     context = {
-        "purchaseorders":purchase_orders
+        "purchaseorders":PurchaseOrder.objects.all().order_by("-id")
     }
     return render(request, "purchases/purchaseorderlist.html", context=context)
     
@@ -308,7 +315,7 @@ def recieve_order(request, pk):
     context = {
         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchase_order_item.id),
         'purchase_order': purchase_order_item,
-        "recievestockform":RecievestockForm(),
+
        
         
     }
@@ -348,33 +355,76 @@ def preview_as_pdf2(request,pk):
 def receive_stock_process(request, pk):
     purchase_order = get_object_or_404(PurchaseOrder, id=pk)
     if request.method == 'POST':
-        stockform = RecievestockForm(request.POST)
-        product = request.POST['product']
-        product=get_object_or_404(Product_Item, id=product)
+        recieved_quantity=request.POST['recieved_quantity']
+        orderedproduct = request.POST['orderedproduct']
+        orderedproduct = get_object_or_404(OrderedProduct, id=orderedproduct)
+        if int(recieved_quantity) > 0:
+            if int(recieved_quantity) <= orderedproduct.remaining_quantity:
+                
+        
+                orderedproduct.received_quantity = orderedproduct.received_quantity + int(recieved_quantity)
+                orderedproduct.add_to_stock(user=request.user,quantity=int(recieved_quantity))
+                purchase_order.update_order_status()
+                messages.success(request, f'{str(recieved_quantity)} {str(orderedproduct.product.name)} recieved sucessfully')
+                return redirect(reverse('purchases:recieve_order',args=[pk]))
 
-        if stockform.is_valid():
-            received_quantity = stockform.cleaned_data['received_quantity']
+            messages.error(request, 'recieved quantity can not be greater to remaining quantity')
+            return redirect(reverse('purchases:recieve_order',args=[pk]))
 
-            if received_quantity < 0:
-                messages.error(request, 'Received quantity must be a positive integer.')
-                return redirect(reverse("purchases:recieve_order" ,args=[purchase_order.id]))
-            elif received_quantity > product.available_quantity:
-                messages.error(request, 'Received quantity exceeds available quantity.')
-                return redirect(reverse("purchases:recieve_order" ,args=[purchase_order.id]))
-            else:
-                # Create a ReceivedStock instance
-                received_stock = ReceivedStock(
-                    purchase_order=purchase_order,
-                    product=product,
-                    received_quantity=received_quantity
-                )
-                received_stock.save()
+        
+        messages.error(request, f'recieved quantity can not be {str(recieved_quantity)}')
+        return redirect(reverse('purchases:recieve_order',args=[pk]))
 
-                messages.success(request, f'Stock for {product.name} received successfully.')
 
-                return redirect(reverse("purchases:recieve_order" ,args=[purchase_order.id])) # Redirect to the purchase order list page
 
-        else:
-            messages.error(request,str(stockform.errors))
-            return redirect(reverse("purchases:recieve_order" ,args=[purchase_order.id]))
-      
+
+def recieve_all_stock(request, pk):
+    purchase_order = get_object_or_404(PurchaseOrder, id=pk)
+    orderedproduct = OrderedProduct.objects.filter(purchase_order=purchase_order.id)
+    for product in orderedproduct:
+        product.recieved_quantity = product.remaining_quantity
+        product.add_to_stock(user=request.user,quantity=int(product.recieved_quantity ))
+    purchase_order.update_order_status()
+    messages.success(request, 'All items recievd succesfully')
+    return redirect(reverse('purchases:recieve_order',args=[pk]))      
+
+
+def send_purhase_order_as_email(request, pk):
+    purchaseorder = PurchaseOrder.objects.get(id=pk)
+    tenant=get_tenant(request)
+    context = {
+         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
+         "purchaseorder": purchaseorder,
+         "pharmacy":tenant
+        
+
+    }
+
+    # Render the HTML template
+    template = get_template('purchases/purchaseorderpdf.html')
+    html = template.render(context)
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
+
+    # Generate the PDF
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('PDF generation error')
+    email_user = EmailBackend.objects.order_by('pk').first()
+   
+    email = EmailMessage(
+                            'Purchase Order',
+                            "Purchase Order",
+                            email_user.email,
+                            [purchaseorder.supplier.email,]
+
+                        )
+    email.attach('purchase_order.pdf', response.content, 'application/pdf')
+    email.fail_silently = False
+    email.send()
+    messages.success(request, 'Purchase Order sent  succesfully')
+    return redirect('purchases:order') 
+            
+    

@@ -5,6 +5,10 @@ from product.models import Product_Item, Package
 from .  import utils
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.db.models import Sum
+from stock.models import StockEntry
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -26,10 +30,27 @@ class PurchaseOrder(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     date_created = models.DateField(auto_now_add=True, null=True)
     updated_at = models.DateField(auto_now=True, null=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
     recieved_at = models.DateField( null=True)
     status = models.CharField(max_length=20, default='pending',choices=Status,null=True) 
 
 
+    def update_order_status(self):
+        remaining_quantity_sum = self.orderedproduct_set.aggregate(
+            total_remaining_quantity=Sum('remaining_quantity')
+        )['total_remaining_quantity']
+
+        if remaining_quantity_sum == 0:
+            # All products received
+            self.status = 'recieved'
+        elif remaining_quantity_sum > 0:
+            # Some products received
+            self.status = 'partially received'
+        else:
+            # No products received
+            self.status = 'pending'
+
+        self.save()
     
     def save(self, *args, **kwargs):
         if not self.order_number:
@@ -64,17 +85,27 @@ class  OrderedProduct(models.Model):
     quantity = models.PositiveIntegerField(null=True,blank=True)
     cost_unit_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
     package_type = models.ForeignKey(Package, on_delete=models.DO_NOTHING, null=True,blank=True)
-    total_cost_price=models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    total_cost_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    received_quantity = models.PositiveIntegerField(default=0, null=True)
+    remaining_quantity = models.PositiveIntegerField(default=0, null=True)
 
-    def calculate_total_cost_price(self):
-        self.total_cost_price = (self.quantity) * self.cost_unit_price
-      
+
+
+
+
         
 
     def save(self, *args, **kwargs):
-        
-            # Calculate total cost price only when creating a new OrderedProduct
+
+        self.remaining_quantity = self.quantity-self.received_quantity
+
             
+
+
+        super(OrderedProduct, self).save(*args, **kwargs)
+
+    def calculate_quantity(self):
+                    
         if self.package_type:
             # If there's a package type, use its number_of_products_item for multiplication
             multiplier = self.package_type.number_of_products_item
@@ -82,23 +113,35 @@ class  OrderedProduct(models.Model):
             # If there's no package type, assume a multiplier of 1
             multiplier = 1
 
-        self.quantity=self.quantity * multiplier
+        self.quantity = self.quantity * multiplier
 
-            
-        self.calculate_total_cost_price()
+    def calculate_total_cost_price(self):
+        self.total_cost_price = (self.quantity) * self.cost_unit_price
+        
+    def add_to_stock(self,user,quantity):
+        stockentry = StockEntry(
+            product=self.product,
+            quantity_received=quantity,
+             previous_quantity=self.product.available_quantity,
+            user=user,
+            created_at=timezone.now(),
+        )
+
+        
+        product = self.product
+        product.available_quantity = self.received_quantity
+        product.save()
+        stockentry.available_quantity = product.available_quantity
+        stockentry.info=f"{self.product.name } updated by {quantity} in purchase order {self.purchase_order.order_number}"
+        stockentry.save()
+        self.save()
 
 
-        super(OrderedProduct, self).save(*args, **kwargs)
+      
 
-
-
-
-
-
-
-
-    
-
-
+class ReceivedProductHistory(models.Model):
+    ordered_product = models.ForeignKey(OrderedProduct, on_delete=models.CASCADE)
+    received_quantity = models.PositiveIntegerField(null=True)
+    received_time = models.DateTimeField(auto_now_add=True)
 
     

@@ -165,6 +165,7 @@ class ProductForm(forms.ModelForm):
         super(ProductForm, self).__init__(*args, **kwargs)
 
         # Customize choices for category, subcategory, item_unit, and supplier
+        self.fields["supplier"].widget.attrs['required'] = False
         self.fields["category"] = CustomModelChoiceField(
             queryset=Category.objects.all(),
             widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"}),
@@ -179,6 +180,7 @@ class ProductForm(forms.ModelForm):
         self.fields["supplier"] = CustomModelChoiceField1(
             queryset=Supplier.objects.all(),
              widget=forms.Select(attrs={"class": " select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",'required':False}),
+             required=False,
         )
 
 

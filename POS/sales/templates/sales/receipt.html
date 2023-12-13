@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: #f9f9ef; padding: 10px; height:870px;">
+ 
+  <div style=" width:100%; display:  flex; flex-direction: column; justify-content: space-between; margin-bottom: 1.5rem; font-family: 'Courier New', monospace;">
+    <div class="d" style="width:100%; display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.2rem;">
+        <span>Date:</span>
+      
+        {{sale.date_created}}
+    </div>
+    <hr style="margin-bottom: 0.2rem;"/>
+    <div style="width:100%; display: flex; flex-direction:row;  justify-content: space-between;align-items: stretch; margin-bottom: 0.2rem;">
+        <span>Sale Number:</span>
+        <span>{{sale.sale_number}}</span>
+    </div>
+    <hr style="margin-bottom: 0.2rem;"/>
+    <div style="display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.2rem;">
+        <span>Sales Person:</span>
+        <span>{{user.first_name}}</span>
+    </div>
+    <hr style="margin-bottom: 0.6rem;"/>
+
+    {% for product in saleproducts%}
+    <div style="display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>{{product.product.name}}</span>
+        <span> GH₵ {{product.total_cost_price}}</span>
+    </div>
+    {%endfor%}
+    <div style="display: flex; flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>Discount</span>
+        {%if sale.discount%}
+        <span style="color: red;">-{{sale.discount}}%</span>
+        {%else%}
+        <span style="color: red;">-0.00%</span>
+        {%endif%}
+    </div>
+    <div style="display: flex; flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>Tax</span>
+        <div style="display: flex; flex-direction:column;  justify-content: flex-end; align-items: flex-end;">
+            {% if sale.tax%}
+            {% for tax in  sale.tax.all%}
+            <span>{{tax.name}}</span>
+            <span>+{{tax.amount}}</span>
+            {%endfor%}
+            {%else%}
+         
+            {%endif%}
+        </div>
+    </div>
+    <div style="display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.3rem;">
+        <span style="font-weight: bold;">Sub Total</span>
+        {% if sale.sub_total_cost_price %}
+        <span style="font-weight: bold;">  GH₵ {{sale.sub_total_cost_price}}</span>
+        {%else%}
+        <span style="font-weight: bold;"> GH₵ 0.00</span>
+        {%endif%}
+    </div>
+
+    <hr style="margin-bottom: 0.2rem;"/>
+
+    <div style="display: flex;flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
+        <span style="font-weight: bold; color: #333;">Total</span>
+        {% if sale.total_cost_price %}
+        <span style="font-weight: bold; color: #333;"> GH₵ {{sale.total_cost_price}}</span>
+        {%else%}
+        <span style="font-weight: bold; color: #333;"> GH₵ 0.00</span>
+        {%endif%}
+    </div>
+    <div style="display: flex; flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>Amount Paid</span>
+        <span> GH₵ {{sale.payment.amount_paid}}</span>
+    </div>
+    <div style="display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>Change</span>
+        <span> GH₵ {{sale.payment.change}}</span>
+    </div>
+</div>
+
+
+    
+    <span style=" bottom: 10%; right: 50%; transform: rotate(90deg);position: absolute; opacity:0.6;  color: rgb(32, 141, 32); font-weight: 800; font-family: 'Times New Roman', Times, serif; border-color: rgb(32, 141, 32); border: solid; border-radius: 10% 10% 10% 10%; font-size: xx-large; padding: 10px;  ">PAID</span>
+
+
+</body>
+</html>

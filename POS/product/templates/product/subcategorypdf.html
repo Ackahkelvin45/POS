@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load  filterstring %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body >
+    <div>
+        <h1 style="text-align: center;font-size: 1.5rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ">
+{{pharmacy.name}}
+
+        </h1>
+        <h1 style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; margin-top:-5px;">
+            {{pharmacy.address}}
+        </h1>
+    </div>
+
+
+    <div style="max-width: 100%; overflow-x: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-radius: 0.375rem;">
+        <h2  style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ;">subcategory List</h2>
+        <table class="fl-table" style="width: 100%; font-size: 0.875rem; text-align: left; direction: ltr; color: #718096; background-color: #f8fafc; border-collapse: collapse; border-spacing: 0;">
+            <thead style="  text-align: center;font-size: 0.75rem; color: #4a5568; text-transform: uppercase; background-color: #edf2f7; color: #1a202c;">
+                <tr>
+                    <th style="padding: 0.75rem 1.5rem;">
+                       Subcategory name
+                    </th>
+               
+                     <th style="padding: 0.75rem 1.5rem;">
+                        Code
+                      </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for subcategory  in subcategorys%}
+                <tr style=" border-bottom: 1px solid #e2e8f0;  border-bottom: 1px solid #e2e8f0; text-align: center; ">
+                    <th style="padding: 1rem 1.5rem; font-weight: 500; color: #2d3748; white-space: nowrap;">
+                        {{ subcategory.name}}
+                       
+                    </th>
+                    <td style="padding: 1rem 1.5rem; color: #424447;">
+                        {{subcategory.code}}
+                    </td>
+                    
+                 
+                </tr>
+            {%endfor%}
+               
+             
+            </tbody>
+        </table>
+    </div>
+    
+<style>
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
+
+/* Table Styles */
+
+.table-wrapper{
+ 
+}
+
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+   
+}
+
+.fl-table td, .fl-table th {
+   
+}
+
+.fl-table td {
+    
+}
+
+.fl-table thead th {
+  
+}
+
+
+
+
+.fl-table tbody tr:nth-child(even) {
+    background:#edf2f7;
+}
+.fl-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+</style>
+</body>
+</html>

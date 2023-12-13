@@ -105,3 +105,6 @@ def edit_supplier_process(request, pk):
                 return redirect("suppliers:supplierlist")
             messages.error(request, str(supplierform.errors))
             return redirect("suppliers:supplierlist")
+
+
+

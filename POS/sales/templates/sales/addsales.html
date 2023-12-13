@@ -1,0 +1,1141 @@
+{% extends 'POS/layout.html'%}
+{%load static%}
+{% load  filterstring %}
+{%block body%}
+
+
+<div id="container">
+    <img src="http://placehold.it/3000x3000/cf5">
+</div>
+
+<div id="overlay">
+    <div id="progstat"></div>
+    <div id="progress"></div>
+</div>
+
+
+
+      {% if sale.status %}
+      <script>
+  
+        Swal.fire({
+            icon: 'warning',
+            text: "Do you want to Print a receipt",
+            confirmButtonColor: '#26A69A',
+            confirmButtonText:"Yes",
+            showDenyButton:true,
+            denyButtonText:"Cancel",
+            color:"white",
+            background: 'rgba(0, 0, 0, 0.7)',
+            allowEscapeKey: false,
+            dangerMode:true,
+      
+          }).then((e)=>{
+            if (e.isConfirmed){
+          let url= "{% url 'sales:receipt' sale.id %}";
+           
+         
+           window.location.href=url
+            }
+            else{
+                console.log("denied")
+            }
+          })
+     
+      </script> 
+      {%endif%}
+
+    
+ 
+<div class="mt-20 max-vs:mt-[6.6rem]  ">
+    {%if messages%}
+{% for message in messages%}
+{% if message.tags == 'success'%}
+
+      
+        <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800 absolute z-50  right-5" role="alert">
+           
+            <svg   class="flex-shrink-0 w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <path d="M8.445 12.6675A.9.9 0 0 0 7.1424 13.91l2.5726 2.7448c.3679.3856.9884.3689 1.335-.036l5.591-7.0366a.9.9 0 0 0-1.3674-1.1705l-4.6548 5.9132a.4.4 0 0 1-.607.0252l-1.567-1.6826zM1.9995 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z"></path>
+            </svg>
+            <div class="ml-3 text-sm font-medium">
+              {{message}}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-0  p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" id="close">
+              <span class="sr-only">Dismiss</span>
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
+        </div>
+
+        {%else%}
+        <div id="alert" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800  absolute z-50  right-5" role="alert">
+            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <div class="ml-3 text-sm font-medium">
+              {{message}}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg   p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" id="close">
+              <span class="sr-only">Dismiss</span>
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
+        </div>
+        
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+      
+    <div class="rounded-3xl  border h-fit border-indigo-200 bg-gray-100  mx-4 mb-4 pb-10 ">
+      
+        <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
+            <a href="{% url 'sales:add_sales'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            
+                <i class="mdi mdi-plus text-white text-base"></i>
+                <span class="pl-2 mx-1 text-xs text-white">Add Sales</span>
+             </a>
+
+             <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            
+                <i class="mdi mdi-view-module-outline text-white text-base"></i>
+                <span class="pl-2 mx-1 text-xs text-white">Sales list</span>
+             </a>
+        </div>
+     <!-- component -->
+<!-- component -->
+{% if modal %}
+<div  id="modal" class="fixed z-[100] left-0  top-0 w-screen h-screen bg-gray-600  bg-opacity-30 flex justify-center items-center">
+  <div class=" w-[50%]  bg-white  rounded-md max-sm:w-[70%] max-vs:w-[90%] justify-center items-center flex flex-col">
+    <div class="flex items-start justify-between w-full p-4 border-b rounded-t dark:border-gray-600">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+        {{product.name}}
+      </h3>
+      <button id="closebutton" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+          <span class="sr-only">Close modal</span>
+      </button>
+  </div>
+  {%if edit %}
+  <form method="post" action=""   class="w-full  px-6 py-6 lg:px-8   justify-center items-center flex    ">{% csrf_token %}<div class="relative w-full max-w-md max-h-full">
+
+  {%else%}
+  <form method="post" action="{% url 'sales:sell_item' %}"   class="w-full  px-6 py-6 lg:px-8   justify-center items-center flex    ">{% csrf_token %}<div class="relative w-full max-w-md max-h-full">
+
+  {%endif%}
+  <div class=""><input class="hidden" name="product" value="{{product.id}}"/>
+
+      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Package Type</label>{{saleform.package_type}}</div>
+      <div>
+         <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>{{saleform.quantity}}</div><div class="mb-2"><label class="block mb-2 text-sm font-medium text-gray-900  ">Cost Price</label>{{saleform.cost_unit_price}}
+        </div >
+        <div class="w-full justify-center items-center flex">
+          <button type="submit" class="w-fit  text-white bg-blue-700  font-medium rounded-lg text-sm px-2 py-2.5 text-center  ">Order Now </button> 
+        </div>
+     
+    </div></div>
+  </form>
+</div>
+</div>
+{%endif%}
+<div class="  px-0 max-vs:px-2  mx-4 ">
+    <!--menu bar-->
+    <div class="text-gray-700 my-2">Add Sales</div>
+    <hr class="h-[1px] w-full bg-gray-900 mb-2"/>
+
+
+
+    </div>
+    <div class="px-2 max-vs:px-2 flex flex-row w-full pt-5 justify-between ">
+
+    <div class="w-[65%] bg-white ">
+      <!--search div -->
+    <div class="w-full h-64 overflow-y-scroll scrollbar-thin scrollbar-track-slate-300 scrollbar-thumb-indigo-300 rounded-md border-[1px] border-gray-400  ">
+      <div class="w-full flex flex-row p-3 justify-between ">
+
+        <form method="post" id="search-form" class="flex w-[50%]">
+          {% csrf_token %}
+          <div id="bloodhound" class="flex w-full">
+          <input   id="product-name" class="typeahead   w-full h-8 pl-4 pr-3  rounded-lg  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300 placeholder:text-xs" type="text" placeholder="search product..."/>
+
+          <button type="submit" class="-ml-4 py-1 px-2  h-8 bg-indigo-600 rounded-r-lg z-10">
+            <i class="mdi mdi-shopping-search text-white text-lg"></i>
+          </button>
+        </div>
+      </form>
+
+    </div>
+    <hr class="bg-slate-500 w-full "/>
+    <div class="w-full flex flex-col "  >
+
+      <table id="productcard" class="text-left w-full">
+        <thead class=" flex  w-full text-xs text-gray-700 uppercase bg-gray-200">
+          <tr class="flex w-full  justify-center items-center">
+            <th class="px-6 py-1 w-1/4 text-center ">Product</th>
+            <th class="px-6 py-1 w-1/4 text-center ">Available Quantity</th>
+            <th class="px-6 py-1 w-1/4 text-center ">Unit Cost</th>
+            <th class="px-6 py-1 w-1/4 text-center ">Action</th>
+          </tr>
+        </thead>
+        <tbody class="bg-grey-light text-sm flex flex-col items-center  w-full" >
+
+ 
+
+  
+        </tbody>
+        
+      </table>
+
+      </div>
+
+    </div>
+
+     <!--order div -->
+    <div class="w-full mt-4 rounded-md border-[1px] border-gray-400  ">
+
+    <hr class="bg-slate-500 w-full "/>
+    <div class="w-full flex flex-col ">
+
+
+  <table id="product-table"  class="text-left w-full">
+    <thead class=" flex  w-full text-xs text-gray-700 uppercase bg-gray-200">
+      <tr class="flex w-full  justify-center items-center">
+        <th class="px-6 py-1 w-1/4 text-center ">Name</th>
+        <th class="px-6 py-1 w-1/4 text-center ">Package_type</th>
+        <th class="px-6 py-1 w-1/4 text-center ">Unit Cost</th>
+        <th class="px-6 py-1 w-1/4 text-center ">Quantity</th>
+        <th class="px-6 py-1 w-1/4 text-center ">Total COST</th>
+        <th class="px-6 py-1 w-1/4 text-center ">Action</th>
+      </tr>
+    </thead>
+    <tbody class="bg-grey-light text-sm flex flex-col items-center  overflow-y-scroll w-full" style="height: 35vh;">
+      {% for product in saleproducts%}
+      <tr class="w-full  ">
+        <td class=" w-1/4 break-words">
+          <div class="flex flex-row items-center w-full">
+          <img src="{% static 'img/profile/image.png'%}" class="w-16 h-[4.5rem] rounded-md "/>
+          <div class="flex flex-col break-words">
+            <span class="font-bold text-gray-700 break-words ">
+              {% for chunk in product.product.name|chunk_string %}
+              {{ chunk }}<br>
+            {% endfor %}
+              
+            </span>
+            <span class="flex flex-row ">
+            <i class="mdi mdi-tag text-indigo-600 text-sm break-words"></i>
+            <span class="text-gray-500 text-sm mx-2 ">{{product.product.code}}</span>
+          
+          </span>
+          
+          </div>
+          </div>
+        </div>
+        </td>
+        <td class=" text-center  w-1/4 break-words">{{product.package_type}}</td>
+        <td class="text-center   w-1/4 break-words">{{product.cost_unit_price}}</td>
+        <td class="w-1/4 break-words">
+          <form method="post" action="{% url 'sales:update_quantity' product.id %}">
+            {%csrf_token%}
+          <input  name="quantity" value="{{product.quantity}}" type="number" class="h-6 border-[1px] rounded-md w-14 focus:ring-0"/>
+        </form>
+        </td>
+        <td class=" text-center  w-1/4 break-words">{{product.total_cost_price}}</td>
+        <td class="px-10 text-center w-1/4 break-words">
+          <a href="{% url 'sales:delete_item' product.id %}">
+          <i class="mdi mdi-trash-can font-bold text-lg text-indigo-700"></i>
+        </a>
+        </td>
+      
+      </tr>
+{%endfor%}
+      
+
+    </tbody>
+    <tfoot >
+      <tr class="flex w-full justify-end ">
+        <td class="flex w-full">
+        <div class="w-full flex flex-row p-3 justify-end  ">
+
+  
+          <a href="{% url 'sales:delete_sale'%}" class="w-[30%] flex  justify-end items-end "> 
+            
+          <span class="text-sm text-indigo-600"> Remove-all</span>
+              <button   class="py-[1px] px-2  h-6 bg-indigo-600 rounded-md mx-1 ">
+                <i class="mdi mdi-cancel text-white text-sm"></i>
+              </button>
+          
+          
+            </a>
+              </div>
+            </td>
+      </tr>
+    </tfoot>
+  </table>
+
+      </div>
+
+    </div>
+  </div>
+    <div class="w-[33%] flex flex-col font-mono">
+      <div class="bg-[#f9f9ef] border rounded-md shadow-lg px-2 py-2 text-gray-600">
+    
+
+        <div class="flex flex-col justify-between mb-6">
+            
+                <form id="dateform" method="post" action="{% url 'sales:complete_sale'%}" class="flex flex-row justify-between mb-1">
+                  {%csrf_token%}
+                  <span>Date:</span>
+         {{saleform.date_created}}           
+                </form>
+                <hr class="mb-1"/>
+                <div class="flex flex-row justify-between mb-1">
+                  <span>Sale No:</span>
+
+                  <span>{{sale.sale_number}}</span>
+                  
+                </div>
+                <hr class="mb-1"/>
+                <div class="flex flex-row justify-between mb-1">
+                  <span>Sales Person:</span>
+                  <span>{{request.user.first_name}}</span>
+                  
+                </div>
+                <hr class="mb-6"/>
+
+                <div class="flex flex-row justify-between mb-2">
+                  <span>Discount</span>
+                  {%if sale.discount%}
+                  <span class="text-red-600">-{{sale.discount}}%</span>
+                  {%else%}
+                  <span class="text-red-600">-0.00%</span>              
+                  {%endif%}
+                  
+                
+                </div>
+                <div class="flex flex-row justify-between mb-2">
+                  <span>Tax</span>
+                  <div class="flex flex-col justify-end items-end">
+                  {% if sale.tax%}
+                  {% for tax in  sale.tax.all%}
+                  <span >
+                    {{tax.name}}
+                  </span>
+                  <span >
+                    +{{tax.amount}}
+                  </span>
+                  {%endfor%}
+                  
+                           
+                    {%else%}
+                  <span>+0.00</span>
+                  {%endif%}
+                </div> 
+
+                </div>
+                <div class="flex flex-row justify-between mb-2">
+                  <span class="font-semibold">Sub Total</span>
+                  {% if sale.sub_total_cost_price %}
+                  <span class="font-semibold">{{sale.sub_total_cost_price}}</span>
+                  {%else%}
+                  <span class="font-semibold">0.00</span>
+                  {%endif%}
+                  
+                </div>
+              
+             
+                <hr class="mb-1"/>
+                
+                <div class="flex flex-row justify-between mb-2">
+                  <span class="font-semibold text-gray-900"> Total</span>
+                  {% if sale.total_cost_price %}
+                  <span class="font-semibold">{{sale.total_cost_price}}</span>
+                  {%else%}
+                  <span class="font-semibold">0.00</span>
+                  {%endif%}
+                  
+                </div>
+                <div class="flex flex-row justify-between mb-2">
+                  <span>Amount Paid</span>
+                
+                  <span class="">{{sale.payment.amount_paid}}</span>
+                 
+                  
+                
+                </div>
+                <div class="flex flex-row justify-between mb-2">
+                  <span>Change </span>
+                
+                  <span class="">{{sale.payment.change}}</span>
+                 
+                  
+                
+                </div>
+                
+        </div>
+   
+    </div>
+
+    <div class="w-full bg-white flex flex-col mt-5 ">
+      <div class=" w-full grid grid-cols-3 border  border-gray-300">
+        <div class="border-r-[2px] border-gray-200 flex justify-center items-center">
+          <i class="mdi-cash mdi text-green-600 text-6xl " id="cash" onclick="openNav1()"></i>
+        </div>
+        <div class="border-r-[2px] border-gray-200 bg-gray-100 flex justify-center items-center">
+          <i class="mdi-label-percent mdi text-red-600 text-6xl" id="discount"  onclick="openNav2()"></i>
+        </div>
+        <div  class="border-r-[2px] border-gray-200 flex justify-center items-center">
+        
+          <svg id="tax"  onclick="openNav4()"  class="w-14 h-14" viewBox="0 0 75 75 " xmlns="http://www.w3.org/2000/svg"><g><path d="m40 22c-.323 0-.64-.156-.833-.445l-4-6c-.306-.46-.182-1.08.277-1.387s1.08-.183 1.387.277l4 6c.306.46.182 1.08-.277 1.387-.17.113-.363.168-.554.168z"/></g><g><path d="m35.999 22c-.19 0-.383-.055-.554-.168-.459-.307-.583-.927-.277-1.387l4-6c.306-.46.926-.584 1.387-.277.459.307.583.927.277 1.387l-4 6c-.193.289-.51.445-.833.445z"/></g><g><path d="m33 19h-4c-.552 0-1-.447-1-1s.448-1 1-1h4c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g>
+            <path d="m33 22c-.552 0-1-.447-1-1v-4.8c.008-.145-.037-.199-.098-.205l-1.902.005c.036.001-.008.056-.003.118l.003 4.882c0 .553-.448 1-1 1s-1-.447-1-1v-4.8c-.09-1.062.761-2.083 1.902-2.195l2.098-.005c1.24.117 2.091 1.139 1.997 2.283l.003 4.717c0 .553-.448 1-1 1z"/></g><g><path d="m24 22c-.552 0-1-.447-1-1v-6c0-.553.448-1 1-1s1 .447 1 1v6c0 .553-.448 1-1 1z"/></g><g>
+              <path d="m26 16h-4c-.552 0-1-.447-1-1s.448-1 1-1h4c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m40 40h-18.001c-.552 0-1-.447-1-1s.448-1 1-1h18.001c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m40 33h-18.001c-.552 0-1-.447-1-1s.448-1 1-1h18.001c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m40 26h-18.001c-.552 0-1-.447-1-1s.448-1 1-1h18.001c.552 0 1 .447 1 1s-.448 1-1 1z"/></g>
+              <g><path d="m50 11h-30.001c-.552 0-1-.447-1-1s.448-1 1-1h30.001c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m15.999 45c-.552 0-1-.447-1-1v-30c0-.553.448-1 1-1s1 .447 1 1v30c0 .553-.448 1-1 1z"/>
+          </g><g><path d="m15.999 15c-.552 0-1-.447-1-1 0-2.757 2.243-5 5-5 .552 0 1 .447 1 1s-.448 1-1 1c-1.654 0-3 1.346-3 3 0 .553-.448 1-1 1z"/></g><g>
+            <path d="m14 55c-2.757 0-5-2.243-5-5 0-.553.448-1 1-1s1 .447 1 1c0 1.654 1.346 3 3 3 .552 0 1 .447 1 1s-.448 1-1 1z"/></g><g>
+              <path d="m42 55h-28c-.552 0-1-.447-1-1s.448-1 1-1h28c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m38 45h-28c-.552 0-1-.447-1-1s.448-1 1-1h28c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g>
+                <path d="m38 51c-.552 0-1-.447-1-1v-6c0-.553.448-1 1-1s1 .447 1 1v6c0 .553-.448 1-1 1z"/></g><g><path d="m42 55c-2.71 0-5-2.29-5-5 0-.553.448-1 1-1s1 .447 1 1c0 1.626 1.374 3 3 3s3-1.374 3-3c0-.553.448-1 1-1s1 .447 1 1c0 2.71-2.29 5-5 5z"/>
+                </g><g><path d="m10 51c-.552 0-1-.447-1-1v-6c0-.553.448-1 1-1s1 .447 1 1v6c0 .553-.448 1-1 1z"/></g><g><path d="m54 21h-8c-.552 0-1-.447-1-1s.448-1 1-1h8c.552 0 1 .447 1 1s-.448 1-1 1z"/></g><g><path d="m46 51c-.552 0-1-.447-1-1v-36c0-.553.448-1 1-1s1 .447 1 1v36c0 .553-.448 1-1 1z"/></g>
+                <g><path d="m54 15c-.552 0-1-.447-1-1 0-1.626-1.374-3-3-3s-3 1.374-3 3c0 .553-.448 1-1 1s-1-.447-1-1c0-2.71 2.29-5 5-5s5 2.29 5 5c0 .553-.448 1-1 1z"/></g><g><path d="m54 21c-.552 0-1-.447-1-1v-6c0-.553.448-1 1-1s1 .447 1 1v6c0 .553-.448 1-1 1z"/></g></svg>
+   
+      </div>
+      </div>
+      <div class=" w-full grid grid-cols-3 border  border-gray-300">
+        <div class="border-r-[2px] border-gray-200 flex  bg-gray-100 justify-center items-center " >
+               
+          <i class="mdi mdi-menu-open text-6xl text-blue-400 " id="main" onclick="openNav()"></i>
+        </div>
+        <div class="border-r-[2px] border-gray-200 flex justify-center items-center">
+          <a href="{% url 'sales:delete_sale'%}" class="w-full h-full flex justify-center items-center">
+            <i class="mdi-cancel mdi text-red-600 text-5xl"></i>
+          </a>
+          
+        </div>
+        <div class="border-r-[2px] border-gray-200 flex justify-center items-center">
+          
+          <button id="complete" class="w-full flex justify-center items-center" ><i class="mdi-check-underline-circle mdi text-green-600 text-5xl"></i></button>
+        </div>
+      </div>
+
+    </div>
+    </div>
+      
+        </div>
+        
+    </div>
+
+
+
+    </div>
+</div>
+</div>
+<div id="sidebar" class="bg-gray-200   border-indigo-600 rounded-l-md h-screen w-0  top-0 right-0 absolute z-[150] overflow-x-hidden transition-all duration-500 ease-in-out">
+  <div class="w-full flex flex-col justify-center items-center"> 
+    
+      
+    
+  <div class="w-full flex justify-between  bg-indigo-600 text-white px-2">
+    <span class="font-semibold text-xl ">Options</span>
+  <a href="javascript:void(0)" class="close-btn   text-2xl cursor-pointer" onclick="closeNav()">×</a>
+ 
+
+  </div>
+  <div class="w-full flex flex-col py-2 px-4 ">
+
+    <a href="{% url 'sales:pause_sale'%}" class="w-full flex-row flex   items-center border-b border-indigo-300">
+<i class="mdi mdi-pause text-2xl text-indigo-600"></i>
+      <span class=" font-semibold text-base mx-2 ">Pause </span>
+
+    </a>
+    <div class="w-full flex-row flex   items-center border-b border-indigo-300 mt-2">
+      <i class="mdi mdi-contactless-payment text-2xl text-indigo-600"></i>
+            <span class=" font-semibold text-base mx-2 ">Pay in installment </span>
+      
+          </div>
+
+</div> 
+</div>
+</div>
+
+<div id="paymentsidebar" class="bg-gray-200   border-indigo-600 rounded-l-md h-screen w-0  top-0 right-0 absolute z-[150] overflow-x-hidden transition-all duration-500 ease-in-out">
+  <form method="post" action="{% url 'sales:add_payment'%}" class="w-full flex flex-col justify-center items-center"> 
+    
+    {% csrf_token %}
+    
+  <div class="w-full flex justify-between  bg-indigo-600 text-white px-2">
+    <span class="font-semibold text-xl ">Payment</span>
+  <a href="javascript:void(0)" class="close-btn   text-2xl cursor-pointer" onclick="closeNav2()">×</a>
+ 
+
+  </div>
+  <div class="w-full flex flex-col py-2 px-4 ">
+
+    <div class="flex w-full  items-start justify-start">
+      <div class="w-full  mb-2  flex-col flex items-start justify-start">
+          <label for="" class="text-sm text-gray-700   px-1">Balance </label>
+          <div class="flex w-full">
+{{paymentform.balance}}          </div>
+      </div>
+     
+  </div>
+  <div class="flex w-full  items-start justify-start">
+    <div class="w-full  mb-2  flex-col flex items-start justify-start">
+        <label for="" class="text-sm text-gray-700   px-1">Payment Method</label>
+        <div class="flex w-full">
+{{paymentform.payment_type}}        </div>
+    </div>
+   
+</div>
+
+  <div class="flex w-full  items-start justify-start">
+    <div class="w-full  mb-2  flex-col flex items-start justify-start">
+        <label for="" class="text-sm text-gray-700   px-1">Amount Paid</label>
+        <div class="flex w-full">
+{{paymentform.amount_paid}}        </div>
+    </div>
+   
+</div>
+<div class="flex w-full  items-start justify-start">
+  <div class="w-full  mb-2  flex-col flex items-start justify-start">
+      <label for="" class="text-sm text-gray-700   px-1">Change </label>
+      <div class="flex w-full">
+{{paymentform.change}}      </div>
+  </div>
+ 
+
+
+</div>
+<div class="flex w-full  items-center justify-center">
+  <button type="submit" class="bg-green-500 px-2 py-1 rounded-md font-semibold text-sm text-white">pay</button>
+  
+ 
+ 
+</div>
+</div> 
+</form>
+</div>
+
+
+<div id="discountsidebar" class="bg-gray-200   border-indigo-600 rounded-l-md h-screen w-0  top-0 right-0 absolute z-[150] overflow-x-hidden transition-all duration-500 ease-in-out">
+<form method="post" action="{% url 'sales:add_discount'%}" class="w-full flex flex-col justify-center items-center"> 
+    
+      
+    
+  <div class="w-full flex justify-between  bg-indigo-600 text-white px-2">
+    <span class="font-semibold text-xl ">Add Disount</span>
+  <a href="javascript:void(0)" class="close-btn   text-2xl cursor-pointer" onclick="closeNav3()">×</a>
+ 
+
+  </div>
+  <div class="w-full flex flex-col py-2 px-4 ">
+
+    <div class="flex w-full  items-start justify-start">
+      <div class="w-full  mb-2  flex-col flex items-start justify-start">
+          <label for="" class="text-sm text-gray-700   px-1">Balance </label>
+          <div class="flex w-full">
+            {%if sale.sub_total_cost_price%}
+<input type="number" id="totalamount" value="{{sale.sub_total_cost_price}}" class=" select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+{%else%}
+<input type="number" id="totalamount"  class=" select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+
+{%endif%}
+          </div>
+      </div>
+     
+  </div>
+
+  <div class="flex w-full  items-start justify-start">
+    <div class="w-full  mb-2  flex-col flex items-start justify-start">
+        <label for="" class="text-sm text-gray-700   px-1">Discount in Amount</label>
+        <div class="flex w-full">
+<input id="discountamount" step="0.01" value="0" type="number" class=" select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+        </div>
+    </div>
+   
+</div>
+<div class="flex w-full  items-start justify-start">
+  <div class="w-full  mb-2  flex-col flex items-start justify-start">
+      <label for="" class="text-sm text-gray-700   px-1">Discount in Percentage </label>
+      <div class="flex w-full">
+<input id="discountpercentage" step="0.01" name="discountpercentage" value="{{sale.discount}}" type="number" class=" select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+      </div>
+  </div>
+  {% csrf_token %}
+</div>
+<div class="flex w-full  items-start justify-start">
+  <div class="w-full  mb-2  flex-col flex items-start justify-start">
+      <label for="" class="text-sm text-gray-700   px-1">Amount Payable </label>
+      <div class="flex w-full">
+<input id="amountpayable" type="number" step="0.01"  class=" select w-full pl-4 pr-3 py-2 rounded-lg  border border-gray-300 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+      </div>
+  </div>
+ 
+</div>
+<div class="flex w-full  items-center justify-center">
+  <button type="submit" class="rounded-md  bg-indigo-700 text-sm font-semibold text-white px-3 py-1" >add</button>
+
+  </div>
+ 
+</div>
+
+</form>
+</div>
+
+<div id="taxsidebar" class="bg-gray-200   border-indigo-600 rounded-l-md h-screen w-0  top-0 right-0 absolute z-[150] overflow-x-hidden transition-all duration-500 ease-in-out">
+  <div class="w-full flex flex-col justify-center items-center"> 
+    
+      
+    
+  <div class="w-full flex justify-between  bg-indigo-600 text-white px-2">
+    <span class="font-semibold text-xl ">Add Tax</span>
+  <a href="javascript:void(0)" class="close-btn   text-2xl cursor-pointer" onclick="closeNav4()">×</a>
+ 
+
+  </div>
+
+  <div class="w-full flex flex-col py-2 px-4 ">
+    <div class="w-full flex justify-end items-end mb-4">
+
+<span class="bg-indigo-600 px-1 py-[1px] rounded-md" id="addtax">
+  <i class="mdi mdi-plus text-white text-xl"></i>
+</span>
+    </div>
+    <div class="flex w-full  items-start justify-start flex-col ">
+      {% for tax in taxes%}
+      <div class="w-full  mb-2  flex-row justify-between flex  items-center">
+     <span class="text-sm font-semibold">{{tax.name}}({{tax.amount}})</span>
+     {% with saletax=sale.tax.all %}
+     {% if tax in saletax %}
+         <a href="{% url 'sales:remove_tax' tax.id %}" class="cursor-pointer bg-indigo-600 px-2 py-[1px] text-white font-semibold rounded-md">Remove</a>
+     {% else %}
+         <a href="{% url 'sales:add_tax'  tax.id %}" class="cursor-pointer bg-indigo-600 px-2 py-[1px] text-white font-semibold rounded-md">Add</a>
+     {% endif %}
+ {% endwith %}
+
+      </div>
+     {%endfor%}
+  </div>
+
+
+<form action="{%url 'sales:create_tax'%} " method="post" class=" flex-col w-full  mt-4  hidden" id="taxform">
+  <div class="flex w-full  items-start justify-start">
+    {%csrf_token%}
+    <div class="w-full  mb-2  flex-col flex items-start justify-start">
+        <label for="" class="text-sm text-gray-700   px-1">Name</label>
+        <div class="flex w-full">
+{{taxform.name}}        </div>
+    </div>
+   
+</div>
+  <div class="flex w-full  items-start justify-start">
+    <div class="w-full  mb-2  flex-col flex items-start justify-start">
+        <label for="" class="text-sm text-gray-700   px-1">Tax Amount</label>
+        <div class="flex w-full">
+{{taxform.amount}}        </div>
+    </div>
+   
+</div>
+
+
+<div class="flex w-full  items-center justify-center">
+  <button type="submit" class="rounded-md  bg-indigo-700 text-sm font-semibold text-white px-3 py-1" >add</button>
+
+  </div>
+</form>
+</div> 
+</div>
+</div>
+
+
+<div id="backdrop" class="h-screen w-full fixed top-0 bg-gray-900 z-[100] bg-opacity-30 hidden">
+
+</div>
+
+  
+
+<style>
+  .tt-dropdown-menu{
+    background-color:  rgb(226 232 240) !important;
+    padding: 5px;
+    border: rgb(179, 179, 179) solid !important;
+    border-radius: 5px 5px 5px 5px !important;
+    z-index: 1000 !important;
+}
+.twitter-typeahead{
+    width: 100% !important;
+}
+    .progress-container {
+    width: 100%;
+    height: 5px; /* Height of the progress bar */
+    background-color: #ccc; /* Background color of the progress container */
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #3498db; /* Color of the progress bar */
+    transition: width 0.3s; /* Transition effect for smoother progress */
+}
+</style>
+<script>
+   (function(){
+  function id(v){ return document.getElementById(v); }
+  function loadbar() {
+    var ovrl = id("overlay"),
+        prog = id("progress"),
+        stat = id("progstat"),
+        img = document.images,
+        c = 0,
+        tot = img.length;
+    if(tot == 0) return doneLoading();
+
+    function imgLoaded(){
+      c += 1;
+      var perc = ((100/tot*c) << 0) +"%";
+      prog.style.width = perc;
+      
+      if(c===tot) return doneLoading();
+    }
+    function doneLoading(){
+      ovrl.style.opacity = 0;
+      setTimeout(function(){ 
+        ovrl.style.display = "none";
+      }, 1200);
+    }
+    for(var i=0; i<tot; i++) {
+      var tImg     = new Image();
+      tImg.onload  = imgLoaded;
+      tImg.onerror = imgLoaded;
+      tImg.src     = img[i].src;
+    }    
+  }
+  document.addEventListener('DOMContentLoaded', loadbar, false);
+}());
+if (document.getElementById("close")){
+document.getElementById("close").addEventListener("click",()=>{
+    modal=document.getElementById("alert")
+    modal.classList.add("hidden")
+})
+}
+      
+
+
+
+
+
+</script>
+
+
+<style>
+    /* preloader.css */
+
+
+
+
+img {
+    width: 32.2%;
+}
+
+#overlay {
+    position: absolute;
+    z-index: 70;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make overlay cover the full width of the viewport */
+    height: 10px; /* Make overlay cover the full height of the viewport */
+    transition: 1s 0.4s;
+}
+
+#progress {
+    height: 3px;
+    background: rgb(99 102 241);
+    position: absolute;
+    width: 0; /* will be increased by JS */
+    top: 0;
+    left: 0; /* Start progress bar from the left */
+}
+
+#progstat {
+    font-size: 0.7em;
+    letter-spacing: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center vertically and horizontally */
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+</style>
+<script>
+  function openNav() {
+      document.getElementById("sidebar").style.width = "250px";
+      document.getElementById("main").style.marginRight = "";
+      
+      document.getElementById("sidebar").classList.add("border-[1px]")
+      document.getElementById("backdrop").classList.remove("hidden")
+      // Add event listener to close the sidebar when clicking outside of it
+      document.body.addEventListener('click', closeNavOnClickOutside);
+  }
+
+  function closeNav() {
+      document.getElementById("sidebar").style.width = "0";
+      document.getElementById("main").style.marginRight = "0";
+       
+      document.getElementById("sidebar").classList.remove("border-[1px]")
+      document.getElementById("backdrop").classList.add("hidden")
+      // Remove event listener when closing the sidebar
+      document.body.removeEventListener('click', closeNavOnClickOutside);
+  }
+
+  function closeNavOnClickOutside(event) {
+      // Check if the click is outside the sidebar
+      if (!document.getElementById("sidebar").contains(event.target) && event.target !== document.getElementById("main")) {
+          closeNav();
+      }
+  }
+
+
+  function openNav1() {
+      document.getElementById("paymentsidebar").style.width = "250px";
+      document.getElementById("cash").style.marginRight = "";
+      
+      document.getElementById("paymentsidebar").classList.add("border-[1px]")
+      // Add event listener to close the paymentsidebar when clicking outside of it
+      document.body.addEventListener('click', closeNavOnClickOutside2);
+      document.getElementById("backdrop").classList.remove("hidden")
+  }
+
+  function closeNav2() {
+      document.getElementById("paymentsidebar").style.width = "0";
+      document.getElementById("cash").style.marginRight = "0";
+       
+      document.getElementById("paymentsidebar").classList.remove("border-[1px]")
+      // Remove event listener when closing the paymentsidebar
+      document.body.removeEventListener('click', closeNavOnClickOutside2);
+      document.getElementById("backdrop").classList.add("hidden")
+  }
+
+  function closeNavOnClickOutside2(event) {
+      // Check if the click is outside the paymentsidebar
+      if (!document.getElementById("paymentsidebar").contains(event.target) && event.target !== document.getElementById("cash")) {
+          closeNav2();
+      }
+  }
+
+  function openNav2() {
+      document.getElementById("discountsidebar").style.width = "250px";
+      document.getElementById("discount").style.marginRight = "";
+      
+      document.getElementById("discountsidebar").classList.add("border-[1px]")
+      // Add event listener to close the discountsidebar when clicking outside of it
+      document.body.addEventListener('click', closeNavOnClickOutside3);
+      document.getElementById("backdrop").classList.remove("hidden")
+  }
+
+  function closeNav3() {
+      document.getElementById("discountsidebar").style.width = "0";
+      document.getElementById("discount").style.marginRight = "0";
+       
+      document.getElementById("discountsidebar").classList.remove("border-[1px]")
+      // Remove event listener when closing the discountsidebar
+      document.body.removeEventListener('click', closeNavOnClickOutside3);
+      document.getElementById("backdrop").classList.add("hidden")
+  }
+
+  function closeNavOnClickOutside3(event) {
+      // Check if the click is outside the discountsidebar
+      if (!document.getElementById("discountsidebar").contains(event.target) && event.target !== document.getElementById("discount")) {
+          closeNav3();
+      }
+  }
+
+
+  function openNav4() {
+      document.getElementById("taxsidebar").style.width = "250px";
+      document.getElementById("tax").style.marginRight = "";
+      
+      document.getElementById("taxsidebar").classList.add("border-[1px]")
+      // Add event listener to close the taxsidebar when clicking outside of it
+      document.body.addEventListener('click', closeNavOnClickOutside4);
+      document.getElementById("backdrop").classList.remove("hidden")
+  }
+
+  function closeNav4() {
+      document.getElementById("taxsidebar").style.width = "0";
+      document.getElementById("tax").style.marginRight = "0";
+       
+      document.getElementById("taxsidebar").classList.remove("border-[1px]")
+      // Remove event listener when closing the taxsidebar
+      document.body.removeEventListener('click', closeNavOnClickOutside4);
+      document.getElementById("backdrop").classList.add("hidden")
+  }
+
+  function closeNavOnClickOutside4(event) {
+      // Check if the click is outside the taxsidebar
+      if (!document.getElementById("taxsidebar").contains(event.target) && event.target !== document.getElementById("tax")) {
+          closeNav4();
+      }
+  }
+
+
+
+document.getElementById("addtax").addEventListener("click", ()=>{
+  document.getElementById("taxform").classList.remove("hidden")
+  document.getElementById("taxform").classList.add("flex")
+})
+</script>
+<script>
+  $(document).ready(function() {
+      $('#search-form').submit(function(e) {
+            e.preventDefault();
+          var csrfToken = Cookies.get('csrftoken');
+        
+          var productName = $('#product-name').val();
+  
+          $.ajax({
+              type: 'POST',
+              url: '{% url "sales:search_product" %}', 
+              headers: {
+              'X-CSRFToken': csrfToken
+              }, 
+              data: { product_name: productName },
+              success: function(data,xhr) {
+
+               
+                  if ('error' in data) {
+                      // Display an error message
+                    
+                  } else {
+                    
+                    console.log(data)
+               
+              
+                     if ( data.length > 0 ){
+                      $('productcard  tbody').empty();
+              
+                  data.forEach(function(item) {
+           
+                   
+                      var pd = $(`   <tr class="w-full  ">
+      <td class=" w-1/4 break-words">
+        <div class=" flex flex-row items-center">
+          <img src="../../../media/${item.fields.product_image}"  class="w-16 h-[4.5rem] rounded-md mr-[0.5px]"/><div class="flex flex-col"><span class="font-bold text-gray-700 ">${item.fields.name}</span><span class="flex flex-row ">
+          <i class="mdi mdi-tag text-indigo-600 text-sm"></i><span class="text-gray-500 text-sm mx-2 ">${item.fields.code}</span></span><span class="flex flex-row text-xs text-gray-600"> </span></div></div> 
+    
+        
+   
+      </td>
+      <td class=" text-center  w-1/4 break-words">${item.fields.available_quantity}</td>
+      <td class="text-center   w-1/4 break-words">    $${item.fields.cost_price}</td>
+      <td class="w-1/4 break-words">
+     
+      </td>
+
+      <td class="px-10 text-center w-1/4 break-words">
+        <a  class="text-md hover:underline cursor-pointer hover:text-indigo-600">sell</a>
+      </td>
+    
+    </tr>`);
+  pd.find('a').attr('data-id', item.pk);
+
+    
+pd.find('a').attr('href', '{% url "sales:order_item" 0 %}'.replace('0', item.pk));
+                     
+
+  
+                      $('#productcard  tbody').append(pd);
+            
+                  });
+
+                     }
+                     else{
+                 
+
+                     }
+                  }
+              },
+              error: function(xhr) {
+                  // Handle AJAX error
+                  if (xhr.status===404){
+                    $('#product-table tbody').html(
+                        '<tr class=" h-10 bg-white border-b dark:bg-gray-900 dark:border-gray-700"><td class="flex flex-row justify-center items-center">Product not found  <a href="{% url "product:productpage"%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   "> <i class="mdi mdi-plus text-white text-base mx-2"></i> </a></td>/tr>'
+                 
+                
+                      );
+                  
+                  }
+                  
+              }
+          });
+      });
+  });
+  
+</script>
+<script>
+  var states = [{% for product in products %} '{{ product.name }}', {% endfor %}];
+  
+  // Constructs the suggestion engine
+  var engine = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: $.map(states, function(state) {
+      return { value: state };
+    })
+  });
+  
+  // Kicks off the loading/processing of local and prefetch
+  engine.initialize();
+  
+  $('#bloodhound .typeahead').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'states',
+    displayKey: 'value',
+    source: engine.ttAdapter(),
+    templates: {
+      empty: '<div class="flex flex-row "><span>No records found</span> </div>'
+    }
+  });
+
+  
+  $("#closebutton").click(()=>{
+    url="{% url 'sales:add_sales'%}"
+      window.location.href=url
+  })
+  </script>
+<style>
+  .remove-arrow::-webkit-inner-spin-button,
+.remove-arrow::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.remove-arrow {
+  -moz-appearance: textfield;
+}
+
+</style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const discountpercentage = document.getElementById("discountpercentage");
+        const discountamount = document.getElementById("discountamount");
+        const totalamount = document.getElementById("totalamount");
+        const amountpayable = document.getElementById("amountpayable");
+        
+
+       
+
+        // Function to calculate selling price and profit forecast based on cost price and markup
+        function calculatepercentage() {
+            const amount= parseFloat(discountpercentage.value);
+            const  total= parseFloat(totalamount.value);
+          
+
+            if (!isNaN(amount) && !isNaN(total) ){
+
+              let calculatedPercentage = (amount / 100) * total;  
+              if (calculatedPercentage >total){
+                discountamount.value = 0
+              amountpayable.value=total
+              }
+              else{
+                discountamount.value = calculatedPercentage.toFixed(2);
+              amountpayable.value=total-calculatedPercentage
+              }
+
+  
+            }
+            else{
+              let discountamount =0
+              discountamount.value = discountamount.toFixed(2);
+              amountpayable.value=total
+            }
+           
+        }
+
+
+
+        function calculateamount() {
+            const  amount = parseFloat( discountamount.value);
+            const total = parseFloat(totalamount.value);
+          
+
+            if (!isNaN(total) && !isNaN(amount)) {
+              let calculatedpercentage  = (amount *100) /total;  
+              
+              if (amount>total){
+              discountpercentage.value= 0
+              amountpayable.value=total
+              }else{
+                discountpercentage.value= calculatedpercentage.toFixed(2) ;
+              amountpayable.value=total-amount
+              }
+            }
+            else{
+              let discountamount =0
+              discountpercentage.value = discountamount.toFixed(2) ;
+              amountpayable.value=total;
+            }
+           
+        }
+
+  
+        // Calculate values when markup is entered
+        discountpercentage.addEventListener("input", calculatepercentage);
+        discountamount.addEventListener("input", calculateamount)
+
+    });
+
+
+
+
+
+</script>
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Get the current date and time in the format expected by datetime-local input
+      const currentDateAndTime = new Date().toISOString().slice(0, 16);
+  
+      // Set the default value of the datetime input
+      document.getElementById('date_created').value = currentDateAndTime;
+  });
+  </script>
+  <script>
+        amount_paid=document.getElementById("amount_paid")
+      balance=document.getElementById("balance_amount")
+      change=document.getElementById("change_amount")
+    function calculatechange(){
+  
+
+      let change_amount=balance.value-amount_paid.value
+      if (change_amount>0){
+        change.style.color="red"
+        change.value=change_amount.toFixed(2)
+      }
+      else{
+        change.style.color=""
+        change.value=-1 * change_amount.toFixed(2)
+      }
+      
+    }
+
+
+    amount_paid.addEventListener('input',calculatechange)
+
+  </script>
+
+<script>
+  document.getElementById("complete").addEventListener("click",()=>{
+    document.getElementById("dateform").submit()
+  })
+</script>
+{%endblock%}

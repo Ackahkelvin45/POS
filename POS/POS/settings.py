@@ -64,7 +64,10 @@ TENANT_APPS = [
     'users',
     'suppliers',
     'purchases',
-    'stock',
+    'stock', 
+    'settings',
+    'sales',
+    'report',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -196,3 +199,5 @@ EMAIL_PORT='587'
 EMAIL_HOST_USER='fooseplug835@gmail.com'
 EMAIL_HOST_PASSWORD='edls nnhm ooag zfhj'
 EMAIL_USE_TLS=True
+
+os.environ['WKHTMLTOPDF_BIN'] = "C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"

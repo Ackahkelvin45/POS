@@ -46,6 +46,7 @@ class Product_Item(models.Model):
     barcode = models.ImageField(upload_to='product_barcode/', blank=True, null=True)
     location = models.CharField(max_length=20, null=True,)
     available_quantity=models.PositiveIntegerField(default=0,null=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
 
 
     def __str__(self):
@@ -64,7 +65,9 @@ class Package(models.Model):
     unit=models.ForeignKey(Unit, on_delete=models.CASCADE,null=True, blank=True)
     package_name = models.CharField(max_length=100, null=True, unique=True)
     cost_price = models.DecimalField(max_digits=20, decimal_places=2,null=True, blank=True)
-    selling_price = models.DecimalField(max_digits=20, decimal_places=2,null=True, blank=True)
+    selling_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    
     
     def __str__(self):
         return self.package_name    

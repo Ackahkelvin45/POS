@@ -1,0 +1,367 @@
+{% extends 'POS/layout.html'%}
+{%load static%}
+
+{%block body%}
+
+<div id="container">
+    <img src="http://placehold.it/3000x3000/cf5">
+</div>
+
+<div id="overlay">
+    <div id="progstat"></div>
+    <div id="progress"></div>
+</div>
+
+<div class="mt-20 max-vs:mt-[6.6rem]  " id="body">
+    {%if messages%}
+{% for message in messages%}
+{% if message.tags == 'success'%}
+
+      
+        <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800 absolute z-50  right-5" role="alert">
+           
+            <svg   class="flex-shrink-0 w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <path d="M8.445 12.6675A.9.9 0 0 0 7.1424 13.91l2.5726 2.7448c.3679.3856.9884.3689 1.335-.036l5.591-7.0366a.9.9 0 0 0-1.3674-1.1705l-4.6548 5.9132a.4.4 0 0 1-.607.0252l-1.567-1.6826zM1.9995 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z"></path>
+            </svg>
+            <div class="ml-3 text-sm font-medium">
+              {{message}}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-0  p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" id="close">
+              <span class="sr-only">Dismiss</span>
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
+        </div>
+
+        {%else%}
+        <div id="alert" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800  absolute z-50  right-5" role="alert">
+            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <div class="ml-3 text-sm font-medium">
+              {{message}}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg   p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" id="close">
+              <span class="sr-only">Dismiss</span>
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
+        </div>
+        
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+    <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
+      
+        <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
+            <a href="{% url 'sales:add_sales'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            
+                <i class="mdi mdi-plus text-white text-base"></i>
+                <span class="pl-2 mx-1 text-xs text-white">Add Sales</span>
+             </a>
+
+             <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            
+                <i class="mdi mdi-view-module-outline text-white text-base"></i>
+                <span class="pl-2 mx-1 text-xs text-white">Sales list</span>
+             </a>
+        </div>
+     <!-- component -->
+<!-- component -->
+<div class="  px-8 max-vs:px-2  mx-4">
+    <!--menu bar-->
+   
+    <div class="text-gray-700 my-2">Sales Detail</div>
+    <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
+
+
+
+    </div>
+    <div class="px-10 max-vs:px-2">
+    <div class="flex flex-row mb-6 ">
+        <div class="flex flex-col w-[50%]">
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Date:</span>
+                <span>{{sale.date_created}}</span>
+            </div>
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Sale number:</span>
+                <span>{{sale.sale_nuber}}</span>
+            </div>
+            
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Total Cost Price:</span>
+                <span>{{sale.total_cost_price}}</span>
+            </div>
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Total Subtotal:</span>
+                <span>{{sale.sub_total_cost_price}}</span>
+            </div>
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Total Quantity:</span>
+                <span>{{sale.total_quantity}}</span>
+            </div>
+        </div>
+       
+        <div class="flex flex-col w-[50%]">
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Discount:</span>
+                <span>{{sale.discount}}%</span>
+            </div>
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Tax:</span>
+                <div class="flex flex-col">
+                    {% for tax in  sale.tax.all%}
+                    <div class="flex flex-row ">
+                <span>{{tax.name}}</span> <span class="">({{tax.amount }})</span>
+            </div>
+                {%endfor%}
+            </div>
+            </div>
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">Status:</span>
+                <span class=" text-green-500">{{sale.status}}</span>
+            </div>
+         
+            <div class="flex flex-row mb-1">
+                <span class="font-semibold  ">User:</span>
+                <span>{{sale.creator.first_name}}</span>
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="w-full mb-10">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                  Product
+                    </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                    Cost Unit Price
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Total  Quantity
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Total Cost Price
+                </th>
+             
+                </tr>
+            </thead>
+            <tbody>
+                {%for product in saleproducts%}
+                <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {{product.product.name}}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{product.cost_unit_price}}
+                    </td>
+                    <td class="px-6 py-4">
+              
+                      {{product.quantity}}
+                  </td>
+                  <td class="px-6 py-4">
+                    {{product.total_cost_price}}
+                </td>
+             
+                 
+                </tr>
+                {%endfor%}
+               
+              
+                
+              
+            
+            </tbody>
+        </table>
+    </div>
+     <button id="generatePdf" type="button">fffffffff</button>
+  </div>
+    </div>
+
+
+
+    </div>
+</div>
+</div>
+<style>
+    .progress-container {
+    width: 100%;
+    height: 5px; /* Height of the progress bar */
+    background-color: #ccc; /* Background color of the progress container */
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #3498db; /* Color of the progress bar */
+    transition: width 0.3s; /* Transition effect for smoother progress */
+}
+</style>
+<script>
+   (function(){
+  function id(v){ return document.getElementById(v); }
+  function loadbar() {
+    var ovrl = id("overlay"),
+        prog = id("progress"),
+        stat = id("progstat"),
+        img = document.images,
+        c = 0,
+        tot = img.length;
+    if(tot == 0) return doneLoading();
+
+    function imgLoaded(){
+      c += 1;
+      var perc = ((100/tot*c) << 0) +"%";
+      prog.style.width = perc;
+      
+      if(c===tot) return doneLoading();
+    }
+    function doneLoading(){
+      ovrl.style.opacity = 0;
+      setTimeout(function(){ 
+        ovrl.style.display = "none";
+      }, 1200);
+    }
+    for(var i=0; i<tot; i++) {
+      var tImg     = new Image();
+      tImg.onload  = imgLoaded;
+      tImg.onerror = imgLoaded;
+      tImg.src     = img[i].src;
+    }    
+  }
+  document.addEventListener('DOMContentLoaded', loadbar, false);
+}());
+if (document.getElementById("close")){
+document.getElementById("close").addEventListener("click",()=>{
+    modal=document.getElementById("alert")
+    modal.classList.add("hidden")
+})
+}
+      
+
+
+
+
+</script>
+
+<script>
+    
+    let deletestudent=document.getElementsByClassName("delete-item")
+   for  (var i=0;i<deletestudent.length;i++){
+   deletestudent[i].addEventListener("click",(item)=>{
+    Swal.fire({
+        icon: 'warning',
+        text: "Do you want to delete this?",
+        confirmButtonColor: '#26A69A',
+        confirmButtonText:"Yes,I'm sure",
+        showDenyButton:true,
+        denyButtonText:"No",
+        color:"white",
+        background: 'rgba(0, 0, 0, 0.7)',
+        allowEscapeKey: false,
+        dangerMode:true,
+  
+      }).then((e)=>{
+        if (e.isConfirmed){
+        url=item.target.getAttribute("data-url")
+       
+       console.log("url",url)
+       window.location.href=url
+        }
+        else{
+            console.log("denied")
+        }
+      })
+    })
+   }
+
+
+
+   
+if (document.getElementById("close")){
+
+
+document.getElementById("close").addEventListener("click",(item)=>{
+    modal=document.getElementById("alert")
+    modal.classList.add("hidden")
+
+
+})
+}
+  </script> 
+<style>
+    /* preloader.css */
+
+
+
+
+img {
+    width: 32.2%;
+}
+
+#overlay {
+    position: absolute;
+    z-index: 70;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make overlay cover the full width of the viewport */
+    height: 10px; /* Make overlay cover the full height of the viewport */
+    transition: 1s 0.4s;
+}
+
+#progress {
+    height: 3px;
+    background: rgb(99 102 241);
+    position: absolute;
+    width: 0; /* will be increased by JS */
+    top: 0;
+    left: 0; /* Start progress bar from the left */
+}
+
+#progstat {
+    font-size: 0.7em;
+    letter-spacing: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center vertically and horizontally */
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+</style>
+<script>
+    document.getElementById('generatePdf').addEventListener('click', function () {
+        window.onbeforeprint = function() {
+            console.log('Before print');
+        };
+
+        window.onafterprint = function() {
+            console.log('After print');
+          
+        };
+
+        // Use html2pdf to generate the PDF
+        const element = document.body;
+        
+        html2pdf(element, {
+            margin: 10,
+            filename: 'generated.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).then(() => {
+            // Open the print dialog after generating the PDF
+            window.print();
+        });
+    });
+</script>
+{%endblock%}

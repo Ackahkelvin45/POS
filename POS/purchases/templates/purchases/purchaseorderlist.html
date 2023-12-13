@@ -135,7 +135,12 @@
                             {{purchaseorder.date_created}}
                         </td>
                         <td class="px-6 py-4">
-                          <span class="text-red-600 text-sm">Pending</span>
+                          {% if  purchaseorder.status == 'recieved'%}
+                          <span class="text-green-600 text-sm">{{purchaseorder.status}}</span>
+                          {%else%}
+                          <span class="text-red-600 text-sm">{{purchaseorder.status}}</span>
+
+                          {%endif%}
                         </td>
                         <td class="px-6 py-4 flex flex-col justify-start items-start  ">
                             <div class="mb-2">
@@ -148,9 +153,13 @@
                                 </a>
                             </div>
                             <div class="">
-                              <a href="{% url 'purchases:recieve_order' purchaseorder.id%}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-                                  <i class="mdi  mdi-table-arrow-down  text-green-500 text-xs"></i>
-                                  <span class="group-hover:underline">recieve order</span>
+                              {% if  purchaseorder.status == 'recieved'%}
+                           
+                                  {%else%}
+                                  <a href="{% url 'purchases:recieve_order' purchaseorder.id%}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+                                    <i class="mdi  mdi-table-arrow-down  text-green-500 text-xs"></i>
+                                    <span class="group-hover:underline">recieve order</span>
+                                {%endif%}
                               
                                  
                               
@@ -233,7 +242,13 @@ document.getElementById("close").addEventListener("click",()=>{
       
 
 $(document).ready( function () {
-    $('.myTable').DataTable();
+    $('.myTable').DataTable(
+        
+    {
+      "order": [],
+    }
+    )
+  
 } );
 
 

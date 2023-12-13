@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django_pdfkit import PDFView
+
 
 app_name = "product"
 
@@ -66,7 +68,11 @@ urlpatterns = [
     path('add_package/', views.showAddPackage, name='add_package'),
     path('add_package_process/', views.addPackage, name='add_package_process'),
     path('export-products-pdf/', views.export_products_as_pdf, name='export_products_as_pdf'),
+    path('export-categories-pdf/', views.export_categories_as_pdf, name='export_categories_as_pdf'),
+     path('export-subcategories-pdf/', views.export_subcategories_as_pdf, name='export_subcategories_as_pdf'),
     path('export/products/excel/', views.export_products_to_excel, name='export_products_to_excel'),
+    
+    
 
 
 

@@ -22,11 +22,15 @@ from django.conf.urls.static import static
 urlpatterns = [
 
     path('admin/', admin.site.urls),
-     path("__reload__/", include("django_browser_reload.urls")),
-     path("product/", include("product.urls")),
-       path("", include("tenant.urls")),
-       path("user/",include("users.urls")),
-       path("suppliers/",include("suppliers.urls")),
-        path("purchases/", include("purchases.urls")),
-        path("inventory/",include("stock.urls")),
+    path("__reload__/", include("django_browser_reload.urls")),
+    path("product/", include("product.urls")),
+    path("", include("tenant.urls")),
+    path("user/",include("users.urls")),
+    path("suppliers/",include("suppliers.urls")),
+    path("purchases/", include("purchases.urls")),
+    path("inventory/", include("stock.urls")),
+    path("settings/", include("settings.urls")),
+    path("sales/", include("sales.urls")),
+    path("report/", include("report.urls")),
+        
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

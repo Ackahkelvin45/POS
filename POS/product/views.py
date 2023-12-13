@@ -10,7 +10,7 @@ from io import BytesIO
 from django.http import FileResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-
+import pdfkit
 
 
 
@@ -352,37 +352,69 @@ def addPackage(request):
 
 
 def export_products_as_pdf(request):
-    # Query your product data
-    products = Product_Item.objects.all()
-    tenant=get_tenant(request)
+    template = get_template('product/pdf.html')  # Replace with your actual template name
+    html_content = template.render({
+        'products': Product_Item.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  # Replace with your actual data
 
-    # Create an HTML template context
-    context = {
-        'products': products,
-        'pharmacy':tenant
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
     }
 
-    # Render the HTML template
-    template = get_template('product/pdf.html')
-    html = template.render(context)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
-    # Create a PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
-
-    # Generate the PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('PDF generation error')
-
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
     return response
-  
 
 
 
+def export_categories_as_pdf(request):
+    template = get_template('product/categorypdf.html')  # Replace with your actual template name
+    html_content = template.render({
+        'categorys': Category.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  # Replace with your actual data
 
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
+    }
 
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
+    return response
+
+def export_subcategories_as_pdf(request):
+    template = get_template('product/subcategorypdf.html')  # Replace with your actual template name
+    html_content = template.render({
+        'subcategorys': Subcategory.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  # Replace with your actual data
+
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
+    }
+
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
+
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
+    return response
 
 
 

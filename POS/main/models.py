@@ -13,7 +13,7 @@ class Domain(DomainMixin):
 
 class Pharmacy(TenantMixin):
     name = models.CharField(max_length=100,null=True)
-    created_on = models.DateField(auto_now_add=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True)
     schema_name = models.CharField(max_length=63, unique=True, db_index=True,null=True)
     owner = models.ForeignKey(User, related_name="tenant_admin", on_delete=models.CASCADE, null=True)
     is_verified = models.BooleanField(default=False)

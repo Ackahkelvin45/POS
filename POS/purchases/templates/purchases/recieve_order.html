@@ -56,14 +56,14 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 pb-10 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'purchases:order'%}" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Purcahse Order</span>
                
              </a>
 
-             <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'purchases:purchaseorderlist'%} "  class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Purchase order list</span>
@@ -127,11 +127,11 @@
                 <th class="px-2 text-left py-1 w-1/4">Quantity Ordered </th>
                 <th class="px-2 text-left py-3 w-1/4"> Cost Price</th>
                 <th class="px-2 text-left py-3 w-1/4">Total Cost Price</th>
-                <th class="px-2 text-left py-3 w-1/4">supplier</th>
+                <th class="px-2 text-left py-3 w-1/4">Remaining Quantity</th>
                 <th class="px-2 text-left py-3 w-1/4">Action</th>
               </tr>
             </thead>
-            <tbody class="bg-grey-light text-sm flex flex-col    overflow-y-scroll w-full" style="height: 25vh;">
+            <tbody class="bg-grey-light text-sm flex flex-col    overflow-y-scroll w-full" style="height: 45vh;">
               {% if ordered_products%}
               {%for product in ordered_products%}
               <tr class="flex w-full border-b border-gray-300 py-1 justify-center items-center">
@@ -140,15 +140,26 @@
                <td class=" w-1/4  py-2 break-words px-2 text-center">{{product.quantity}}</td>
                <td class=" w-1/4 py-2  break-words px-2 text-center">{{product.cost_unit_price}}</td>
                <td class=" w-1/4  py-2 break-words px-2 text-center">  {{product.total_cost_price}}</td>
-               <td class=" w-1/4  py-2 break-words px-2 text-center"> {{purchase_order.supplier}}</td>
+               <td class=" w-1/4  py-2 break-words px-2 text-center"> {{product.remaining_quantity}}</td>
 
                <td class=" w-1/4 break-words px-2 text-center ">
               
                 <form class="w-full"  method="post" action="{% url 'purchases:recieve_order_process' purchase_order.id  %}">
-                  <input type="hidden" value="{{product.product.id}}" name="product" />
+                  <input type="hidden" value="{{product.id}}" name="orderedproduct" />
                   {% csrf_token %}
-{{recievestockform.received_quantity}}
-              <button type="submit" class="bg-green-500 px-1  my-2  py-2 fo text-sm   rounded-md text-white">recievce</button>
+              
+<input type="number" value="{{product.remaining_quantity}}" name="recieved_quantity" class=" remove-arrow  w-20 h-8  pl-4 pr-3  rounded-lg  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
+<style>
+  .remove-arrow::-webkit-inner-spin-button,
+.remove-arrow::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.remove-arrow {
+  -moz-appearance: textfield;
+}
+</style>
+              <button type="submit" class="bg-green-500 px-1  my-2  py-2 fo text-sm   rounded-md text-white">receive</button>
             </form> 
             </td>
               </tr>
@@ -169,7 +180,7 @@
               <tr>
                 <td>
                   {% if purchase_order %}
-                  <button  class="bg-green-500 px-3 py-1 font-bold rounded-md text-white">recieve all</button>
+                  <button data-url="{% url 'purchases:recieve_all_stock' purchase_order.id %}"  id="recieve-all" class="bg-green-500 px-3 py-1 font-bold rounded-md text-white">receive all</button>
 
                   {%endif%}
                 </td>
@@ -335,10 +346,53 @@ img {
     width: 100% !important;
 }
 </style>
-<!--search functionality  of products in js-->
-<!-- Search functionality of products in JS -->
 
 
+<script>
+    
+  let  recieve_all=document.getElementById("recieve-all")
+
+ recieve_all.addEventListener("click",(item)=>{
+  Swal.fire({
+      icon: 'warning',
+      text: "Do you want to delete this?",
+      confirmButtonColor: '#26A69A',
+      confirmButtonText:"Yes,I'm sure",
+      showDenyButton:true,
+      denyButtonText:"No",
+      color:"white",
+      background: 'rgba(0, 0, 0, 0.7)',
+      allowEscapeKey: false,
+      dangerMode:true,
+
+    }).then((e)=>{
+      if (e.isConfirmed){
+      url=item.target.getAttribute("data-url")
+     
+     console.log("url",url)
+     window.location.href=url
+      }
+      else{
+          console.log("denied")
+      }
+    })
+  })
+ 
+
+
+
+ 
+if (document.getElementById("close")){
+
+
+document.getElementById("close").addEventListener("click",(item)=>{
+  modal=document.getElementById("alert")
+  modal.classList.add("hidden")
+
+
+})
+}
+</script> 
 
 
 {%endblock%}

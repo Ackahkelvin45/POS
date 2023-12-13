@@ -79,6 +79,49 @@
     </div>
     <div class="px-10 max-vs:px-2">
     
+      <div class=" my-3 w-full flex flex-row bg-slate-200 border  border-slate-400 px-2 py-2">
+        <span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+            <span class="group-hover:underline">Preview All</span>
+        
+           
+        
+        </span>
+    
+   
+        
+        <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+        <a  href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
+            <span class="group-hover:underline ">Export as pdf</span>
+        
+           
+        
+        </a>
+        
+        <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+        <a href="{% url 'product:export_products_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
+            <span class="group-hover:underline ">download as csv</span>
+        
+           
+        
+        </a>
+        
+        <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
+        <span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i class="mdi mdi-cancel text-gray-700 text-xs"></i>
+            <span class="group-hover:underline text-red-500">delete all</span>
+        
+           
+        
+        </span>
+        
+        
+        
+        
+        
+            </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-10 ">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 myTable hover row-border stripe">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">

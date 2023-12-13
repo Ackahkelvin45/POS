@@ -20,4 +20,6 @@ urlpatterns = [
      path("delete/<int:pk>/", views.delete_purchaseorder2, name="delete_purchaseorder2"),
      path("recieve/<int:pk>/", views.recieve_order, name="recieve_order"),
      path("recieve_process/<int:pk>/", views.receive_stock_process, name="recieve_order_process"),
+     path("recieve_all/<int:pk>/", views.recieve_all_stock, name="recieve_all_stock"),
+     path("send_email/<int:pk>/", views.send_purhase_order_as_email,name="send_purhase_order_as_email"),
 ]

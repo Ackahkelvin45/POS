@@ -1,81 +1,142 @@
-{% load  filterstring %}
-<style>
-   tbody tr {
-                
-                border: 1px solid #4b4b4b;
-                
-            }
-         
-                           thead tr {
-                
-                border: 1px solid #222222;
-            }
-            tbody tr td  {
-                
-                text-align: center;
-                padding: 5px;
-    
-                
-                
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load  filterstring %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-            thead tr  th {
-                
-              text-align: center;
-                padding: 3px;
-            }
-            </style>
+</head>
+<body >
+    <div>
+        <h1 style="text-align: center;font-size: 1.5rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ">
+{{pharmacy.name}}
 
-            <div style="text-align: center;">
-              <div style="font-weight: 600 ; font-size: 17px;">SAMSOFT PHARMACIES</div>
-              <div  style="font-weight: 300; font-size: 13px; ">Kumasi,Ghana</div>
-              <h2></h2>
-            </div>
-           
+        </h1>
+        <h1 style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; margin-top:-5px;">
+            {{pharmacy.address}}
+        </h1>
+    </div>
 
+
+    <div style="max-width: 100%; overflow-x: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-radius: 0.375rem;">
+        <h2  style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ;">Product List</h2>
+        <table class="fl-table" style="width: 100%; font-size: 0.875rem; text-align: left; direction: ltr; color: #718096; background-color: #f8fafc; border-collapse: collapse; border-spacing: 0;">
+            <thead style="  text-align: center;font-size: 0.75rem; color: #4a5568; text-transform: uppercase; background-color: #edf2f7; color: #1a202c;">
+                <tr>
+                    <th style="padding: 0.75rem 1.5rem;">
+                        Product name
+                    </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                      Cost Price
+                    </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                      Selling  Price
+                    </th>
+                    <th style="">
+                        Availbale   Quantity
+                      </th>
+                  
+                    <th style="padding: 0.75rem 1.5rem;">
+                       Category
+                     </th>
+                   
+                     <th style="padding: 0.75rem 1.5rem;">
+                        subcategory
+                      </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for product in products%}
+                <tr style=" border-bottom: 1px solid #e2e8f0;  border-bottom: 1px solid #e2e8f0; text-align: center; ">
+                    <th style="padding: 1rem 1.5rem; font-weight: 500; color: #2d3748; white-space: nowrap;">
+                        {% for chunk in product.name|chunk_string %}
+                        {{ chunk }}<br>
+                      {% endfor %}
+                    </th>
+                    <td style="padding: 1rem 1.5rem; color: #424447;">
+                        {{product.cost_price}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.selling_price}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.available_quantity}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.category.name}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.subcategory.name}}
+                    </td>
+                </tr>
+            {%endfor%}
+               
              
-            
-<div class="container">
-  <div style="text-align: center ; font-size: 16px; text-decoration: underline;">Product list</div>
+            </tbody>
+        </table>
+    </div>
+    
+<style>
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
 
-  <table class="responsive-table">
-    <thead>
-      <tr>
-        <th scope="col">Product Image</th>
-        <th scope="col">Product Name</th>
-        <th scope="col">Category</th>
-        <th scope="col">Sub Category</th>
-        <th scope="col">Cost Price</th>
-        <th scope="col">Selling price</th>
-        <th scope="col">Expiry Date</th>
-        <th scope="col">Available Quantity</th>
-      </tr>
-    </thead>
+/* Table Styles */
+
+.table-wrapper{
+ 
+}
+
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+   
+}
+
+.fl-table td, .fl-table th {
+   
+}
+
+.fl-table td {
+    
+}
+
+.fl-table thead th {
   
-    <tbody>
-      {% for product in products%}
-      <tr style="word-wrap: break-word;white-space: initial;">
-        <th scope="row"><img src="..{{product.product_image.url}}" style="height: 30px; width: 30px;"/>
-        </th>
-        <th data-title="Released"  ><div style="overflow-x: hidden;">
-          {% for chunk in product.name|chunk_string %}
-          {{ chunk }}<br>
-        {% endfor %}</div></th>
-        <td data-title="Studio">{{product.name}}</td>{{product.category.name}}</td>
-        <td data-title="Domestic Gross" data-type="currency">{{product.subcategory.name}}</td>
-        <td data-title="International Gross" data-type="currency">{{product.cost_price}}</td>
-        <td data-title="Budget" data-type="currency">{{product.selling_price}}</td>
-        <td data-title="Budget" data-type="currency"><td>
-        <td data-title="Budget" data-type="currency"></td>
+}
 
-      </tr>
-      {%endfor%}
 
-    </tbody>
-  </table>
-</div>
-<script>
-  document.getElementById('printButton').addEventListener('click', function() {
-      window.print();
-  });
-  </script>
+
+
+.fl-table tbody tr:nth-child(even) {
+    background:#edf2f7;
+}
+.fl-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+</style>
+</body>
+</html>

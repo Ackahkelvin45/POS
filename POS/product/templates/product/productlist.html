@@ -99,7 +99,7 @@
 </span>
 
 <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-<a href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+<a  href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
     <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
     <span class="group-hover:underline ">Export as pdf</span>
 
@@ -159,6 +159,9 @@
                             Selling price
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Available Quantity
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Action
                         </th>
                     </tr>
@@ -186,6 +189,9 @@
                         <td class="px-6 py-4">
                             ₵ {{product.selling_price}}
                         </td>
+                        <td class="px-6 py-4">
+                            {{product.available_quantity}}
+                        </td>
                         <td class="px-6 py-4 flex flex-row justify-center items-center ">
  
                             <a href="{% url 'product:editproduct' product.id %}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'product:delete_product' product.id%}" class="delete-item"> <i data-url="{% url 'product:delete_product' product.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
@@ -197,6 +203,8 @@
                 </tbody>
             </table>
         </div>
+
+        
         </div>
     </div>
 
@@ -356,4 +364,6 @@ img {
 }
 
 </style>
+
+
 {%endblock%}

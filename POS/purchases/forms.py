@@ -53,7 +53,7 @@ class CustomModelChoiceField(forms.ModelChoiceField):
 class OrderedProductForm(forms.ModelForm):
     class Meta:
         model = OrderedProduct
-        fields = ("quantity",'cost_unit_price','product',"package_type",)
+        fields = ("quantity",'cost_unit_price','product',"package_type")
         
         widgets = {
             "quantity": forms.NumberInput(
@@ -81,7 +81,7 @@ class OrderedProductForm(forms.ModelForm):
 
 
                 }
-            )
+            ),
         }
     def __init__(self, *args, **kwargs):
             super(OrderedProductForm, self).__init__(*args, **kwargs)
