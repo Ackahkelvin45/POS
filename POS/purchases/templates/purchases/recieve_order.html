@@ -71,8 +71,8 @@
         </div>
      <!-- component -->
 <!-- component -->
-<div class="  px-8 max-vs:px-2  mx-4">
-    <div class="text-gray-700 my-1 text-md">Recieve Order</div>
+<div class="  px-4 max-vs:px-2  mx-4">
+    <div class="text-gray-700 my-1 text-md">Receive Order</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
 
@@ -82,7 +82,7 @@
      
         
                     {% if purchase_order%}
-                    <form id="saveform" method="post" action="{% url 'purchases:save_purchase_order' %}" class="w-[50%] h-full  flex justify-end items-end">
+                    <form id="date_form" method="post" action="{% url 'purchases:recieve_order_process' purchase_order.id  %}" class="w-[50%] h-full  flex justify-end items-end">
 
                     {%else%}
                     <form class="w-[50%] h-full  flex justify-end items-end">
@@ -92,9 +92,9 @@
                       <div class="w-full mb-2  flex-col flex items-end justify-end">
                         {% csrf_token %}
                         
-                        <div class=" w-full  flex flex-row justify-end items-end" >
-                          <label for="" class="text-md  flex justify-center items-center mx-1  px-1">Date recieved:</label>
-                          {{purchaseorderform.supplier}}
+                        <div class=" w-full  flex flex-row justify-center items-center" >
+                          <label for="" class="text-md  text-center mx-1  px-1">Date&nbsp;receIved:</label>
+                        <input id="recieved_date"  name='received_date' type="datetime-local" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none focus:outline-none focus:ring-0">
         
                           
                                 
@@ -115,7 +115,7 @@
    
 
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-10  ">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-10   ">
           <div class="text-gray-700 my-1 text-md"> Purchase order List</div>
           <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
@@ -149,17 +149,9 @@
                   {% csrf_token %}
               
 <input type="number" value="{{product.remaining_quantity}}" name="recieved_quantity" class=" remove-arrow  w-20 h-8  pl-4 pr-3  rounded-lg  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"/>
-<style>
-  .remove-arrow::-webkit-inner-spin-button,
-.remove-arrow::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.remove-arrow {
-  -moz-appearance: textfield;
-}
-</style>
-              <button type="submit" class="bg-green-500 px-1  my-2  py-2 fo text-sm   rounded-md text-white">receive</button>
+<input type="hidden" class="received_date" name="received_date"/>
+
+              <button type="submit" class="bg-green-500 px-1   my-2  py-2 fo text-sm   rounded-md text-white submit ">receive</button>
             </form> 
             </td>
               </tr>
@@ -180,7 +172,7 @@
               <tr>
                 <td>
                   {% if purchase_order %}
-                  <button data-url="{% url 'purchases:recieve_all_stock' purchase_order.id %}"  id="recieve-all" class="bg-green-500 px-3 py-1 font-bold rounded-md text-white">receive all</button>
+                  <button data-url="{% url 'purchases:recieve_all_stock' purchase_order.id %}"  id="recieve-all" class="bg-green-500 px-3 py-1 mx-2 font-bold rounded-md text-white">receive all</button>
 
                   {%endif%}
                 </td>
@@ -344,6 +336,18 @@ img {
 }
 .twitter-typeahead{
     width: 100% !important;
+
+
+
+}
+
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
 }
 </style>
 
@@ -354,8 +358,8 @@ img {
 
  recieve_all.addEventListener("click",(item)=>{
   Swal.fire({
-      icon: 'warning',
-      text: "Do you want to delete this?",
+      icon: 'info',
+      text: "Do you want to   recieve all?",
       confirmButtonColor: '#26A69A',
       confirmButtonText:"Yes,I'm sure",
       showDenyButton:true,
@@ -364,6 +368,12 @@ img {
       background: 'rgba(0, 0, 0, 0.7)',
       allowEscapeKey: false,
       dangerMode:true,
+      showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
 
     }).then((e)=>{
       if (e.isConfirmed){
@@ -394,5 +404,30 @@ document.getElementById("close").addEventListener("click",(item)=>{
 }
 </script> 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Get the current date and time in the format expected by datetime-local input
+      const currentDateAndTime = new Date().toISOString().slice(0, 16);
+  
+      // Set the default value of the datetime input
+      document.getElementById('recieved_date').value = currentDateAndTime;
+      $(".received_date").val(currentDateAndTime);
+  });
+ 
+
+  $(document).ready(function() {
+  // Get the main datetime field
+  var mainDatetimeField = $('#received_date');
+
+  // Add an event listener to the main datetime field
+  mainDatetimeField.change(function() {
+    // Get the new value of the main datetime field
+    var newValue = mainDatetimeField.val();
+
+    // Update the value of all hidden datetime fields in each row
+    $('.received_date').val(newValue);
+  });
+});
+  </script>
 
 {%endblock%}

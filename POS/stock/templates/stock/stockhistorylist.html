@@ -55,14 +55,14 @@
         {%endif%}
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
-        <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'product:productpage'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+        <div class="w-full flex flex-row flex-wrap  py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
+            <a href="{% url 'inventory:add_inventory'%}" type="button" class="relative flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Inventory</span>
              </a>
 
-             <a href="{% url 'product:productlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'inventory:history'%}" type="button" class="flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Inventory History</span>
@@ -117,6 +117,10 @@
                         <th scope="col" class="px-6 py-3">
                          Product Name
                         </th>
+                         
+                        <th scope="col" class="px-6 py-3">
+                          Package Type
+                         </th>
                         <th scope="col" class="px-6 py-3">
                         Previous Quantity
                         </th>
@@ -146,6 +150,9 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                            {{entry.product.name}}
                         </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{entry.package_type}}
+                         </th>
                         <td class="px-6 py-4">
                             {{entry.previous_quantity}}
                         </td>
@@ -238,7 +245,11 @@ document.getElementById("close").addEventListener("click",()=>{
       
 
 $(document).ready( function () {
-    $('.myTable').DataTable();
+    $('.myTable').DataTable(
+        {
+      "order": []
+    }
+    );
 } );
 
 
@@ -261,6 +272,12 @@ $(document).ready( function () {
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -329,6 +346,14 @@ img {
     width: 100%;
     text-align: center;
     color: #fff;
+}
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
 }
 
 </style>

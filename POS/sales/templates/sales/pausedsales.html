@@ -56,13 +56,13 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'sales:add_sales'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'sales:add_sales'%}" type="button" class="  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Sales</span>
              </a>
 
-             <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="" type="button" class="  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Sales list</span>
@@ -186,7 +186,11 @@ document.getElementById("close").addEventListener("click",()=>{
       
 
 $(document).ready( function () {
-    $('.myTable').DataTable();
+    $('.myTable').DataTable(
+      {
+      "order": []
+    }
+    );
 } );
 
 
@@ -209,6 +213,12 @@ $(document).ready( function () {
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -279,5 +289,13 @@ img {
     color: #fff;
 }
 
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
 </style>
 {%endblock%}

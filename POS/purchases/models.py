@@ -20,11 +20,11 @@ Status= (
 
 
 class PurchaseOrder(models.Model):
-    supplier = models.ForeignKey(Supplier, on_delete=models.DO_NOTHING,null=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.DO_NOTHING,null=True,blank=True)
     products = models.ManyToManyField(Product_Item, through='OrderedProduct')
     total_cost_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
     total_quantity=models.PositiveIntegerField(null=True, blank=True)
-    discount = models.DecimalField(max_digits=5, decimal_places=2,null=True)
+    discount = models.DecimalField(max_digits=5, decimal_places=2,null=True,blank=True)
     invoice_number = models.CharField(null=True, blank=True)
     order_number = models.CharField(max_length=12,null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
@@ -89,10 +89,6 @@ class  OrderedProduct(models.Model):
     received_quantity = models.PositiveIntegerField(default=0, null=True)
     remaining_quantity = models.PositiveIntegerField(default=0, null=True)
 
-
-
-
-
         
 
     def save(self, *args, **kwargs):
@@ -105,43 +101,52 @@ class  OrderedProduct(models.Model):
         super(OrderedProduct, self).save(*args, **kwargs)
 
     def calculate_quantity(self):
-                    
-        if self.package_type:
-            # If there's a package type, use its number_of_products_item for multiplication
-            multiplier = self.package_type.number_of_products_item
-        else:
-            # If there's no package type, assume a multiplier of 1
-            multiplier = 1
-
-        self.quantity = self.quantity * multiplier
+     
+        self.quantity = self.quantity 
 
     def calculate_total_cost_price(self):
         self.total_cost_price = (self.quantity) * self.cost_unit_price
         
-    def add_to_stock(self,user,quantity):
+    def add_to_stock(self, user, quantity, date=None):
+        if date is None:
+            date = timezone.now()
+        if self.package_type:
+            package_type = self.package_type
+            previous_quantity=self.package_type.available_quantity
+        else:
+            package_type = None
+            previous_quantity=self.product.available_quantity
+            
+            
+
         stockentry = StockEntry(
             product=self.product,
             quantity_received=quantity,
-             previous_quantity=self.product.available_quantity,
+             previous_quantity=previous_quantity,
             user=user,
-            created_at=timezone.now(),
+            created_at=date,
+            package_type=package_type
         )
 
         
-        product = self.product
-        product.available_quantity = self.received_quantity
-        product.save()
-        stockentry.available_quantity = product.available_quantity
-        stockentry.info=f"{self.product.name } updated by {quantity} in purchase order {self.purchase_order.order_number}"
+
+        if self.package_type:
+            product = self.package_type
+            product.available_quantity =   self.received_quantity
+            product.save()
+            stockentry.available_quantity = product.available_quantity
+            stockentry.info = f"{self.product.name } updated by {quantity} {self.package_type} in purchase order {self.purchase_order.order_number}"
+        else:
+            product = self.product
+            product.available_quantity =   self.received_quantity
+            product.save()
+            stockentry.available_quantity = product.available_quantity
+            
+            stockentry.info = f"{self.product.name } updated by {quantity} in purchase order {self.purchase_order.order_number}"
+
         stockentry.save()
         self.save()
 
 
-      
-
-class ReceivedProductHistory(models.Model):
-    ordered_product = models.ForeignKey(OrderedProduct, on_delete=models.CASCADE)
-    received_quantity = models.PositiveIntegerField(null=True)
-    received_time = models.DateTimeField(auto_now_add=True)
 
     

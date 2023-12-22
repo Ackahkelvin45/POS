@@ -31,7 +31,8 @@ class Sale(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
     status = models.CharField(max_length=20, null=True)
     sub_total_cost_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
-    payment = models.ForeignKey(PaymentDetails, null=True, on_delete=models.CASCADE, related_name='sales_item')
+    payment = models.ForeignKey(PaymentDetails, null=True, on_delete=models.CASCADE, related_name='sales_item',blank=True)
+    total_gross_profit= models.DecimalField(max_digits=20, decimal_places=2, null=True,blank=True)
     
  
     def save(self, *args, **kwargs):
@@ -45,6 +46,12 @@ class Sale(models.Model):
             total_cost_price = sum(op.total_cost_price for op in saleproducts)
             self.sub_total_cost_price =sum(op.total_cost_price for op in saleproducts)
             total_quantity = sum(op.quantity for op in saleproducts)
+            self.total_gross_profit = sum(op.profit for op in saleproducts)
+
+            #calculate gross profit
+           
+           
+   
 
             if self.discount:
                 original_price = total_cost_price
@@ -70,6 +77,7 @@ class  SaleProduct(models.Model):
     product = models.ForeignKey(Product_Item, on_delete=models.CASCADE,null=True)
     quantity = models.PositiveIntegerField(null=True,blank=True)
     cost_unit_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    profit = models.DecimalField(max_digits=20, decimal_places=2, null=True)
     package_type = models.ForeignKey(Package, on_delete=models.DO_NOTHING, null=True,blank=True)
     total_cost_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
 
@@ -80,6 +88,16 @@ class  SaleProduct(models.Model):
 
     def calculate_total_cost_price(self):
         self.total_cost_price = (self.quantity) * self.cost_unit_price
+    
+    def calculate_profit(self):
+        if self.package_type:
+            self.profit = self.package_type.selling_price - self.package_type.cost_price
+            print(f"After calculation - profit: {self.profit}")
+
+        else:
+
+            self.profit = self.product.selling_price - self.product.cost_price
+            print(f"After calculation - profit: {self.profit}")
         
 
 

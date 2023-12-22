@@ -56,17 +56,23 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'purchases:order'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'purchases:order'%}" type="button" class="relative  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Purchase Order</span>
              </a>
 
-             <a href="{% url 'purchases:purchaseorderlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'purchases:purchaseorderlist'%}" type="button" class="relative     flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Purchase Order list</span>
              </a>
+
+             <a href="{% url 'inventory:history'%}" type="button" class="flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            
+              <i class="mdi mdi-view-module-outline text-white text-base"></i>
+              <span class="pl-2 mx-1 text-xs text-white">Inventory History</span>
+           </a>
         </div>
      <!-- component -->
 <!-- component -->
@@ -89,20 +95,20 @@
                            Purchase Order Number
                            </th>
                         <th scope="col" class="px-6 py-3">
-                      Created By
+                      Created&nbsp;By
                         </th>
                         <th scope="col" class="px-6 py-3">
                           Supplier
                         </th>
                         
                         <th scope="col" class="px-6 py-3">
-                         Total Cost Price
+                         Total&nbsp;Cost&nbsp;Price
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Discount
                           </th>
                         <th scope="col" class="px-6 py-3">
-                          Date
+                          Date&nbsp;Created
                         </th>
                         <th scope="col" class="px-6 py-3">
                           Completed
@@ -144,7 +150,7 @@
                         </td>
                         <td class="px-6 py-4 flex flex-col justify-start items-start  ">
                             <div class="mb-2">
-                                <a href="{% url 'purchases:preview_as_pdf2' purchaseorder.id %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+                                <a target="_blank" href="{% url 'purchases:preview_as_pdf2' purchaseorder.id %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
                                     <i class="mdi mdi-printer text-gray-700 text-xs"></i>
                                     <span class="group-hover:underline">Preview </span>
                                 
@@ -157,7 +163,7 @@
                            
                                   {%else%}
                                   <a href="{% url 'purchases:recieve_order' purchaseorder.id%}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-                                    <i class="mdi  mdi-table-arrow-down  text-green-500 text-xs"></i>
+                                    <i class="mdi  mdi-table-arrow-down  text-green-500 text-xs {% if  purchaseorder.status == 'recieved'%}hidden {%endif%}"></i>
                                     <span class="group-hover:underline">recieve order</span>
                                 {%endif%}
                               
@@ -166,7 +172,7 @@
                               </a>
                           </div>
  <div class="flex flex-row justify-center items-cente mt-2 ">
-                            <a href="{% url 'purchases:editpurchaseorder' purchaseorder.id %}" class=" "><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="delete-item"> <i data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
+                            <a href="{% url 'purchases:editpurchaseorder' purchaseorder.id %}" class=" {% if  purchaseorder.status == 'recieved'%} hidden {%endif%}"><i class="mdi mdi-pencil text-indigo-700 text-lg"></i> </a>  <button data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="delete-item"> <i data-url="{% url 'purchases:delete_purchaseorder2' purchaseorder.id%}" class="mdi mdi-trash-can-outline text-indigo-700 text-lg ml-3"></i> </button>
                         </div>
                       
                         </td>
@@ -271,6 +277,12 @@ $(document).ready( function () {
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -341,5 +353,12 @@ img {
     color: #fff;
 }
 
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
 </style>
 {%endblock%}

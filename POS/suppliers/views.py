@@ -9,6 +9,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django_tenants.utils import get_tenant
+import pdfkit
 
 # Create your views here.
 
@@ -43,29 +44,26 @@ def supplierslist(request):
 
 
 def export_suppliers_as_pdf(request):
-    suppliers = Supplier.objects.all()
-    tenant=get_tenant(request)
+    template = get_template('suppliers/suppliers_pdf.html')  
+    html_content = template.render({
+        'suppliers': Supplier.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  
 
-    # Create an HTML template context
-    context = {
-        'suppliers': suppliers,
-        "pharmacy":tenant
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
     }
 
-    # Render the HTML template
-    template = get_template('suppliers/suppliers_pdf.html')
-    html = template.render(context)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
-    # Create a PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
-
-    # Generate the PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('PDF generation error')
-
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="supliers.pdf"'
     return response
+
 
 
 
@@ -108,3 +106,4 @@ def edit_supplier_process(request, pk):
 
 
 
+ 

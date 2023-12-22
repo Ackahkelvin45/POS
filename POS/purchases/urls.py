@@ -22,4 +22,6 @@ urlpatterns = [
      path("recieve_process/<int:pk>/", views.receive_stock_process, name="recieve_order_process"),
      path("recieve_all/<int:pk>/", views.recieve_all_stock, name="recieve_all_stock"),
      path("send_email/<int:pk>/", views.send_purhase_order_as_email,name="send_purhase_order_as_email"),
+      path("get_package_cost/", views.get_costprice_of_package, name="get_package_cost"),
+      path("remove/", views.remove_from_session,name="remove_from_session"),
 ]

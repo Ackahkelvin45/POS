@@ -68,10 +68,23 @@ urlpatterns = [
     path('add_package/', views.showAddPackage, name='add_package'),
     path('add_package_process/', views.addPackage, name='add_package_process'),
     path('export-products-pdf/', views.export_products_as_pdf, name='export_products_as_pdf'),
+     path('export-package-pdf/', views.export_packages_as_pdf, name='export_packages_as_pdf'),
     path('export-categories-pdf/', views.export_categories_as_pdf, name='export_categories_as_pdf'),
-     path('export-subcategories-pdf/', views.export_subcategories_as_pdf, name='export_subcategories_as_pdf'),
-    path('export/products/excel/', views.export_products_to_excel, name='export_products_to_excel'),
-    
+    path('export-subcategories-pdf/', views.export_subcategories_as_pdf, name='export_subcategories_as_pdf'),
+    path('export-units-pdf/', views.export_units_as_pdf, name='export_units_as_pdf'),
+    path('export_products/excel/', views.export_products_to_excel, name='export_products_to_excel'),
+        path('export_package/excel/', views.export_package_to_excel, name='export_package_to_excel'), 
+    path('export_categories/excel/', views.export_categories_to_excel, name='export_categories_to_excel'),
+     path('export_subcategories/excel/', views.export_subcategories_to_excel, name='export_dubcategories_to_excel'),
+          path('export_units/excel/', views.export_units_to_excel, name='export_units_to_excel'),    
+    path('reset_products_to_zero/', views.reset_product_to_zero, name='reset_product_to_zero'),
+    path('reset_package_to_zero/', views.reset_package_to_zero, name='reset_package_to_zero'),
+    path('delete_all_category/', views.delete_all_categories, name='delete_all_categories'),
+    path('delete_all_subcategory/', views.delete_all_subcategories, name='delete_all_subcategories'),
+    path('delete_all_units/', views.delete_all_units, name='delete_all_units'),
+     path('update_quantity_in_bulk/', views.update_quantity_in_bulk, name='update_quantity_in_bulk'),
+
+      path('update_package_quantity_in_bulk/', views.update_packages_quantity_in_bulk, name='update_package_quantity_in_bulk'),
     
 
 

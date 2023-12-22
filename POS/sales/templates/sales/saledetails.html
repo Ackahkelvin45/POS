@@ -72,7 +72,20 @@
 <!-- component -->
 <div class="  px-8 max-vs:px-2  mx-4">
     <!--menu bar-->
+    <div class=" my-3 w-full flex flex-row flex-wrap bg-slate-200 border  border-slate-400 px-2 py-2">
+        <span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i class="mdi mdi-printer text-gray-700 text-xs"></i>
+            <span class="group-hover:underline">Preview as pdf</span>
+        
+           
+        
+        </span>
    
+   
+        
+        
+        
+    </div>
     <div class="text-gray-700 my-2">Sales Detail</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
@@ -80,24 +93,24 @@
 
     </div>
     <div class="px-10 max-vs:px-2">
-    <div class="flex flex-row mb-6 ">
-        <div class="flex flex-col w-[50%]">
+    <div class="flex flex-row max-sm:flex-col mb-6  text-gray-700">
+        <div class="flex flex-col w-[50%] max-sm:w-full">
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Date:</span>
                 <span>{{sale.date_created}}</span>
             </div>
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Sale number:</span>
-                <span>{{sale.sale_nuber}}</span>
+                <span>{{sale.sale_number}}</span>
             </div>
             
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Total Cost Price:</span>
-                <span>{{sale.total_cost_price}}</span>
+                <span>₵ {{sale.total_cost_price}}</span>
             </div>
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Total Subtotal:</span>
-                <span>{{sale.sub_total_cost_price}}</span>
+                <span> ₵ {{sale.sub_total_cost_price}}</span>
             </div>
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Total Quantity:</span>
@@ -105,7 +118,7 @@
             </div>
         </div>
        
-        <div class="flex flex-col w-[50%]">
+        <div class="flex flex-col w-[50%] max-sm:w-full">
             <div class="flex flex-row mb-1">
                 <span class="font-semibold  ">Discount:</span>
                 <span>{{sale.discount}}%</span>
@@ -133,7 +146,7 @@
        
     </div>
 
-    <div class="w-full mb-10">
+    <div class="w-full mb-10  overflow-x-auto">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -142,7 +155,7 @@
                     </th>
                     
                     <th scope="col" class="px-6 py-3">
-                    Cost Unit Price
+                    Cost Unit Price(₵)
                     </th>
                     <th scope="col" class="px-6 py-3">
                       Total  Quantity
@@ -181,7 +194,7 @@
             </tbody>
         </table>
     </div>
-     <button id="generatePdf" type="button">fffffffff</button>
+  
   </div>
     </div>
 
@@ -267,6 +280,12 @@ document.getElementById("close").addEventListener("click",()=>{
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -338,30 +357,5 @@ img {
 }
 
 </style>
-<script>
-    document.getElementById('generatePdf').addEventListener('click', function () {
-        window.onbeforeprint = function() {
-            console.log('Before print');
-        };
 
-        window.onafterprint = function() {
-            console.log('After print');
-          
-        };
-
-        // Use html2pdf to generate the PDF
-        const element = document.body;
-        
-        html2pdf(element, {
-            margin: 10,
-            filename: 'generated.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).then(() => {
-            // Open the print dialog after generating the PDF
-            window.print();
-        });
-    });
-</script>
 {%endblock%}

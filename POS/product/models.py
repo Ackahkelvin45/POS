@@ -45,7 +45,8 @@ class Product_Item(models.Model):
     product_image = models.ImageField(null=True, blank=True, upload_to='product_images/')
     barcode = models.ImageField(upload_to='product_barcode/', blank=True, null=True)
     location = models.CharField(max_length=20, null=True,)
-    available_quantity=models.PositiveIntegerField(default=0,null=True)
+    available_quantity = models.PositiveIntegerField(default=0, null=True)
+    available_package_quantity=models.PositiveIntegerField(default=0,null=True)
     date_created=models.DateTimeField(auto_now_add=True,null=True)
 
 
@@ -66,7 +67,9 @@ class Package(models.Model):
     package_name = models.CharField(max_length=100, null=True, unique=True)
     cost_price = models.DecimalField(max_digits=20, decimal_places=2,null=True, blank=True)
     selling_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    available_quantity=models.PositiveIntegerField(default=0,null=True,blank=True)
+    
     
     
     def __str__(self):

@@ -5,6 +5,7 @@ from product.models import Product_Item
 from django.http import JsonResponse
 from django.contrib import messages
 from .models import StockEntry
+from product.models import Package
 
 # Create your views here.
 
@@ -23,24 +24,49 @@ def showchangestock(request):
     
 class GetAvailableQuantityView(View):
     def get(self, request, *args, **kwargs):
-        product_id = request.GET.get('product_id')
-        product = Product_Item.objects.get(pk=product_id)
-        available_quantity = product.available_quantity  # Replace 'available_quantity' with your actual field name
+        try:
+            product_id = request.GET.get('product_id')
+            product = Product_Item.objects.get(pk=product_id)
+            available_quantity = product.available_quantity
+            packages = Package.objects.filter(product__id=product_id).values('id', 'package_name')
 
-        return JsonResponse({'available_quantity': available_quantity})
+            return JsonResponse({'available_quantity': available_quantity, "packages": list(packages)})
 
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+class GetAvailablePackageQuantityView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            package_id = request.GET.get('package_id')
+            package = Package.objects.get(pk=package_id)
+            available_quantity = package.available_quantity
+
+            
+            return JsonResponse({'available_quantity': available_quantity})
+
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
 def add_stock_process(request):
     if request.method == "POST":
         stockentryform = StockEntryForm(request.POST)
         if stockentryform.is_valid():
             stock = stockentryform.save()
-            product = stock.product
-            stock.previous_quantity=product.available_quantity
-            stock.add_to_stock()
-            stock.info = f"{stock.product.name} updated by {stock.quantity_received} manually"
+            if stock.package_type:
+                product = stock.package_type
+                stock.previous_quantity = product.available_quantity
+                stock.add_to_stock()
+                stock.available_quantity=stock.package_type.available_quantity
+            else:
+                product = stock.product
+                stock.previous_quantity = product.available_quantity
+                stock.add_to_stock()
+                stock.available_quantity=stock.product.available_quantity
+            
             stock.user = request.user
-            stock.available_quantity=stock.product.available_quantity
             stock.save()
 
             messages.success(request,'Inventory added succesfully')
@@ -51,12 +77,21 @@ def change_stock_process(request):
         stockentryform = StockEntryForm(request.POST)
         if stockentryform.is_valid():
             stock = stockentryform.save()
-            product = stock.product
-            stock.previous_quantity=product.available_quantity
-            stock.change_stock()
-            stock.info = f"{stock.product.name} changed  to  {stock.quantity_received} manually"
+            if stock.package_type:
+                product = stock.package_type
+                stock.previous_quantity = product.available_quantity
+                stock.change_stock()
+                stock.available_quantity = stock.package_type.available_quantity
+                
+            else:
+                product = stock.product
+                
+                stock.previous_quantity = product.available_quantity
+                stock.change_stock()
+                stock.available_quantity=stock.product.available_quantity        
+                
             stock.user = request.user
-            stock.available_quantity=stock.product.available_quantity
+            
             stock.save()
 
             messages.success(request,'Inventory Corrected  succesfully')

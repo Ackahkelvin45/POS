@@ -56,14 +56,14 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 pb-10 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href=""  class="relative  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Purcahse Order</span>
                
              </a>
 
-             <a href="{% url 'purchases:purchaseorderlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'purchases:purchaseorderlist'%}" class="relative   flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Purchase order list</span>
@@ -78,13 +78,13 @@
 
 
   
-    <div class="flex w-full flex-row overflow-hidden    items-center  h-full py-2   bg-slate-300 px-2">
+    <div class="flex w-full flex-row max-sm:flex-col max-sm:items-end  overflow-hidden sm:justify-between    items-center  h-full py-2   bg-slate-300 px-2">
      
         
-                <div  class="  w-[50%]  h-full  flex justify-start items-start flex-row  ">
+                <div  class="  w-[50%] max-sm:w-full  h-full  flex justify-start items-start flex-row  ">
                     {% csrf_token %}
                     <div class="flex w-full  h-full flex-row  justify-start items-start">
-                        <form method="post"  id="search-form"  class=" mb-2 h-full  flex-col flex items-start justify-start">
+                        <form method="post"  id="search-form"  class=" mb-2 max-sm:w-full  h-full  flex-col flex items-start justify-start max">
                             <label for="" class="text-sm text-gray-700   px-1">Search Product</label>
                             <div class=" w-full  h-full flex flex-row justify-start items-start"  id="bloodhound">
                                 <input id="product-name" class=" typeahead w-full h-10  pl-4 pr-3  rounded-lg  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300" type="text"/>
@@ -103,31 +103,31 @@
                        
                     </div>
                     {% if purchase_order%}
-                    <form id="saveform" method="post" action="{% url 'purchases:save_purchase_order' %}" class="w-[50%] h-full  flex justify-end items-end">
+                    <form id="saveform" method="post" action="{% url 'purchases:save_purchase_order' %}" class=" max-sm:w-full w-[50%] h-full  flex justify-end items-end">
 
                     {%else%}
-                    <form class="w-[50%] h-full  flex justify-end items-end">
+                    <form class="w-[50%] h-full  flex justify-end items-end max-sm:w-full">
 
                     {%endif%}
 
                       <div class="w-full mb-2  flex-col flex items-end justify-end">
                         {% csrf_token %}
                         
-                        <div class=" w-full  flex flex-row justify-end items-end" >
-                          <label for="" class="text-md  flex justify-center items-center mx-1  px-1">select supplier:</label>
+                        <div class=" w-full  flex flex-row justify-end items-center" >
+                          <label for="" class="  flex justify-center items-center mx-1  px-1 max-lg:text-sm">select supplier:</label>
                           {{purchaseorderform.supplier}}
         
                           
                                 
                         
                                         </div>
-                      <div class="flex flex-row my-2 justify-end items-end">
-                        <label class="text-md mx-2  flex justify-center items-center">add discount:</label>
+                      <div class="flex flex-row my-2 justify-end items-centr">
+                        <label class="text-md mx-2  flex justify-center items-center max-lg:text-sm">add discount:</label>
                         {{purchaseorderform.discount}}
                                             </div>
 
-                      <div class="flex flex-row justify-end items-end ">
-                        <label class="text-md mx-1 flex justify-center items-center ">Invoice Number:</label>
+                      <div class="flex flex-row justify-end items-center ">
+                        <label class="text-md mx-1 flex justify-center items-center text-center max-lg:text-sm">Invoice Number:</label>
                    
                         {{purchaseorderform.invoice_number}}
                       </div>
@@ -154,7 +154,7 @@
               </thead>
               <tbody class="bg-grey-light text-sm flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 25vh;">
                 <tr class="flex w-full justify-center items-center ">
-                  <td class="px-6 w-1/4 break-words">No records</td>
+                  <td class="px-6 w-full break-words text-center">No records</td>
                 
                 </tr>
                 
@@ -210,14 +210,16 @@
             </tbody>
             <tfoot class="bg-slate-300 py-2  text-sm flex flex-col  text-left overflow-y-hidden w-full">
               <tr>
-                <td class="px-6 w-1/4 break-words"><span class="font-semibold">PO Number:</span>{{purchase_order.order_number}}</td>
-                <td class="px-6 w-1/4 break-words"> <span class="font-semibold">Total Quantity:</span>{{purchase_order.total_quantity}}</td>
-                <td class="px-6 w-1/4 break-words"><span  class="font-semibold">Total Price:</span>{{purchase_order.total_cost_price}}</td>
-                <td class="px-6 w-1/4 break-words space-x-2 ">
+                <td class="px-6 max-sm:px-2 w-1/4 break-words max-sm:text-sm"><span class="font-semibold">PO Number:</span>{{purchase_order.order_number}}</td>
+                <td class="px-6 w-1/4 break-words max-sm:px-2 max-sm:text-sm"> <span class="font-semibold">Total Quantity:</span>{{purchase_order.total_quantity}}</td>
+                <td class="px-6 w-1/4 break-words max-sm:px-2 max-sm:text-sm"><span  class="font-semibold">Total Price:</span>{{purchase_order.total_cost_price}}</td>
+                <td class="px-6 w-1/4 break-words" >
+                  <div class=" sm:space-x-2 max-sm:px-2 max-sm:text-sm max-sm:flex flex-col  max-sm:space-y-2">
                   {% if purchase_order %}
                   <button id="savebutton" class="bg-green-500 px-3 py-1 font-bold rounded-md text-white">save</button>
-                  <button id="deletebutton" data-url="{% url 'purchases:delete_purchaseorder'%}" class=" ml-2 bg-red-500 px-3 py-1 font-bold rounded-md text-white">delete</button>
+                  <button id="deletebutton" data-url="{% url 'purchases:delete_purchaseorder'%}" class=" ml-2 max-sm:ml-0 bg-red-500 px-3 py-1 font-bold rounded-md text-white">cancel</button>
                   {%endif%}
+                </div>
                 </td>
               </tr>
             </tfoot>
@@ -226,7 +228,17 @@
       </div>
       {% if purchase_order %}
       <div class=" mt-6 w-full flex flex-row bg-slate-200 border  border-slate-400 px-2 py-2">
-        <a href="{% url 'purchases:preview_as_pdf'%}" class="flex flex-row text-xs text-gray-500  group cursor-pointer justify-center items-center ">
+      
+        <a href="{% url 'purchases:remove_from_session' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer  justify-center items-center ">
+            <i class="mdi mdi-plus font-bold   text-green-500 text-lg mr-1"></i>
+            <span class="group-hover:underline ">Add New</span>
+
+        
+           
+        
+        </a>
+        <span class="h-5 mx-1 bg-gray-500 w-[1px] mt-1"></span>
+        <a href="{% url 'purchases:preview_as_pdf'%}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer justify-center items-center ">
             <i class="mdi mdi-printer text-gray-700 text-lg"></i>
             <span class="group-hover:underline ">Preview </span>
         
@@ -564,6 +576,12 @@ $("#saveform").submit();
       background: 'rgba(0, 0, 0, 0.7)',
       allowEscapeKey: false,
       dangerMode:true,
+      showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
 
     }).then((e)=>{
       if (e.isConfirmed){
@@ -582,5 +600,48 @@ $("#saveform").submit();
 
 
 </script>
+
+<script>
+    $(document).ready(function () {
+        $('#package_select').change(function () {
+            var selectedPackageId = $(this).val();
+            $.ajax({
+                url: '{% url "purchases:get_package_cost"%}',
+                data: {'package_id': selectedPackageId},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result === 'success') {
+                        console.log('Cost Price: ' + data.cost_price);
+                        $("#item_cost_price").val(`${data.cost_price}`);
+                        // Handle the cost price here
+                    } else {
+                      $("#item_cost_price").val('{{product.cost_price}}');
+                    }
+                }
+            });
+        });
+    });
+</script>
+<style>
+  input::-webkit-outer-spin-button,
+ input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+ }
+ 
+ /* Firefox */
+ input[type=number] {
+   -moz-appearance: textfield;
+ }
+
+
+ .slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
+   </style>
 
 {%endblock%}

@@ -15,7 +15,7 @@ class Supplier(models.Model):
     is_active = models.BooleanField(default=True, null=True)
     city = models.CharField(max_length=100, null=True)
     address = models.TextField(null=True, blank=True)
-    opening_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    opening_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True ,default=0)
 
     
     

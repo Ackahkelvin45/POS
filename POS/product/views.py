@@ -11,6 +11,8 @@ from django.http import FileResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import pdfkit
+from stock.models import StockEntry
+from django.utils import timezone
 
 
 
@@ -271,36 +273,62 @@ def add_unit(request):
         messages.error(request, str(unitform.errors))
         return redirect("product:unitpage")
 
-
 def create_categories_from_excel(request):
     try:
         if request.method == "POST":
             excel_file = request.FILES["excel_file"]
-            if excel_file.name.endswith(".xls") or excel_file.name.endswith(".xlsx"):
+            if excel_file.name.lower().endswith((".xls", ".xlsx")):
                 df = pd.read_excel(excel_file)
-                for index, row in df.iterrows():
-                    name = row["name"]
-                    code = row["code"]
-                    Category.objects.create(name=name, code=code)
-                messages.success(request, "Category Added Successfully")
-                return redirect("product:categorylist")
+                
+                # Use a case-insensitive check for the "Name" column
+                name_column = next((col for col in df.columns if col.lower() == "name"), None)
+                
+                # Use a case-insensitive check for the "Code" column
+                code_column = next((col for col in df.columns if col.lower() == "code"), None)
+                
+                if name_column is not None and code_column is not None:
+                    for index, row in df.iterrows():
+                        name = row[name_column].lower() if pd.notna(row[name_column]) else ""
+                        code = row[code_column] if pd.notna(row[code_column]) else ""
+                        Category.objects.create(name=name, code=code)
+                    
+                    messages.success(request, "Category Added Successfully")
+                    return redirect("product:categorylist")
+                messages.error(request, "Please make sure you have the right rows and colums")
+                return redirect("product:categorypage")
+            messages.error(request, "Try again with the correct file")
+            return redirect("product:categorypage")
     except Exception as e:
         messages.error(request, f"{str(e)}")
         return redirect("product:categorypage")
+
 
 
 def create_subcategories_from_excel(request):
     try:
         if request.method == "POST":
             excel_file = request.FILES["excel_file"]
-            if excel_file.name.endswith(".xls") or excel_file.name.endswith(".xlsx"):
+            if excel_file.name.lower().endswith((".xls", ".xlsx")):
                 df = pd.read_excel(excel_file)
-                for index, row in df.iterrows():
-                    name = row["name"]
-                    code = row["code"]
-                    Subcategory.objects.create(name=name, code=code)
-                messages.success(request, "Subcategory Added Successfully")
-                return redirect("product:subcategory_list")
+                
+                # Use a case-insensitive check for the "Name" column
+                name_column = next((col for col in df.columns if col.lower() == "name"), None)
+                
+                # Use a case-insensitive check for the "Code" column
+                code_column = next((col for col in df.columns if col.lower() == "code"), None)
+                
+                if name_column is not None and code_column is not None:
+                    for index, row in df.iterrows():
+                        name = row[name_column].lower() if pd.notna(row[name_column]) else ""
+                        code = row[code_column] if pd.notna(row[code_column]) else ""
+                        Subcategory.objects.create(name=name, code=code)
+                    
+                    messages.success(request, "Subcategory Added Successfully")
+                    return redirect("product:subcategory_list")
+                messages.error(request, "Please make sure you have the right rows and colums")
+                return redirect("product:subcategorypage") 
+            messages.error(request, "Try again with the correct file")
+            return redirect("product:subcategorypage")
     except Exception as e:
         messages.error(request, f"{str(e)}")
         return redirect("product:subcategorypage")
@@ -310,17 +338,33 @@ def create_units_from_excel(request):
     try:
         if request.method == "POST":
             excel_file = request.FILES["excel_file"]
-            if excel_file.name.endswith(".xls") or excel_file.name.endswith(".xlsx"):
+            if excel_file.name.lower().endswith((".xls", ".xlsx")):
                 df = pd.read_excel(excel_file)
-                for index, row in df.iterrows():
-                    name = row["name"]
-                    shorthand = row["shorthand"]
-                    Unit.objects.create(name=name, shorthand=shorthand)
-                messages.success(request, "Unit Added Successfully")
-                return redirect("product:unitlist")
+
+                # Use a case-insensitive check for the "Name" column
+                name_column = next((col for col in df.columns if col.lower() == "name"), None)
+
+                # Use a case-insensitive check for the "Shorthand" column
+                shorthand_column = next((col for col in df.columns if col.lower() == "shorthand"), None)
+
+                if name_column is not None and shorthand_column is not None:
+                    for index, row in df.iterrows():
+                        name = row[name_column].lower() if pd.notna(row[name_column]) else ""
+                        shorthand = row[shorthand_column].lower() if pd.notna(row[shorthand_column]) else ""
+                        Unit.objects.create(name=name, shorthand=shorthand)
+
+                    messages.success(request, "Units Added Successfully")
+                    return redirect("product:unitlist")
+                messages.error(request, "Please make sure you have the right rows and colums")
+                return redirect("product:unitpage") 
+            messages.error(request, "Try again with the correct file")
+            return redirect("product:unitpage")
+
     except Exception as e:
         messages.error(request, f"{str(e)}")
-        return redirect("product:unitpage")
+
+    return redirect("product:unitpage")
+
 
 
 
@@ -343,6 +387,8 @@ def addPackage(request):
         packageform = PackageForm(request.POST)
         if packageform.is_valid():
             package = packageform.save()
+            package.unit = package.product.item_unit
+            package.save()
             messages.success(request, "Package Added Successfully")
             return redirect("product:add_package")
         messages.error(request, str(packageform.errors))
@@ -352,12 +398,12 @@ def addPackage(request):
 
 
 def export_products_as_pdf(request):
-    template = get_template('product/pdf.html')  # Replace with your actual template name
+    template = get_template('product/pdf.html')  
     html_content = template.render({
         'products': Product_Item.objects.all().order_by("-id"),
         "pharmacy":get_tenant(request)
     
-    })  # Replace with your actual data
+    })  
 
     options = {
         'page-size': 'Letter',
@@ -369,18 +415,39 @@ def export_products_as_pdf(request):
     pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
     response = HttpResponse(pdf_data, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
+    response['Content-Disposition'] = 'inline; filename="products.pdf"'
     return response
 
 
+def export_packages_as_pdf(request):
+    template = get_template('product/packagespdf.html')  
+    html_content = template.render({
+        'products': Package.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  
+
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
+    }
+
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
+
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="packages.pdf"'
+    return response
+
 
 def export_categories_as_pdf(request):
-    template = get_template('product/categorypdf.html')  # Replace with your actual template name
+    template = get_template('product/categorypdf.html')  
     html_content = template.render({
         'categorys': Category.objects.all().order_by("-id"),
         "pharmacy":get_tenant(request)
     
-    })  # Replace with your actual data
+    }) 
 
     options = {
         'page-size': 'Letter',
@@ -392,16 +459,16 @@ def export_categories_as_pdf(request):
     pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
     response = HttpResponse(pdf_data, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
+    response['Content-Disposition'] = 'inline; filename="categories.pdf"'
     return response
 
 def export_subcategories_as_pdf(request):
-    template = get_template('product/subcategorypdf.html')  # Replace with your actual template name
+    template = get_template('product/subcategorypdf.html')  
     html_content = template.render({
         'subcategorys': Subcategory.objects.all().order_by("-id"),
         "pharmacy":get_tenant(request)
     
-    })  # Replace with your actual data
+    })
 
     options = {
         'page-size': 'Letter',
@@ -413,63 +480,335 @@ def export_subcategories_as_pdf(request):
     pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
     response = HttpResponse(pdf_data, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="preview.pdf"'
+    response['Content-Disposition'] = 'inline; filename="subcategories.pdf"'
+    return response
+
+
+def export_units_as_pdf(request):
+    template = get_template('product/unitpdf.html')  
+    html_content = template.render({
+        'units': Unit.objects.all().order_by("-id"),
+        "pharmacy":get_tenant(request)
+    
+    })  
+
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
+    }
+
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
+
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="units.pdf"'
     return response
 
 
 
 def export_products_to_excel(request):
-    # Query the data you want to export
+    
     products = Product_Item.objects.all()
 
-    # Create a DataFrame from the queryset
+   
     data = {
         'Product Name': [product.name for product in products],
+        'Code': [product.code for product in products],
         'Category': [product.category for product in products],
+        'Sub Category':[product.subcategory for product in products],
         'Cost Price': [product.cost_price for product in products],
         'Selling Price': [product.selling_price for product in products],
-        # Add more fields as needed
+        'Unit': [product.item_unit for product in products],
+        'profit margin': [product.profit_margin for product in products],
+        'mark up': [product.markup for product in products],
+        'Available Quantity': [product.available_quantity for product in products],
+        'Location': [product.location for product in products],
+        'Suplier':[product.supplier.company_name for product in products]
+        
+    
+       
     }
 
     df = pd.DataFrame(data)
 
-    # Create a BytesIO object to store the Excel file in memory
     output = BytesIO()
 
-    # Use pandas to write the Excel file to the BytesIO object using openpyxl engine
+ 
     df.to_excel(output, engine='openpyxl', index=False, sheet_name='Products')
 
-    # Set up the response
+ 
     response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=products.xlsx'
 
     return response
 
-    # Query the data you want to export
-    products = Product_Item.objects.all()
 
-    # Create a DataFrame from the queryset
+
+
+def export_package_to_excel(request):
+    
+    products = Package.objects.all()
+
+   
     data = {
-        'Product Name': [product.name for product in products],
-        'Category': [product.category for product in products],
+        'Package Name': [product.package_name for product in products],
+        'Product': [product.product.name for product in products],
+        'number of products item': [product.number_of_products_item for product in products],
+        'unit':[product.unit for product in products],
         'Cost Price': [product.cost_price for product in products],
         'Selling Price': [product.selling_price for product in products],
-        # Add more fields as needed
+        'Available Quantity': [product.available_quantity for product in products],
+     
+        
+    
+       
     }
 
     df = pd.DataFrame(data)
 
-    # Create a BytesIO object to store the Excel file in memory
     output = BytesIO()
 
-    # Use pandas to write the Excel file to the BytesIO object
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, sheet_name='Products', index=False)
-    writer.save()
-    writer.close()
+ 
+    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Packages')
 
-    # Set up the response
+ 
     response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=products.xlsx'
+    response['Content-Disposition'] = 'attachment; filename=packages.xlsx'
 
     return response
+
+
+
+
+def export_categories_to_excel(request):
+    
+    categories=Category.objects.all()
+
+   
+    data = {
+        'Name': [category.name for category in categories],
+        'Code': [category.code for category in categories],
+     
+      
+        
+    
+       
+    }
+
+    df = pd.DataFrame(data)
+
+    output = BytesIO()
+
+ 
+    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Categories')
+
+ 
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=categories.xlsx'
+
+    return response
+
+
+
+
+
+def export_subcategories_to_excel(request):
+    
+    subcategories=Subcategory.objects.all()
+
+   
+    data = {
+        'Name': [subcategory.name for subcategory in subcategories],
+        'Code': [subcategory.code for subcategory in subcategories],
+     
+      
+        
+    
+       
+    }
+
+    df = pd.DataFrame(data)
+
+    output = BytesIO()
+
+ 
+    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Subcategories')
+
+ 
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=subcategories.xlsx'
+
+    return response
+
+
+def export_units_to_excel(request):
+    
+    units=Unit.objects.all()
+
+   
+    data = {
+        'Name': [unit.name for unit in units],
+        'Shorthand': [unit.shorthand for unit in units],
+     
+      
+        
+    
+       
+    }
+
+    df = pd.DataFrame(data)
+
+    output = BytesIO()
+
+ 
+    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Units')
+
+ 
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=units.xlsx'
+
+    return response
+
+def reset_product_to_zero(request):
+    products = Product_Item.objects.all()
+    for product in products:
+        product.available_quantity = 0
+        product.save()
+    messages.success(request, "Quantity has been reset ")
+    return redirect("product:productlist")
+
+def reset_package_to_zero(request):
+    products = Package.objects.all()
+    for product in products:
+        product.available_quantity = 0
+        product.save()
+    messages.success(request, "Quantity has been reset ")
+    return redirect("product:add_package")
+
+
+
+def delete_all_categories(request):
+    categories = Category.objects.all()
+    for category in categories:
+        category.delete()
+    messages.success(request, "All catgories Deleted Successfully")
+    return redirect("product:categorylist")
+
+def delete_all_subcategories(request):
+    subcategories = Subcategory.objects.all()
+    for subcategory in subcategories:
+        subcategory.delete()
+    messages.success(request, "All subcatgories Deleted Successfully")
+    return redirect("product:subcategory_list")
+
+
+def delete_all_units(request):
+    units = Unit.objects.all()
+    for unit in units:
+        unit.delete()
+    messages.success(request, "All Units Deleted Successfully")
+    return redirect("product:unitlist")
+
+
+
+def update_quantity_in_bulk(request):
+    if request.method == 'POST':
+        percentage = request.POST['percentage']
+        amount = request.POST['amount']
+        products=Product_Item.objects.all()
+        if amount != "":
+            amount = int(amount)
+            for product in products:
+
+                stock = StockEntry.objects.create(product=product,
+                quantity_received=amount,
+                previous_quantity=product.available_quantity,
+                info=f'{product.name} updated by {amount},bulk process',
+                user=request.user,
+                created_at=timezone.now(),
+
+                
+                )
+                stock.add_to_stock()
+                stock.available_quantity = product.available_quantity
+                stock.save()
+            messages.success(request, "All Product Quantity Updated successfully")
+            return redirect("product:productlist")
+        if percentage != "":
+
+            percentage = int(percentage)
+            percentage_decimal = percentage / 100.0
+
+            for product in products:
+                new_quantity = product.available_quantity * (1 + percentage_decimal)
+
+                stock = StockEntry.objects.create(product=product,
+                quantity_received=new_quantity ,
+                previous_quantity=product.available_quantity,
+                info=f'{product.name} updated by {amount},bulk process',
+                user=request.user,
+                created_at=timezone.now(),
+
+                
+                )
+                stock.add_to_stock()
+                stock.available_quantity = product.available_quantity
+                stock.save()
+            messages.success(request, "All Product Quantity Updated successfully")
+            return redirect("product:productlist")
+            
+        
+        messages.success(request, "All Product Quantity Updated successfully")
+        return redirect("product:productlist")        
+
+
+
+def update_packages_quantity_in_bulk(request):
+    if request.method == 'POST':
+        percentage = request.POST['percentage']
+        amount = request.POST['amount']
+        products=Package.objects.all()
+        if amount != "":
+            amount = int(amount)
+            for product in products:
+
+                stock = StockEntry.objects.create(product=product.product,
+                package_type=product,
+                quantity_received=amount,
+                previous_quantity=product.available_quantity,
+                info=f'{product.package_name} updated by {amount},bulk process',
+                user=request.user,
+                created_at=timezone.now(),
+
+                
+                )
+                stock.add_to_stock()
+                stock.available_quantity = product.available_quantity
+                stock.save()
+            messages.success(request, "All  Package  Quantity Updated successfully")
+            return redirect("product:add_package")
+        if percentage != "":
+
+            percentage = int(percentage)
+            percentage_decimal = percentage / 100.0
+
+            for product in products:
+                new_quantity = product.available_quantity * (1 + percentage_decimal)
+
+                stock = StockEntry.objects.create(product=product.product,
+                quantity_received=new_quantity,
+                package_type=product,
+                previous_quantity=product.available_quantity,
+                info=f'{product.package_name} updated by {amount},bulk process',
+                user=request.user,
+                created_at=timezone.now(),
+
+                
+                )
+                stock.add_to_stock()
+                stock.available_quantity = product.available_quantity
+                stock.save()
+            messages.success(request, "All Package   Quantity Updated successfully")
+            return redirect("product:add_package")
+   

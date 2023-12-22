@@ -55,18 +55,26 @@
         {%endif%}
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
-        <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'product:unitpage'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+        <div class="w-full flex flex-row  flex-wrap py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
+            <a href="{% url 'product:unitpage'%}" type="button" class=" my-1    flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Unit</span>
              </a>
 
-             <a href="{% url 'product:unitlist'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'product:unitlist'%}" type="button" class=" my-1   flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Unitlist</span>
              </a>
+
+             <a href="{% url 'product:add_package'%}"
+    
+             class=" my-1 relative flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
+           >
+           <i class="mdi mdi-package-variant text-white text-base max-sm:text-xs"></i>
+             <span class=" mx-1 text-xs text-white"> Package</span>
+           </a>
         </div>
      <!-- component -->
 <!-- component -->
@@ -80,18 +88,18 @@
     <div class="px-10 max-vs:px-2">
     
       <div class=" my-3 w-full flex flex-row bg-slate-200 border  border-slate-400 px-2 py-2">
-        <span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+        <a href="{% url 'product:export_units_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
             <i class="mdi mdi-printer text-gray-700 text-xs"></i>
             <span class="group-hover:underline">Preview All</span>
         
            
         
-        </span>
+        </a>
     
    
         
         <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-        <a  href="{% url 'product:export_products_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+        <a  href="{% url 'product:export_units_as_pdf' %}" target="_blank" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
             <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
             <span class="group-hover:underline ">Export as pdf</span>
         
@@ -100,7 +108,7 @@
         </a>
         
         <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-        <a href="{% url 'product:export_products_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+        <a href="{% url 'product:export_units_to_excel' %}" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
             <i class="mdi mdi-application-export text-gray-700 text-xs"></i>
             <span class="group-hover:underline ">download as csv</span>
         
@@ -109,13 +117,13 @@
         </a>
         
         <span class="h-5 mx-1 bg-gray-500 w-[1px] "></span>
-        <span class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
-            <i class="mdi mdi-cancel text-gray-700 text-xs"></i>
-            <span class="group-hover:underline text-red-500">delete all</span>
+        <a data-url="{% url 'product:delete_all_units'%}" id="delete-all" class="flex flex-row text-xs text-gray-500  group cursor-pointer ">
+            <i   data-url="{% url 'product:delete_all_units'%}" class="mdi mdi-cancel text-gray-700 text-xs"></i>
+            <span  data-url="{% url 'product:delete_all_units'%}"  class="group-hover:underline text-red-500">delete all</span>
         
            
         
-        </span>
+        </a>
         
         
         
@@ -239,6 +247,12 @@ document.getElementById("close").addEventListener("click",()=>{
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -256,7 +270,9 @@ document.getElementById("close").addEventListener("click",()=>{
 
 
    $(document).ready( function () {
-    $('.myTable').DataTable();
+    $('.myTable').DataTable({
+      "order": []
+    });
 } );
 
 
@@ -302,6 +318,48 @@ img {
     text-align: center;
     color: #fff;
 }
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
 
 </style>
+
+<script>
+    
+ $("#delete-all").click((item)=>{
+  Swal.fire({
+      icon: 'warning',
+      text: "Do you want to delete all Subcategories?",
+      confirmButtonColor: '#26A69A',
+      confirmButtonText:"Yes,I'm sure",
+      showDenyButton:true,
+      denyButtonText:"No",
+      color:"white",
+      background: 'rgba(0, 0, 0, 0.7)',
+      allowEscapeKey: false,
+      dangerMode:true,
+      showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
+
+    }).then((e)=>{
+      if (e.isConfirmed){
+      url=item.target.getAttribute("data-url")
+    
+     window.location.href=url
+      }
+      else{
+          console.log("denied")
+      }
+    })
+
+ })
+</script>  
 {%endblock%}

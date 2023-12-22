@@ -72,8 +72,12 @@
         {%endif%}
     </div>
     <div style="display: flex; flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
+        <span>Payment method</span>
+        <span> {{sale.payment.payment_type}}</span>
+    </div>
+    <div style="display: flex; flex-direction:row;  justify-content: space-between; margin-bottom: 0.3rem;">
         <span>Amount Paid</span>
-        <span> GH₵ {{sale.payment.amount_paid}}</span>
+        <span > GH₵ <span style="color: rgb(49, 157, 49);">{{sale.payment.amount_paid}}</span></span>
     </div>
     <div style="display: flex; flex-direction:row; justify-content: space-between; margin-bottom: 0.3rem;">
         <span>Change</span>

@@ -17,8 +17,10 @@ from django.http import HttpResponse
 from django_tenants.utils import get_tenant
 from django.urls import reverse
 from stock.models import StockEntry
-from  settings.models import EmailBackend
+from  settings.models import EmailBackend, AppSettings
 from django.core.mail import EmailMessage
+import pdfkit
+from datetime import datetime
 
 
 # Create your views here.
@@ -28,7 +30,7 @@ def showOrderPage(request):
     
     purchase_order = request.session.get('active_purchase_order')
     tenant = get_tenant(request)
-    print(tenant.name)
+    setting = AppSettings.objects.first()
     
     
    
@@ -41,6 +43,8 @@ def showOrderPage(request):
         'purchaseorderform': PurchaseOrderForm(instance=purchase_order_item),
         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchase_order),
         'purchase_order': purchase_order_item,
+        'setting':setting
+       
        
         
     }
@@ -49,10 +53,19 @@ def showOrderPage(request):
         context = {
             'products': Product_Item.objects.all(),
             'purchaseorderform': PurchaseOrderForm(),
-            "suppliers":Supplier.objects.all()
+            "suppliers": Supplier.objects.all(),
+            'setting':setting
+       
             
         }
     return render(request,'purchases/addpurchaseorder.html',context=context)
+
+def remove_from_session(request):
+    if 'active_purchase_order' in request.session:
+        del request.session['active_purchase_order']           
+        return redirect('purchases:order')
+    return redirect('purchases:order')
+
 
 
 def searchProduct(request):
@@ -123,14 +136,16 @@ def purchase_item(request):
         form = OrderedProductForm(request.POST)
         if purchase_order:
             purchase_order = PurchaseOrder.objects.get(pk=purchase_order)
-            if purchase_order.orderedproduct_set.filter(product_id=product_id).exists():
-                messages.error(request, 'This product is already in the Purchase Order.You can edit it ')
-                return redirect('purchases:order')
+
         if form.is_valid():
             ordered_product = form.save(commit=False)
             ordered_product.product = product
             ordered_product.calculate_total_cost_price()
             ordered_product.calculate_quantity()
+            if purchase_order:
+                if purchase_order.orderedproduct_set.filter(product_id=ordered_product.product.id ,package_type=ordered_product.package_type ).exists():
+                    messages.error(request, 'This product is already in the Purchase Order.You can edit it ')
+                    return redirect('purchases:order')
 
            
             if purchase_order:
@@ -209,7 +224,7 @@ def edit_item_process(request,pk):
         orderedproduct = OrderedProduct.objects.get(pk=pk)
         
         
-        form = OrderedProductForm(request.POST,instance=orderedproduct)
+        form = OrderedProductForm(request.POST,instance=orderedproduct,)
     
         if form.is_valid():
             ordered_product = form.save(commit=False)
@@ -242,27 +257,25 @@ def save_purchase_order(request):
 def preview_as_pdf(request):
     purchaseorder = PurchaseOrder.objects.get(id=request.session.get('active_purchase_order'))
     tenant=get_tenant(request)
-    context = {
-         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
+    template = get_template('purchases/purchaseorderpdf.html')  
+    html_content = template.render({
+       'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
          "purchaseorder": purchaseorder,
          "pharmacy":tenant
-        
+    
+    })  
 
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
     }
 
-    # Render the HTML template
-    template = get_template('purchases/purchaseorderpdf.html')
-    html = template.render(context)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
-    # Create a PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
-
-    # Generate the PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('PDF generation error')
-
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="products.pdf"'
     return response
    
 
@@ -285,6 +298,7 @@ def view_purchase_order_list(request):
     
 def edit_purchase_order(request, pk):
         purchase_order_item = PurchaseOrder.objects.get(pk=pk)
+        request.session['active_purchase_order'] = purchase_order_item.id
         context = {
         'products': Product_Item.objects.all(),
         'purchaseorderform': PurchaseOrderForm(instance=purchase_order_item),
@@ -313,7 +327,7 @@ def delete_purchaseorder2(request,pk):
 def recieve_order(request, pk):
     purchase_order_item = PurchaseOrder.objects.get(pk=pk)
     context = {
-        'ordered_products': OrderedProduct.objects.filter(purchase_order=purchase_order_item.id),
+        'ordered_products': OrderedProduct.objects.filter(purchase_order=purchase_order_item.id).order_by('id'),
         'purchase_order': purchase_order_item,
 
        
@@ -328,28 +342,27 @@ def recieve_order(request, pk):
 def preview_as_pdf2(request,pk):
     purchaseorder = PurchaseOrder.objects.get(id=pk)
     tenant=get_tenant(request)
-    context = {
-         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
+    template = get_template('purchases/purchaseorderpdf.html')  
+    html_content = template.render({
+       'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
          "purchaseorder": purchaseorder,
          "pharmacy":tenant
-        
+    
+    })  
 
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
     }
 
-    # Render the HTML template
-    template = get_template('purchases/purchaseorderpdf.html')
-    html = template.render(context)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
-    # Create a PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
-
-    # Generate the PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('PDF generation error')
-
+    response = HttpResponse(pdf_data, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="products.pdf"'
     return response
+   
    
 
 def receive_stock_process(request, pk):
@@ -357,15 +370,18 @@ def receive_stock_process(request, pk):
     if request.method == 'POST':
         recieved_quantity=request.POST['recieved_quantity']
         orderedproduct = request.POST['orderedproduct']
+        date = request.POST['received_date']
+        receive_date = datetime.strptime(date, "%Y-%m-%dT%H:%M")
         orderedproduct = get_object_or_404(OrderedProduct, id=orderedproduct)
         if int(recieved_quantity) > 0:
             if int(recieved_quantity) <= orderedproduct.remaining_quantity:
-                
-        
                 orderedproduct.received_quantity = orderedproduct.received_quantity + int(recieved_quantity)
-                orderedproduct.add_to_stock(user=request.user,quantity=int(recieved_quantity))
+                orderedproduct.add_to_stock(user=request.user,quantity=int(recieved_quantity),date=receive_date)
                 purchase_order.update_order_status()
-                messages.success(request, f'{str(recieved_quantity)} {str(orderedproduct.product.name)} recieved sucessfully')
+                if orderedproduct.package_type:
+                    messages.success(request, f'{str(recieved_quantity)} {orderedproduct.package_type} {str(orderedproduct.product.name)} recieved sucessfully')
+                    return redirect(reverse('purchases:recieve_order',args=[pk]))
+                messages.success(request, f'{str(recieved_quantity)}  {str(orderedproduct.product.name)} recieved sucessfully')
                 return redirect(reverse('purchases:recieve_order',args=[pk]))
 
             messages.error(request, 'recieved quantity can not be greater to remaining quantity')
@@ -390,28 +406,25 @@ def recieve_all_stock(request, pk):
 
 
 def send_purhase_order_as_email(request, pk):
-    purchaseorder = PurchaseOrder.objects.get(id=pk)
+    purchaseorder = PurchaseOrder.objects.get(id=request.session.get('active_purchase_order'))
     tenant=get_tenant(request)
-    context = {
-         'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
+    template = get_template('purchases/purchaseorderpdf.html')  
+    html_content = template.render({
+       'ordered_products': OrderedProduct.objects.filter(purchase_order=purchaseorder.id),
          "purchaseorder": purchaseorder,
          "pharmacy":tenant
-        
+    
+    })  
 
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+        'no-images': False,
     }
 
-    # Render the HTML template
-    template = get_template('purchases/purchaseorderpdf.html')
-    html = template.render(context)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
+    pdf_data = pdfkit.from_string(html_content, False, configuration=config, options=options)
 
-    # Create a PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="product_list.pdf"'
-
-    # Generate the PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('PDF generation error')
     email_user = EmailBackend.objects.order_by('pk').first()
    
     email = EmailMessage(
@@ -421,10 +434,21 @@ def send_purhase_order_as_email(request, pk):
                             [purchaseorder.supplier.email,]
 
                         )
-    email.attach('purchase_order.pdf', response.content, 'application/pdf')
+    email.attach('purchase_order.pdf', pdf_data, 'application/pdf')
     email.fail_silently = False
     email.send()
     messages.success(request, 'Purchase Order sent  succesfully')
     return redirect('purchases:order') 
             
     
+def get_costprice_of_package(request):
+    package_id = request.GET.get('package_id', None)
+
+    try:
+        package =  Package.objects.get(pk=package_id)
+        cost_price = package.cost_price
+        data = {'result': 'success', 'cost_price': cost_price}
+    except :
+        data = {'result': 'error', 'message': 'Product not found'}
+
+    return JsonResponse(data)

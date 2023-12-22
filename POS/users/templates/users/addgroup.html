@@ -88,28 +88,25 @@
     <input  type="checkbox" id="selectall" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 focus:ring-gray-50" />
     <label  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> select all</label>
       
-    <div  class="w-full grid  grid-cols-2 my-2">
-     
-            {% for app, app_data in apps_permissions.items %}
-            <ul>
-            <h2 class="font-semibold">{{ app }}</h2>
-           
-                {% for permission in app_data.permissions %}
-                    <li>
+    <div  class="w-full grid  grid-cols-2 my-2 ">
+     <ul class="list-none list-inside">
+         
+                {% for permission in allpermissions %}
+                    <li class="">
                         
                      
                     
                    
                         <span>
-                            <input  type="checkbox" value="{{permission.id}}"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 focus:ring-gray-50" name="permissions[]"/>
-                            <label  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ permission.name }}</label>
+                            <input  type="checkbox" value="{{permission}}"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 focus:ring-gray-50" name="permissions[]"/>
+                            <label  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ permission}}</label>
                         </span>
                       
                     </li>
-                {% endfor %}
-            </ul>
+                
+            
         {% endfor %}
-     
+      </ul>
       
           </div>
 
@@ -267,6 +264,14 @@ img {
     width: 100%;
     text-align: center;
     color: #fff;
+}
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
 }
 
 </style>

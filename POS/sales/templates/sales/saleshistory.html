@@ -72,7 +72,7 @@
 <!-- component -->
 <div class="  px-8 max-vs:px-2  mx-4">
     <!--menu bar-->
-   
+ >
     <div class="text-gray-700 my-2">Sales History</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
@@ -230,6 +230,12 @@ $(document).ready( function () {
         background: 'rgba(0, 0, 0, 0.7)',
         allowEscapeKey: false,
         dangerMode:true,
+        showClass: {
+    popup: 'slow-animation-show'
+  },
+  hideClass: {
+    popup: 'slow-animation-hide'
+  }
   
       }).then((e)=>{
         if (e.isConfirmed){
@@ -300,5 +306,13 @@ img {
     color: #fff;
 }
 
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
 </style>
 {%endblock%}

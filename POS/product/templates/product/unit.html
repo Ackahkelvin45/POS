@@ -55,18 +55,26 @@
         {%endif%}
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
-        <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <button type="button" class="relative flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+        <div class="w-full flex flex-row flex-wrap py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
+            <button type="button" class="relative my-1 flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Unit</span>
              </button>
 
-             <a href="{% url 'product:unitlist'%}" type="button" class="relative   flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'product:unitlist'%}" type="button" class="relative my-1   flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Unit list</span>
              </a>
+
+             <a href="{% url 'product:add_package'%}"
+    
+             class=" my-1 relative flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
+           >
+           <i class="mdi mdi-package-variant text-white text-base max-sm:text-xs"></i>
+             <span class=" mx-1 text-xs text-white"> Package</span>
+           </a>
         </div>
      <!-- component -->
 <!-- component -->
@@ -125,7 +133,7 @@
 
     {% if not edit%}
     <form method="post" enctype="multipart/form-data" action="{% url 'product:create_unit_from_excel'%}" class="w-full flex flex-col justify-start items-start ">
-        <p class="text-sm"> Do you have an existing subcategory excel file?</p>
+        <p class="text-sm"> Do you have an existing units excel file?</p>
         {% csrf_token %}
 
         <div class="flex items-center justify-center w-[40%] max-sm:w-[70%] mt-5">
@@ -257,4 +265,16 @@ img {
 }
 
 </style>
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+  </style>
 {%endblock%}

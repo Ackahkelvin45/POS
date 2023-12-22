@@ -13,12 +13,18 @@ class CustomModelChoiceField(forms.ModelChoiceField):
 class StockEntryForm(forms.ModelForm):
     class Meta:
         model = StockEntry
-        fields = ("product","quantity_received","previous_quantity","created_at","reason")
+        fields = ("product","quantity_received","previous_quantity","created_at","reason",'package_type')
         
         widgets = {
             "product": forms.Select(
                 attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  w-full p-2.5 select outline-none focus:outline-none focus:ring-0",
                 "data-available-quantity-url": reverse_lazy('inventory:get_available_quantity')
+                }
+            ),
+
+             "package_type": forms.Select(
+                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  w-full p-2.5 select outline-none focus:outline-none focus:ring-0",
+                "data-available-quantity-url": reverse_lazy('inventory:get_available_package_quantity'),'id':"package_type"
                 }
             ),
             'quantity_received': forms.NumberInput(
@@ -36,7 +42,7 @@ class StockEntryForm(forms.ModelForm):
             "created_at":forms.TextInput(
                 attrs={
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none focus:outline-none focus:ring-0"
-                  ,'required':True,"type":"datetime-local"
+                  ,'required':True,"type":"datetime-local","id":"created_at"
                 }
               
             ),

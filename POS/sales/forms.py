@@ -3,6 +3,7 @@ from .models import Sale,SaleProduct,Tax,PaymentDetails
 from product.models import Package
 from suppliers.models import Supplier
 from settings.models import AppSettings
+from django.urls import reverse_lazy
 
 
 
@@ -78,7 +79,7 @@ class SaleProductForm(forms.ModelForm):
                 attrs={
                     'class': "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ",
                     "step": "0.01",
-                    "required": True,
+                    "required": True,"id":"cost_price"
                 
                     
                     
@@ -87,7 +88,7 @@ class SaleProductForm(forms.ModelForm):
             "package_type":forms.Select(
                 attrs={
                  'class': "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ",
-                   'required': False 
+                   'required': False ,"id":"package_type","data-cost-price-url": reverse_lazy('sales:get_package_cost_price'),
 
 
                 }
@@ -101,13 +102,14 @@ class SaleProductForm(forms.ModelForm):
             if 'product' in self.initial:
                 product = self.initial['product']
                 if product and 'instance' not in kwargs:
-                    self.fields['cost_unit_price'].initial = product.cost_price
+                    self.fields['cost_unit_price'].initial = product.selling_price
                 self.fields["package_type"].queryset = Package.objects.filter(product_id=product.id)
 
             self.fields["package_type"] = CustomModelChoiceField(
                 queryset=self.fields["package_type"].queryset,
                 required=False,
-                widget=forms.Select(attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " }),
+                widget=forms.Select(attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ", "id": "package_type",
+                 "data-cost-price-url": reverse_lazy('sales:get_package_cost_price'), }),
 
             )
 

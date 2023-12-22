@@ -56,13 +56,13 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <button type="button" class="relative  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Inventory</span>
              </button>
 
-             <a  type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a  type="button" class="relative flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Inventory History</span>
@@ -92,6 +92,17 @@
                 </div>
                
             </div>
+
+            <div class="flex w-full  items-start justify-start">
+              <div class="w-full  mb-2  flex-col flex items-start justify-start">
+                  <label for="" class="text-sm text-gray-700   px-1">Package type</label>
+                  <div class="w-1/2">
+
+    {{stockform.package_type}}
+                  </div>
+              </div>
+             
+          </div>
 
             <div class="flex w-full  items-start justify-start">
                 <div class="w-full  mb-2  flex-col flex items-start justify-start">
@@ -298,6 +309,128 @@ img {
 
 </style>
 <script>
+  $(document).ready(function() {
+  $('.select').select2();
+});
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#id_product').change(function () {
+      var productId = $(this).val();
+      var apiUrl = $('#id_product').data('available-quantity-url');
+      var packageTypeSelect = $('#package_type');
+
+      // Make an AJAX request to the API endpoint
+      $.ajax({
+        url: apiUrl,
+        data: { product_id: productId },
+        dataType: 'json',
+        success: function (data) {
+          
+          // Update the value of the previous_quantity field
+          $('#id_previous_quantity').val(data.available_quantity);
+
+          packageTypeSelect.empty();
+
+          packageTypeSelect.append($('<option>', {
+              value: '',
+              text: '--------'
+            }));
+
+    // Append new options
+    $.each(data.packages, function (index, option) {
+      packageTypeSelect.append($('<option>', {
+        value: option.id,
+        text: option.package_name
+      }));
+    });
+
+
+
+
+
+
+        },
+        error: function () {
+          $('#id_previous_quantity').val(0);
+        }
+      });
+    });
+
+
+    $('#package_type').change(function () {
+      var packageId = $(this).val();
+      var apiUrl = $('#package_type').data('available-quantity-url');
+     
+
+      // Make an AJAX request to the API endpoint
+      $.ajax({
+        url: apiUrl,
+        data: { package_id: packageId },
+        dataType: 'json',
+        success: function (data) {
+         
+          // Update the value of the previous_quantity field
+          $('#id_previous_quantity').val(data.available_quantity);
+
+         
+
+
+        },
+        error: function () {
+     console.log("error");
+
+      var productId = $('#id_product').val();
+      var apiUrl = $('#id_product').data('available-quantity-url');
+      var packageTypeSelect = $('#package_type');
+
+      // Make an AJAX request to the API endpoint
+      $.ajax({
+        url: apiUrl,
+        data: { product_id: productId },
+        dataType: 'json',
+        success: function (data) {
+          
+          // Update the value of the previous_quantity field
+          $('#id_previous_quantity').val(data.available_quantity);
+
+          packageTypeSelect.empty();
+
+          packageTypeSelect.append($('<option>', {
+              value: '',
+              text: '--------'
+            }));
+
+    // Append new options
+    $.each(data.packages, function (index, option) {
+      packageTypeSelect.append($('<option>', {
+        value: option.id,
+        text: option.package_name
+      }));
+    });
+
+
+
+
+
+
+        },
+        error: function () {
+          $('#id_previous_quantity').val(0);
+        }
+      });
+ 
+
+
+        }
+      });
+    });
+    
+  });
+
+  
+</script><script>
     $(document).ready(function() {
     $('.select').select2();
 });
@@ -308,6 +441,7 @@ img {
       $('#id_product').change(function () {
         var productId = $(this).val();
         var apiUrl = $('#id_product').data('available-quantity-url');
+        var packageTypeSelect = $('#package_type');
   
         // Make an AJAX request to the API endpoint
         $.ajax({
@@ -315,15 +449,119 @@ img {
           data: { product_id: productId },
           dataType: 'json',
           success: function (data) {
+            
             // Update the value of the previous_quantity field
             $('#id_previous_quantity').val(data.available_quantity);
+
+            packageTypeSelect.empty();
+
+            packageTypeSelect.append($('<option>', {
+                value: '',
+                text: '--------'
+              }));
+
+      // Append new options
+      $.each(data.packages, function (index, option) {
+        packageTypeSelect.append($('<option>', {
+          value: option.id,
+          text: option.package_name
+        }));
+      });
+
+
+
+
+
+
           },
           error: function () {
             $('#id_previous_quantity').val(0);
           }
         });
       });
+
+
+      $('#package_type').change(function () {
+        var packageId = $(this).val();
+        var apiUrl = $('#package_type').data('available-quantity-url');
+       
+  
+        // Make an AJAX request to the API endpoint
+        $.ajax({
+          url: apiUrl,
+          data: { package_id: packageId },
+          dataType: 'json',
+          success: function (data) {
+           
+            // Update the value of the previous_quantity field
+            $('#id_previous_quantity').val(data.available_quantity);
+
+           
+
+
+          },
+          error: function () {
+       console.log("error");
+  
+        var productId = $('#id_product').val();
+        var apiUrl = $('#id_product').data('available-quantity-url');
+        var packageTypeSelect = $('#package_type');
+  
+        // Make an AJAX request to the API endpoint
+        $.ajax({
+          url: apiUrl,
+          data: { product_id: productId },
+          dataType: 'json',
+          success: function (data) {
+            
+            // Update the value of the previous_quantity field
+            $('#id_previous_quantity').val(data.available_quantity);
+
+            packageTypeSelect.empty();
+
+            packageTypeSelect.append($('<option>', {
+                value: '',
+                text: '--------'
+              }));
+
+      // Append new options
+      $.each(data.packages, function (index, option) {
+        packageTypeSelect.append($('<option>', {
+          value: option.id,
+          text: option.package_name
+        }));
+      });
+
+
+
+
+
+
+          },
+          error: function () {
+            $('#id_previous_quantity').val(0);
+          }
+        });
+   
+
+
+          }
+        });
+      });
+      
     });
+
+    
   </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Get the current date and time in the format expected by datetime-local input
+          const currentDateAndTime = new Date().toISOString().slice(0, 16);
+      
+          // Set the default value of the datetime input
+          document.getElementById('created_at').value = currentDateAndTime;
+      });
+      </script>
   
 {%endblock%}

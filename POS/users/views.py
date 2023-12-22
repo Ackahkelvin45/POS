@@ -104,7 +104,10 @@ def editUserProcess(request,pk):
 
 def deleteUser(request, pk):
     user = User.objects.get(id=pk)
-    tenant=get_tenant(request)
+    tenant = get_tenant(request)
+    if not user.is_admin:
+        messages.error(request, "You don't have permission to delete a user")
+        return redirect("users:userslist")
     if user == tenant.owner:
         messages.error(request, "Cannot delete Pharmacy Owner")
         return redirect("users:userslist")
@@ -122,72 +125,73 @@ def showPermissions(request):
         return render(request,'users/permissions.html',context=context)
 
 def editPermissions(request, pk):
-       # Get the content types to exclude
-    exclude_apps = ['admin', 'auth', 'sessions', 'contenttypes','main']
+  
+    group = Group.objects.get(id=pk)
+    permissions = group.permissions.all()
+    group_permissions = set(permission.content_type.app_label for permission in permissions)
+    
+    exclude_apps = ['admin', 'auth', 'sessions', 'contenttypes', 'main']
+
+    # Get content types associated with excluded app labels
     excluded_content_types = ContentType.objects.filter(app_label__in=exclude_apps)
 
-    # Retrieve all permissions excluding those from the excluded content types
+    # Get unique app labels from content types
+    excluded_app_labels = set(excluded_content_types.values_list('app_label', flat=True))
+
+    # Get permissions excluding those associated with excluded app labels
     all_permissions = Permission.objects.exclude(content_type__in=excluded_content_types)
-    
-    user_group_permissions = Group.objects.get(id=pk).permissions.all() if request.user.groups.exists() else set()
-   
-    apps_permissions = {}
-    for permission in all_permissions:
-        app_name = permission.content_type.app_label
-        if app_name not in apps_permissions:
-            apps_permissions[app_name] = {'permissions': []}
-        apps_permissions[app_name]['permissions'].append({
-            'name': permission.name,
-            'codename': permission.codename,
-            'in_user_group': permission in user_group_permissions,
-            "id":permission.id
-        })
+
+    # Get unique app labels from permissions
+    all_permissions = set(all_permissions.values_list('content_type__app_label', flat=True))
     
     context={
-        'apps_permissions': apps_permissions,
-        'group':Group.objects.get(id=pk)
+        'allpermissions': all_permissions,
+        'group': Group.objects.get(id=pk),
+        'group_permissions': group_permissions,
+        'groupform':GroupForm(instance=group)
     }
 
     return render(request,'users/editpermissions.html',context=context)
 
 
 def editPermissionProcess(request, pk):
-    if request.method=='POST':
-        group = Group.objects.get(id=pk)
-        permissions = request.POST.getlist('permissions[]')
-        group.permissions.clear()
-        for permission in permissions:
-            if permission !="":
-                permissionitem = Permission.objects.get(pk=permission)
-                group.permissions.add(permissionitem)
-        group.save()
+    if request.method == 'POST':
+        group=Group.objects.get(id=pk)
+        groupform = GroupForm(request.POST,instance=group)
+        if groupform.is_valid():
+                tenant=get_tenant(request)
+                with schema_context(tenant.schema_name):
+                    group=groupform.save()
+                    permissions = request.POST.getlist('permissions[]')
+                    for permission in permissions:
+                        if permission !="":
+                            permissions_to_add = Permission.objects.filter(content_type__app_label=permission)
+                            for p in permissions_to_add:
+                                group.permissions.add(p)
+                    group.save()
         messages.success(request, "Permissions Edited Succesfully")
         return redirect("users:permissions")
     
 
 
 def createGroup(request):
-          # Get the content types to exclude
-    exclude_apps = ['admin', 'auth', 'sessions', 'contenttypes','main']
+    # List of app labels to exclude
+    exclude_apps = ['admin', 'auth', 'sessions', 'contenttypes', 'main']
+
+    # Get content types associated with excluded app labels
     excluded_content_types = ContentType.objects.filter(app_label__in=exclude_apps)
 
-    # Retrieve all permissions excluding those from the excluded content types
+    # Get unique app labels from content types
+    excluded_app_labels = set(excluded_content_types.values_list('app_label', flat=True))
+
+    # Get permissions excluding those associated with excluded app labels
     all_permissions = Permission.objects.exclude(content_type__in=excluded_content_types)
-    
-   
-    apps_permissions = {}
-    for permission in all_permissions:
-        app_name = permission.content_type.app_label
-        if app_name not in apps_permissions:
-            apps_permissions[app_name] = {'permissions': []}
-        apps_permissions[app_name]['permissions'].append({
-            'name': permission.name,
-            'codename': permission.codename,
-            "id":permission.id
-        })
+
+    # Get unique app labels from permissions
+    all_permissions = set(all_permissions.values_list('content_type__app_label', flat=True))
     
     context={
-        'apps_permissions': apps_permissions,
+        'allpermissions': all_permissions,
         'groupform':GroupForm
     }
 
@@ -205,8 +209,10 @@ def addGroupProcess(request):
                 permissions = request.POST.getlist('permissions[]')
                 for permission in permissions:
                     if permission !="":
-                        permissionitem = Permission.objects.get(pk=permission)
-                        group.permissions.add(permissionitem)
+                        permissions_to_add = Permission.objects.filter(content_type__app_label=permission)
+                        for p in permissions_to_add:
+                            group.permissions.add(p)
+
                 group.save()
                 messages.success(request, "Group Added Succesfully")
                 return redirect("users:permissions")

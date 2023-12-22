@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views  
+from .views import GetPackageCostView,GetProductCostView
 
 app_name = "sales"
 
@@ -22,6 +23,8 @@ urlpatterns = [
     path("complete_sale/", views.complete_sale, name="complete_sale"),
     path("details/<int:pk>/", views.view_sale_details, name="sale_detail"),
     path("receipt/<int:pk>/", views.receipt, name="receipt"),
-    path("delete_all/",views.delete_sale,name='delete_sale')
+    path("delete_all/", views.delete_sale, name='delete_sale'),
+    path('get_package_cost_price/', GetPackageCostView.as_view(), name='get_package_cost_price'),
+     path('get_product_cost_price/', GetProductCostView.as_view(), name='get_product_cost_price'),
 
 ]

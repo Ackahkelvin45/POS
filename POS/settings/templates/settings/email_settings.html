@@ -56,7 +56,7 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <button type="button" class=" flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">permissions</span>
@@ -69,64 +69,132 @@
 <div class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
     <div class="text-gray-700 my-2">Setup Email</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
+    <div id="info" class="  flex items-center p-4 mb-4 text-gray-800 border-t-4 border-gray-300 bg-gray-100  dark:bg-gray-800 dark:border-green-800 w-full" role="alert">
+           
+      <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <div class="ml-3 text-xs">
+        This setting will help you configure your email for sending email to those you do business with.This <a class="text-blue-500 hover:underline" target="_blank" href="https://support.google.com/accounts/thread/218980039/how-can-i-add-a-new-trusted-third-party-app-through-account-settings?hl=en">post</a> will help get your password from your email account 
+      </div>
+      <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-gray-50 text-gray-600 rounded-lg focus:ring-0  p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" id="closealert">
+        <span class="sr-only">Dismiss</span>
+        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+      </button>
+  </div>
+    {% if emailbackend%}
+    <div class="w-full flex justify-end items-end my-4">
+      <a  href="{% url 'settings:editemailsettings' emailbackend.id %}" class="px-3 py-1 cursor-pointer bg-indigo-600 font-semibold text-white rounded-md">
+        Edit
+      </a>
+    </div>
+<div class="flex-col flex text-gray-700 mt-4">
+<div>
+  <span class="font-semibold">
+    Email
+  </span>
+  <div>{{emailbackend.email}}</div>
+</div>
+<div class="mt-4">
+  <span class="font-semibold ">
+    Email Host Password
+  </span>
+  <div><span class="" x-data="{ show: true }">
+    <span class="relative">
+      <input placeholder="" :type="show ? 'password' : 'text'" class="text-md px-3 py-2 
+    bg-gray-50 border-0 w-[50%] max-sm:w-full focus:ring-50 " disabled value="{{emailbackend.email_host_password}}">
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
 
-<form  method="post" action="{% url 'settings:email_setup_process'%}" class="flex w-full   items- h-full  overflow-hidden">
+        <svg class="h-4 w-4 text-gray-700" fill="none" @click="show = !show"
+          :class="{'hidden': !show, 'block':show }" xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 576 512">
+          <path fill="currentColor"
+            d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z">
+          </path>
+        </svg>
+
+        <svg class="h-4 w-4 text-gray-700" fill="none" @click="show = !show"
+          :class="{'block': !show, 'hidden':show }" xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 640 512">
+          <path fill="currentColor"
+            d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z">
+          </path>
+        </svg>
+
+      </div>
+    </span>
+  </span></div>
+</div>
+
+</div>
+    {%else%}
+    {% if edit%}
+    <form  method="post" action="{% url 'settings:email_edit_process'%}" class="flex w-full   items- h-full  overflow-hidden">
+
+    {%else%}
+    <form  method="post" action="{% url 'settings:email_setup_process'%}" class="flex w-full   items- h-full  overflow-hidden">
+
+    {%endif%}
 
 
-        {% csrf_token %}
-        <div  class=" w-full h-full  flex justify-start items-start flex-col  ">
-            <div class="flex w-full  items-start justify-start">
-                <div class="w-full  mb-2  flex-col flex items-start justify-start">
-                    <label for="" class="text-sm text-gray-700   px-1">Email</label>
-                    <div class="flex w-1/2">
+      {% csrf_token %}
+      <div  class=" w-full h-full  flex justify-start items-start flex-col  ">
+          <div class="flex w-full  items-start justify-start">
+              <div class="w-full  mb-2  flex-col flex items-start justify-start">
+                  <label for="" class="text-sm text-gray-700   px-1">Email</label>
+                  <div class="flex w-1/2">
 
 {{emailbackendform.email}}
 
 </div>
-                </div>
-               
-            </div>
-          
+              </div>
+             
+          </div>
+        
 
-            <div class="flex w-full  items-start justify-start">
-                <div class="w-full  mb-2  flex-col flex items-start justify-start">
-                    <label for="" class="text-sm text-gray-700   px-1">Email App Password</label>
-                    <div class="flex w-1/2 flex-row  relative">
-                        {{emailbackendform.email_host_password}}    
-                    
-                                               </input>
-                    </div>
-                </div>
-               
-            </div>
+          <div class="flex w-full  items-start justify-start">
+              <div class="w-full  mb-2  flex-col flex items-start justify-start">
+                  <label for="" class="text-sm text-gray-700   px-1">Email App Password</label>
+                  <div class="flex w-1/2 flex-row  relative">
+                      {{emailbackendform.email_host_password}}    
+                  
+                                             </input>
+                  </div>
+              </div>
+             
+          </div>
 
-            <div id="infoDiv" class=" hidden  bg-gray-200  w-1/2 px-2 py-1 rounded-md">
-              
-              
-          
-              <p class="text-xs font-mono  ">
-                <i class="mdi mdi-information text-gray-600 text-xl"></i> 
-      This is not your email password it is your password to allow third party apps in you email, this is a security measure to ensure that we  are  authorized to  send emails. 
-              </p>
-            </div>
-
+          <div id="infoDiv" class=" hidden  bg-gray-200  w-1/2 px-2 py-1 rounded-md">
             
             
+        
+            <p class="text-xs font-mono  ">
+              <i class="mdi mdi-information text-gray-600 text-xl"></i> 
+    This is not your email password it is your password to allow third party apps in you email, this is a security measure to ensure that we  are  authorized to  send emails. 
+            </p>
+          </div>
+
+          
+          
+
+       
+
+
+        <hr class="h-[1px] w-full bg-gray-600 my-4"/>
 
          
+             
+          <div class="flex ">
+              <div class="w-full  ">
+                  <button class="block w-full max-w-xs mx-auto text-base  bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-5 py-2 ">save</button>
+              </div>
+          </div>
+      </div>
+  </form>
+    {%endif%}
 
-
-          <hr class="h-[1px] w-full bg-gray-600 my-4"/>
-
-           
-               
-            <div class="flex ">
-                <div class="w-full  ">
-                    <button class="block w-full max-w-xs mx-auto text-base  bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-5 py-2 ">save</button>
-                </div>
-            </div>
-        </div>
-    </form>
 
 
     </div>
@@ -240,20 +308,10 @@ img {
 </style>
 <script>
 
-  const inputElement = document.getElementById('password');
-  const infoDiv = document.getElementById('infoDiv');
+ 
 
 
-  inputElement.addEventListener('focus', () => {
 
-    infoDiv.style.display = 'block';
-  });
-
-
-  inputElement.addEventListener('blur', () => {
-  
-    infoDiv.style.display = 'none';
-  });
 
   if (document.getElementById("close")){
 
@@ -264,7 +322,16 @@ document.getElementById("close").addEventListener("click",(item)=>{
 
 
 })
+
+
 }
+document.getElementById("closealert").addEventListener("click",(item)=>{
+  modal=document.getElementById("info")
+  modal.classList.add("hidden")
+
+
+})
 </script>
+
 
 {%endblock%}

@@ -1,116 +1,197 @@
-{% load  filterstring %}
-<style>
-   tbody tr {
-                
-                border: 1px solid #4b4b4b;
-                
-            }
-            tfoot tr {
-                
-                border: 1px solid #4b4b4b;
-                background-color:#e4e4e4;
-                
-            }
-                           thead tr {
-                
-                border: 1px solid #222222;
-            }
-            tbody tr td  {
-                
-                text-align: center;
-                padding: 5px;
-    
-                
-                
-            }
 
-            tfoot tr td  {
-                
-                text-align: center;
-                padding: 2px;
-    
-                
-                
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load  filterstring %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-            thead tr  th {
-                
-              text-align: center;
-                padding: 3px;
-            }
-            </style>
+</head>
+<body >
+    <div>
+        <h1 style="text-align: center;font-size: 1.5rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ">
+{{pharmacy.name}}
 
-            <div style="text-align: center;">
-              <h2 style="font-weight: 600 ; font-size: 17px; text-transform:uppercase;">{{pharmacy.name}}</h2>
-              <span >
-                <span style="font-size: 13px;">Loc:</span>
-              <span  style="font-weight: 300; font-size: 13px; ">{{pharmacy.address}}</sp>
-              </span>
-            <div >
-              <span style="font-size: 13px;">Tel:</span>
-            <span  style="font-weight: 300; font-size: 13px; ">{{pharmacy.contact}}</sp>
-          </div>
-              <h2></h2>
-            </div>
+        </h1>
+        <h1 style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; margin-top:-5px;">
+            {{pharmacy.address}}
+        </h1>
+        <h1 style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; margin-top:-5px;">
+          {{pharmacy.contact}}
+      </h1>
+    </div>
+
+
+    <div style="max-width: 100%; overflow-x: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-radius: 0.375rem;">
+        <h2  style="text-align: center;font-size: 1rem; color: #4a5568; text-transform: uppercase; color: #1a202c; ;">Purchase Order</h2>
+        
+<div style="width: 100%; color: #4a5568 ; margin-bottom: 20px;  ">
+    <div style="width: 100%; display: flex; flex-direction: row;">
+        <span style="text-transform: uppercase; font-weight: bolder;">Purchase ORDER nUMBER: </span>
+    <span>{{purchaseorder.order_number}}</span>
+    </div>
+    <div style="width: 100%; display:flex; flex-direction:row;">
+        <span style="text-transform: uppercase; font-weight: bolder;">Date: </span>
+    <span>{{purchaseorder.date_created}}</span>
+    </div>
+    {% if purchaseorder.supplier%}
+    <div style="width: 100%; display: flex; flex-direction: row;">
+    <span style="text-transform: uppercase;font-weight: bolder;">Supplier: </span>
+    <span>
+       
+        {{purchaseorder.supplier}}
+      
+    </span>
+    </div>
+    {%endif%}
+    {% if purchaseorder.invoice_number%}
+    <div style="width: 100%; display: flex; flex-direction: row;">
+        <span style="text-transform: uppercase; font-weight: bolder;">Invoice: </span>
+        <span>
            
+            {{purchaseorder.invoice_number}}
+           
+        </span>
+        </div>
+        {%endif%}
 
+        <div style="width: 100%; display: flex; flex-direction: row;">
+            <span style="text-transform: uppercase; font-weight: bolder;">Total Quantity:  </span>
+            <span>
+               
+                {{purchaseorder.total_quantity}}
+               
+            </span>
+            </div>
+            <div style="width: 100%; display: flex; flex-direction: row;">
+                <span style="text-transform: uppercase; font-weight: bolder;">Total Cost Price:  </span>
+                <span>
+                   
+                    {{purchaseorder.total_cost_price}}
+                   
+                </span>
+                </div>
+                {% if purchaseorder.discount%}
+                <div style="width: 100%; display: flex; flex-direction: row;">
+                    <span style="text-transform: uppercase; font-weight: bolder;">Discount: </span>
+                    <span>
+                       
+                        {{purchaseorder.discount}}
+                       
+                    </span>
+                    </div>
+                    {%endif%}
+
+    </div>
+        <table class="fl-table" style="width: 100%; font-size: 0.875rem; text-align: left; direction: ltr; color: #718096; background-color: #f8fafc; border-collapse: collapse; border-spacing: 0;">
+            <thead style="  text-align: center;font-size: 0.75rem; color: #4a5568; text-transform: uppercase; background-color: #edf2f7; color: #1a202c;">
+                <tr>
+                    <th style="padding: 0.75rem 1.5rem;">
+                        Product name
+                    </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                        Package Type
+                      </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                      Cost Unit Price
+                    </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                     Quantity 
+                    </th>
+                    <th style="padding: 0.75rem 1.5rem;">
+                       Total Cost Price
+                       </th>
+                 
+                </tr>
+            </thead>
+            <tbody>
+                {%for product in ordered_products%}
+                <tr style=" border-bottom: 1px solid #e2e8f0;  border-bottom: 1px solid #e2e8f0; text-align: center; ">
+                    <th style="padding: 1rem 1.5rem; font-weight: 500; color: #2d3748; white-space: nowrap;">
+                        {{product.product.name}}
+                    </th>
+                    <td style="padding: 1rem 1.5rem; color: #424447;">
+                        {{product.package_type}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.cost_unit_price}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.quantity}}
+                    </td>
+                    <td style="padding: 1rem 1.5rem;  color: #424447;">
+                        {{product.total_cost_price}}
+                    </td>
+                </tr>
+            {%endfor%}
+               
              
-            
-<div  >
-
-  <div style="display:flex;flex-direction:row; width:100%;margin-top:20px" >
-    <div>
-      <span style="font-weight:400;font-size:larger;">Purchase Order Number:</span>
-      <span>{{purchaseorder.order_number}}</span>
-    </div>
-    <div>
-      <span style="font-weight:400;font-size:larger;">Supplier:{{purchaseorder.supplier.company_name}}</span>
-    </div>
-    <div>
-      <span style="font-weight:400;font-size:larger;">Date:{{purchaseorder.date_created}}</span>
-    </div>
-    <div>
-      <span style="font-weight:400;font-size:larger;">Created By:{{purchaseorder.creator.first_name}} {{purchaseorder.creator.other_names}}</span>
-    </div>
-  </div>
-
-  <table class="responsive-table">
-    <thead>
-      <tr>
+            </tbody>
      
-        <th scope="col">Product Name</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Cost Price</th>
-        <th scope="col">Total Cost Price</th>
+        </table>
+    </div>
+    
+<style>
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
 
-      </tr>
-    </thead>
-  
-    <tbody>
-      {% for product in ordered_products%}
-      <tr >
-  
-        <th data-title="Released"  ><div style="overflow-x: hidden;">
-          {% for chunk in product.product.name|chunk_string %}
-          {{ chunk }}<br>
-        {% endfor %}</div></th>
-        <td>{{product.quantity}}</td>
-        <td data-title="Domestic Gross" data-type="currency">{{product.cost_unit_price}}</td>
-        <td data-title="International Gross" data-type="currency">{{product.total_cost_price}}</td>
+/* Table Styles */
+
+.table-wrapper{
  
-      </tr>
-      {%endfor%}
-      <tfoot>
-        <td>total Quantity:{{purchaseorder.total_quantity}}</td>
-        <td>total Cost Price:GHS {{purchaseorder.total_cost_price}}</td>
-        <td>discount:{{purchaseorder.discount}}%</td>
-      </tfoot>
+}
 
-    </tbody>
-  </table>
-</div>
-<script>
-  document.getElementById('printButton').addEventListener('click', function() {
-      window.print();
-  });
-  </script>
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+   
+}
+
+.fl-table td, .fl-table th {
+   
+}
+
+.fl-table td {
+    
+}
+
+.fl-table thead th {
+  
+}
+
+
+
+
+.fl-table tbody tr:nth-child(even) {
+    background:#edf2f7;
+}
+.fl-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+</style>
+</body>
+</html>

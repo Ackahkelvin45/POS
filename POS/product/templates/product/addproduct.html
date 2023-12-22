@@ -12,30 +12,30 @@
 <div class="mt-20 max-vs:mt-[6.6rem]">
   <div class="rounded-3xl border h-fit border-indigo-200 mx-4 mb-4">
     <div
-      class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4"
+      class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 flex-wrap"
     >
       <button
         type="button"
-        class="relative max-lg:w-[20%] max-md:w-[30%] max-vs:w-[50%] flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
+        class="relative  my-1 flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
       >
-        <i class="mdi mdi-plus text-white text-base"></i>
-        <span class="pl-2 mx-1 text-xs text-white">Add Product</span>
+        <i class="mdi mdi-plus text-white text-base max-sm:text-xs"></i>
+        <span class=" mx-1 text-xs text-white">Add Product</span>
       </button>
 
-      <button
-        type="button"
-        class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%] flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
+      <a href="{% url 'product:productlist' %}"
+       
+        class="relative  my-1 flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
       >
-        <i class="mdi mdi-view-module-outline text-white text-base"></i>
-        <span class="pl-2 mx-1 text-xs text-white">Product list</span>
-      </button>
+        <i class="mdi mdi-view-module-outline text-white text-base max-sm:text-xs"></i>
+        <span class=" mx-1 text-xs text-white">Product list</span>
+      </>
       
       <a href="{% url 'product:add_package'%}"
-        type="button"
-        class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%] flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
+    
+        class=" my-1 relative flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
       >
-        <i class="mdi mdi-view-module-outline text-white text-base"></i>
-        <span class="pl-2 mx-1 text-xs text-white">Add Package</span>
+      <i class="mdi mdi-package-variant text-white text-base max-sm:text-xs"></i>
+        <span class=" mx-1 text-xs text-white"> Package</span>
       </a>
     </div>
     <!-- component -->
@@ -534,5 +534,17 @@ height: 44px !important;
     line-height: 30px !important;
    
   }
+</style>
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
 {%endblock%}

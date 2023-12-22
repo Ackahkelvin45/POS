@@ -56,13 +56,13 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a href="{% url 'users:groupadd'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'users:groupadd'%}" type="button" class="  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Add Group</span>
              </a>
 
-             <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <button type="button" class="  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
                 <span class="pl-2 mx-1 text-xs text-white">Permission list</span>
@@ -71,21 +71,21 @@
      <!-- component -->
 <!-- component -->
 <div class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
-    <div class="text-gray-700 my-2">Permissions</div>
+    <div class="text-gray-700 my-2">Gropus</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
-    <div class="px-10 max-vs:px-2">
+    <div class="">
     
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-10 ">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 myTable hover stripe row-border">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6  text-center py-3">
                           Role
                         </th>
                         
                         
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 text-center py-3">
                             Action
                         </th>
                     </tr>
@@ -93,12 +93,12 @@
                 <tbody class="w-full">
                     {% for group in groups %}
                     <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 w-full">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                            {{group.name}}
                         </th>
                        
                        
-                        <td class="px-6 py-4 flex flex-row justify-start items-start w-full">
+                        <td class="px-6 py-4 flex flex-row justify-center items-center w-full text-center">
                             <a href="{% url 'users:editpermissions' group.id %}" class="hover:text-gray-700 hover:underline cursor-pointer ">Edit Permissions </a>
                         </td>  
                     </tr>
@@ -214,5 +214,13 @@ img {
     color: #fff;
 }
 
+
+.slow-animation-show {
+  animation: swal2-show 0.5s; 
+}
+
+.slow-animation-hide {
+  animation: swal2-hide 0.5s; 
+}
 </style>
 {%endblock%}

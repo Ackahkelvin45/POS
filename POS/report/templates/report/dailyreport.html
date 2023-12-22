@@ -73,7 +73,7 @@
 <div class="  px-8 max-vs:px-2  mx-4">
     <!--menu bar-->
    
-    <div class="text-gray-700 my-2">Daily  Sales  Report</div>
+    <div class="text-gray-700 my-2">Daily    Report</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
 
@@ -81,61 +81,103 @@
     </div>
     <div class="px-10 max-vs:px-2">
     
-        <div  class="w-full  flex-col flex">
+        <div  class="w-full">
             
-            <div  class="w-full flex flex-row  justify-between items-start mt-10">
-           
-            <div class=" w-[80%] p-5 my-5 flex flex-row  items-start justify-start    rounded-md  shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] ">
-    
-            
-              <canvas id="areaChart_2"></canvas>        
-                      
-                </div>
-                <div>
-                  <div class="p-5 rounded-md  shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] ">
+            <div  class="w-full flex flex-col justify-between items-center mt-10">
+              <div class="grid grid-cols-12 gap-6 w-full ">
+                               
+                <a class="transform border-[1px] border-indigo-200  transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-4 intro-y  bg-white"
+                href="#">
+                <div class="p-5">
                     <div class="flex justify-between">
-                      
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-400"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-400"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                        </svg>
+                        <div
+                            class="{% if  salesdecrease %} bg-red-500 {%endif%} {% if  salesincrease %} bg-green-500 {%endif%} {% if  salessame %} bg-yellow-500 {%endif%} rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                            <span class="flex items-center">{{percentage_change_in_sales}}%</span>
+                        </div>
                     </div>
                     <div class="ml-2 w-full flex-1">
                         <div>
-                          <div class="mt-1 text-sm text-gray-600"> GH₵</div>
-                            <div class=" text-3xl font-bold leading-8">{{total_cost_price}}</div>
+                            <div class="mt-1 text-base text-gray-600">GH₵</div>
+                            <div class="mt-3 text-3xl font-bold leading-8">{{daily_total_cost_price}}</div>
 
-                            <div class="mt-1 text-base text-gray-600">Total Sales</div>
+                            <div class="mt-1 text-base text-gray-600">Today's  Sales</div>
                         </div>
                     </div>
                 </div>
+            </a>
+                <a class="transform border-[1px] border-indigo-200   transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-4 intro-y bg-white"
+                    href="#">
+                    <div class="p-5">
+                        <div class="flex justify-between">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-400"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <div
+                            class="{% if  profitdecrease %} bg-red-500 {%endif%} {% if  increasedprofit %} bg-green-500 {%endif%} {% if  profitsame %} bg-yellow-500 {%endif%} rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                            <span class="flex items-center">{{percentage_change_in_profit}}%</span>
+                        </div>
+                           
+                        </div>
+                        <div class="ml-2 w-full flex-1">
+                            <div>
+                                <div class="mt-1 text-base text-gray-600">GH₵</div>
+                              
+                                <div class="mt-3 text-3xl font-bold leading-8">{{daily_profit}}</div>
 
-                <div class="p-5 rounded-md my-5  shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] ">
-                  <div class="flex justify-between">
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-400"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                  </div>
-                  <div class="ml-2 w-full flex-1">
-                      <div>
-                     
-                          <div class=" text-3xl font-bold leading-8">{{total_number}}</div>
+                                <div class="mt-1 text-base text-gray-600">Today's Gross Profit</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a class="transform border-[1px] border-indigo-200  transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-4 intro-y  bg-white"
+                    href="#">
+                    <div class="p-5">
+                        <div class="flex justify-between">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-pink-600"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                            </svg>
+                            <div
+                                class="{% if  amountdecrease %} bg-red-500 {%endif%} {% if  increasedamount %} bg-green-500 {%endif%} {% if  amountsame%} bg-yellow-500 {%endif%} rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                                <span class="flex items-center">{{percentage_change_in_amount}}%</span>
+                            </div>
+                        </div>
+                        <div class="ml-2 w-full flex-1">
+                            <div>
+                                <div class="mt-1 text-base text-gray-600">Quantity</div>
+                                <div class="mt-3 text-3xl font-bold leading-8">{{daily_sales_amount}}</div>
 
-                          <div class="mt-1 text-base text-gray-600">Number of  Sales</div>
-                      </div>
-                  </div>
-              </div>
-                </div>
-        
-       
+                                <div class="mt-1 text-base text-gray-600">Today's sales</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+               
+            </div>
+            <div class="w-full  py-5 my-5 flex flex-col  items-start justify-start  ">
     
+            
+              <div class="bg-white shadow-lg p-4 w-full" id="chartline"></div> 
+              
+              
+              <div class="bg-white shadow-lg p-4 w-full my-6" id="chartbar"></div>   
+                      
                 </div>
+            
     
      
       
@@ -216,51 +258,38 @@ $(document).ready( function () {
 
 </script>
 
-<script>
-    
-    let deletestudent=document.getElementsByClassName("delete-item")
-   for  (var i=0;i<deletestudent.length;i++){
-   deletestudent[i].addEventListener("click",(item)=>{
-    Swal.fire({
-        icon: 'warning',
-        text: "Do you want to delete this?",
-        confirmButtonColor: '#26A69A',
-        confirmButtonText:"Yes,I'm sure",
-        showDenyButton:true,
-        denyButtonText:"No",
-        color:"white",
-        background: 'rgba(0, 0, 0, 0.7)',
-        allowEscapeKey: false,
-        dangerMode:true,
-  
-      }).then((e)=>{
-        if (e.isConfirmed){
-        url=item.target.getAttribute("data-url")
-       
-       console.log("url",url)
-       window.location.href=url
+
+  <script>
+     var options = {
+          series: [{
+          data: [{% for product in top_products_10_in_24_hours%}{{product.total_quantity_sold}}, {%endfor%}]
+        }],
+          chart: {
+          type: 'bar',
+          height: 500
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            horizontal: true,
+          }
+        },
+        title: {
+text: 'Top 10 products' ,
+align: 'left'
+},
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories:[{% for product in top_products_10_in_24_hours%}"{{product.product__name}}", {%endfor%}],
         }
-        else{
-            console.log("denied")
-        }
-      })
-    })
-   }
+        };
 
-
-
-   
-if (document.getElementById("close")){
-
-
-document.getElementById("close").addEventListener("click",(item)=>{
-    modal=document.getElementById("alert")
-    modal.classList.add("hidden")
-
-
-})
-}
-  </script> 
+        var chart = new ApexCharts(document.querySelector("#chartbar"), options);
+        chart.render();
+      
+    </script>
 <style>
     /* preloader.css */
 
@@ -303,183 +332,64 @@ img {
 }
 
 </style>
-
-<script >
-    const observer2=new IntersectionObserver((e)=>{
-e.forEach((e,i)=>{
-if (e.isIntersecting){
-ctx=document.getElementById("saledailychart").getContext("2d");
-var saleschart = new Chart(ctx,{
-   
- type: 'line',
- data: {
-    labels:[],
-    datasets: [{
-       label: "Daily Sales Chart",
-       data: [{%for sale in sales%}
-{{sale.total_cost_price}},
-{%endfor%}],
-       backgroundColor: ['yellow', 'aqua', 'pink', 'lightgreen', 'lightblue', 'gold'],
-       borderColor: ['#4bf2df',],
-       borderWidth: [2],
-       pointRadius: 5,
-       fill:"false",
-    }],
- },
- options: {
-    scales: {
-yAxes: [{
-scaleLabel: {
-display: true,
-labelString:'Price'
-}
-}]
-}     
-
-
- },
-
-})
-
-
-
-}
-})
-})  
-const chart1=document.querySelectorAll('.saledailychart');
-
-
-chart1.forEach((element)=>observer2.observe(element));
-
-
-</script>
 <script>
-  (function($) {
-    "use strict" 
-
-	
-	/* function draw() {
-		
-	} */
-
- var dzSparkLine = function(){
-	let draw = Chart.controllers.line.__super__.draw; //draw shadow
-	
-	var screenWidth = $(window).width();
-	
-
-var areaChart2 = function(){	
-		//gradient area chart
-		if(jQuery('#areaChart_2').length > 0 ){
-			const areaChart_2 = document.getElementById("areaChart_2").getContext('2d');
-			//generate gradient
-			const areaChart_2gradientStroke = areaChart_2.createLinearGradient(0, 1, 200, 500);
-			areaChart_2gradientStroke.addColorStop(0, "rgba(17, 214, 71, 0.5)");
-			areaChart_2gradientStroke.addColorStop(1, "rgba(17, 214, 71,0)");
-			
-			areaChart_2.height = 100;
-
-			new Chart(areaChart_2, {
-				type: 'line',
-				data: {
-					defaultFontFamily: 'Poppins',
-					labels:  [{%for sale in sales%}
-"{{sale.sales_number}}",
-{%endfor%}]
-,
-					datasets: [
-						{
-							label: " Sale Price",
-							data: [{%for sale in sales%}
+            
+  var options = {
+series: [{
+  name: "Sales",
+  data: [{%for sale in daily_sales%}
 {{sale.total_cost_price}},
-{%endfor%}],
-							borderColor: "#4F46E5 ",
-							borderWidth: "4",
-							backgroundColor: areaChart_2gradientStroke,
-              pointRadius: 5,
-              
-       
-						}
-					]
-				},
-				options: {
-					legend: false, 
-					scales: {
-						yAxes: [{
-							ticks: {							
-								padding: 5,
-               
-							},
-              scaleLabel: {
-display: true,
-labelString:'Price',
-fontSize: 16,
-
+{%endfor%}]
+}],
+chart: {
+height: 500,
+type: 'line',
+zoom: {
+  enabled: false
 }
-						}],
-						xAxes: [{ 
-							ticks: {
-								padding: 5,
-                labelString: 'Sales'
-							},
-              scaleLabel: {
-display: true,
-labelString:'Sale',
-fontSize: 16,
+},
+dataLabels: {
+enabled: false
+},
+stroke: {
+curve: 'straight'
+},
+title: {
+text: 'Daily Sales Trend',
+align: 'left'
+},
+markers: {
+size: 4,
+colors: undefined,
+strokeColors: '#fff',
+strokeWidth: 2,
+strokeOpacity: 0.9,
+strokeDashArray: 0,
+fillOpacity: 1,
+discrete: [],
+shape: "circle",
+radius: 2,
 
+hover: {
+size: undefined,
+sizeOffset: 3
 }
-						}]
-					}
-				}
-			});
-		}    
-	}    
+},
+grid: {
+row: {
+  colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+  opacity: 0.5
+},
+},
+xaxis: {
+categories: [],
+}
+};
 
+var chart = new ApexCharts(document.querySelector("#chartline"), options);
+chart.render();
 
-	/* Function ============ */
-	return {
-		init:function(){
-		},
-		
-		
-		load:function(){
-	
-			areaChart2();
-		
-		},
-		
-		resize:function(){
-			// barChart1();	
-			// barChart2();
-			// barChart3();	
-			// lineChart1();	
-			// lineChart2();		
-			// lineChart3();
-			// lineChart03();
-			// areaChart1();
-			// areaChart2();
-			// areaChart3();
-			// radarChart();
-			// pieChart();
-			// doughnutChart(); 
-			// polarChart(); 
-		}
-	}
-
-}();
-
-
-	
-jQuery(window).on('load',function(){
-	dzSparkLine.load();
-});
-
-jQuery(window).on('resize',function(){
-	//dzSparkLine.resize();
-	setTimeout(function(){ dzSparkLine.resize(); }, 1000);
-});
-	
-})(jQuery);
 </script>
+
 
 {%endblock%}

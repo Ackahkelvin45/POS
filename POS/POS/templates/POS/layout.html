@@ -20,6 +20,8 @@
     <script src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    
     
   
 
@@ -54,13 +56,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
 <script src="https://unpkg.com/html2pdf.js@0.10.0/dist/html2pdf.bundle.js"></script>
 
+<!--DATEPICKER-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.js"></script>
+
 
 </head>
 <body class="w-full ">
     <div class="flex h-screen bg-gray-50 w-full"  :class="{ 'overflow-hidden': isSideMenuOpen }">
-        
+   
+  
         <!-- Desktop sidebar -->
-        <aside class="  z-50 flex-shrink-0 hidden lg:w-[20%] md:w-[30%] overflow-x-hidden pl-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-slate-100 bg-gray-800 md:flex">
+        <aside class="  z-50 flex-shrink-0 hidden lg:w-[20%] md:w-[25%] overflow-x-hidden pl-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-slate-100 bg-gray-800 md:flex">
             <div class="w-full">
                 <div class="text-white w-full">
                     <div class="flex p-2  w-full">
@@ -147,7 +155,12 @@
                                      </a>
                                        </button>
                                     
-                                    
+                                       <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                        <a class="flex justify-start items-center space-x-6 " href="{% url 'product:add_package'%}">
+                                         <i class="mdi  mdi-package-variant  text-gray-400 text-lg "></i>
+                                         <p class="text-sm leading-4   ">Package</p>
+                                     </a>
+                                       </button>
                     
                                     </div>
                                 </div>
@@ -250,7 +263,7 @@
                                     <button onclick="showMenu7(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
                                         <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
                                         <i class="mdi mdi-stocking text-gray-400 text-lg "></i>
-                                      <div  class="text-sm leading-5  " id="menu7button"> Iventory</div>                                                                                                                                                   
+                                      <div  class="text-sm leading-5  " id="menu7button"> Inventory</div>                                                                                                                                                   
                                     </div>
                                       <svg id="icon7" class="transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -271,7 +284,7 @@
                                         
                                         <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:history'%}">
 
-                                        <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                        <i class="mdi  mdi-history text-gray-400 text-lg "></i>
                                         <p class="text-sm leading-4  ">Inventory history</p>
                                         </a>
                                       </button>
@@ -279,7 +292,7 @@
                                         
                                         <a class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
 
-                                        <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                        <i class="mdi  mdi-undo-variant text-gray-400 text-lg "></i>
                                         <p class="text-sm leading-4  ">Inventory correction</p>
                                         </a>
                                       </button>
@@ -320,14 +333,14 @@
                                     <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
                                       <a  href="{% url 'sales:sales_history'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
 
-                                      <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                      <i class="mdi  mdi-history text-gray-400 text-lg "></i>
                                       <p class="text-sm leading-4  ">sale history</p>
                                       </a>
                                     </button>
                                     <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
                                       <a  href="{% url 'sales:paused_sales'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
 
-                                      <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
+                                      <i class="mdi  mdi-pause-circle-outline text-gray-400 text-lg "></i>
                                       <p class="text-sm leading-4  ">Paused transactions</p>
                                       </a>
                                     </button>
@@ -361,14 +374,28 @@
                                   <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
                                     <a  href="{% url 'report:daily_report'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
 
-                                    <i class="mdi   mdi-view-list-outline text-gray-400 text-lg "></i>
-                                    <p class="text-sm leading-4   ">Daily Report</p>
+                                    <i class="mdi   mdi-chart-bar-stacked  text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-4   ">Daily  Report</p>
                                   </a>
                                   </button>
                                
                                  
                               
-                                
+                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                    <a  href="{% url 'report:inventoryreport'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
+
+                                    <i class="mdi   mdi-chart-donut-variant text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-4   ">Inventory Report</p>
+                                  </a>
+                                  </button>
+
+                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                    <a  href="{% url 'report:datepicker'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
+
+                                    <i class="mdi   mdi-calendar-blank-multiple text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-4   ">Sales Report</p>
+                                  </a>
+                                  </button>
                                 </div>
                             </div>
                               </div>
@@ -411,6 +438,13 @@
                                     
                                   <i class="mdi mdi-point-of-sale text-gray-400 text-lg "></i>
                                     <p class="text-sm leading-4   ">Sale Settings</p>
+                                    </a>
+                                  </button>
+                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                    <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'settings:generalsettings'%}">
+                                    
+                                  <i class="mdi mdi-toolbox-outline text-gray-400 text-lg "></i>
+                                    <p class="text-sm leading-4   ">General Settings</p>
                                     </a>
                                   </button>
                                  
@@ -880,7 +914,7 @@
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                           </svg>
-                                          <span>Add User</span>
+                                          <span> Users</span>
                                       </a>
                                   </li>
 

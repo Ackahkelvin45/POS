@@ -14,6 +14,7 @@ import pdfkit
 from datetime import datetime
 from django.utils import timezone
 from settings.models import AppSettings
+from django.views import View
 
 
 # Create your views here.
@@ -33,7 +34,8 @@ def show_add_sales(request):
         'sale': sale_item,
         'taxform': TaxForm(),
         'taxes': Tax.objects.all(),
-        "paymentform":PaymentDetailsForm(initial={"sale":sale_item})
+        "paymentform": PaymentDetailsForm(initial={"sale": sale_item}),
+        'setting':setting
        
         
     }
@@ -44,7 +46,8 @@ def show_add_sales(request):
             'saleform': SaleForm(allow_date_change_value=setting.allow_date_change),
             'taxform': TaxForm(),
             "taxes": Tax.objects.all(),
-            "paymentform":PaymentDetailsForm()
+            "paymentform": PaymentDetailsForm(),
+            'setting':setting
            
             
         }
@@ -57,6 +60,32 @@ def show_sales_history(request):
     }
     return render(request, "sales/saleshistory.html",context=context)
     
+
+
+class GetPackageCostView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            package_id = request.GET.get('package_id')
+            package = Package.objects.get(pk=package_id)
+            cost_price= package.selling_price
+
+            
+            return JsonResponse({'selling_price': cost_price})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+class GetProductCostView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            product_id= request.GET.get('product_id')
+            product = Product_Item.objects.get(pk=product_id)
+            cost_price= product.selling_price
+
+            
+            return JsonResponse({'selling_price': cost_price})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
 
 def search_product(request):
@@ -98,24 +127,35 @@ def sell_item(request):
         product=Product_Item.objects.get(pk=product_id)
         
         form = SaleProductForm(request.POST)
-        if sale:
-            sale = Sale.objects.get(pk=sale)
-            if sale.saleproduct_set.filter(product_id=product_id).exists():
-                messages.error(request, 'This product is already in the Sale.You can  change quantity ')
-                return redirect('sales:add_sales')
+
+            
         if form.is_valid():
             saleproduct = form.save(commit=False)
-            if saleproduct.package_type:
+    
+            if sale:
+                sale = Sale.objects.get(pk=sale)
+                if saleproduct.package_type:
+
+                    if   sale.saleproduct_set.filter(package_type_id=saleproduct.package_type.id).exists():
+                        messages.error(request,'This package is already in the Sale.You can  change quantity ')
+                        return redirect('sales:add_sales')  
                     saleproduct.cost_unit_price = saleproduct.package_type.selling_price
                     saleproduct.total_cost_price = saleproduct.quantity *  saleproduct.package_type.selling_price
-
-
-            if (saleproduct.quantity > saleproduct.product.available_quantity):
-                messages.error(request, 'Can not sell quantity more than what is in stock ')
-                return redirect('sales:add_sales')
+                
+                    if (saleproduct.quantity > saleproduct.package_type.available_quantity ):
+                        messages.error(request, 'Can not sell quantity more than what is in stock ')
+                        return redirect('sales:add_sales')
+                else:
+                    if sale.saleproduct_set.filter(product_id=product_id).exists():
+                        messages.error(request,'This product is already in the Sale.You can  change quantity ')
+                        return redirect('sales:add_sales')  
+                    if (saleproduct.quantity > saleproduct.product.available_quantity ):
+                        messages.error(request, 'Can not sell quantity more than what is in stock ')
+                        return redirect('sales:add_sales')
 
             saleproduct.product = product
             saleproduct.calculate_total_cost_price()
+            saleproduct.calculate_profit()
             
         
 
@@ -330,8 +370,14 @@ def complete_sale(request):
                 if sale_item.payment:
 
                     for item in sale_item.saleproduct_set.all():
-                        product = item.product
-                        product.available_quantity = product.available_quantity - item.quantity
+                        if item.package_type:
+                            product = item.package_type
+                            product.available_quantity = product.available_quantity - item.quantity
+                        else:
+                            product = item.product
+                            product.available_quantity = product.available_quantity - item.quantity
+
+
                         product.save()
                     sale_item.status = "completed"
                     

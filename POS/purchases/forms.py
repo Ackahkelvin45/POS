@@ -19,18 +19,21 @@ class PurchaseOrderForm(forms.ModelForm):
         widgets = {
             "supplier":forms.Select(
                 attrs={
-                    "class": " w-[40%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                    "class": " w-[40%] max-sm:w-[50%]   h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                    'required':False
                 }
             ),
             'discount': forms.NumberInput(
                 attrs={
-                 "class": "w-[40%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                 "class": "w-[40%]   max-sm:w-[50%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                 'required':False
                  
                 }
             ),
               'invoice_number': forms.NumberInput(
                 attrs={
-                    "class": "w-[40%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                    "class": "w-[40%]   max-sm:w-[50%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300",
+                    'required':False
                  
                 }
             ),
@@ -39,15 +42,16 @@ class PurchaseOrderForm(forms.ModelForm):
             super(PurchaseOrderForm, self).__init__(*args, **kwargs)
 
             self.fields["supplier"].widget.attrs['required'] = False
+            self.fields["discount"].widget.attrs['required'] = False
             self.fields["supplier"] = CustomModelChoiceField2(
                 queryset=Supplier.objects.all(),
-                widget=forms.Select(attrs={"class": "w-[40%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300 ","required":False}),
+                widget=forms.Select(attrs={"class": " max-sm:w-[50%]  w-[40%]  h-10  pl-4 pr-3  rounded-md  border border-gray-400 outline-none focus:outline-none focus:ring-0 focus:border-gray-300 ","required":False}),
             )
 
 
 class CustomModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return getattr(obj, "package_name", str(obj))
+                return f'{getattr(obj, "package_name", str(obj))} ({ getattr(obj, "number_of_products_item", str(obj))} units) '
 
 
 class OrderedProductForm(forms.ModelForm):
@@ -70,6 +74,7 @@ class OrderedProductForm(forms.ModelForm):
                     'class': "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ",
                     "step": "0.01",
                     "required": True,
+                    "id":'item_cost_price'
                     
                     
                 }
@@ -92,12 +97,13 @@ class OrderedProductForm(forms.ModelForm):
                 product = self.initial['product']
                 if product and 'instance' not in kwargs:
                     self.fields['cost_unit_price'].initial = product.cost_price
-                self.fields["package_type"].queryset = Package.objects.filter(product_id=product.id)
+                if hasattr(product, 'id'):
+                    self.fields["package_type"].queryset = Package.objects.filter(product_id=product.id)
 
             self.fields["package_type"] = CustomModelChoiceField(
                 queryset=self.fields["package_type"].queryset,
                 required=False,
-                widget=forms.Select(attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " }),
+                widget=forms.Select(attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ","id":"package_select" }),
 
             )
 

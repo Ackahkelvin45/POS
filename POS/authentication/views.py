@@ -53,7 +53,7 @@ def signupprocess(request):
                 with schema_context(pharmacy.name):
 
                     user.is_admin = True
-                    user.is_superuser = True
+               
                     user.is_staff=True
                     user.save()
                 

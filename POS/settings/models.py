@@ -8,7 +8,7 @@ class EmailBackend(models.Model):
     email = models.EmailField(verbose_name="pharmacy_email", max_length=255, null=True)
     email_host = models.CharField(max_length=255, null=True, blank=True)
     email_port = models.CharField(max_length=10, null=True, blank=True)
-    email_host_password = models.CharField(max_length=255, null=True, blank=True)
+    email_host_password = models.CharField(max_length=255, null=True)
     
     def __str__(self):
         return self.email
