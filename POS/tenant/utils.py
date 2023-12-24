@@ -199,3 +199,48 @@ def get_top_products_all():
         .annotate(total_quantity_sold=Coalesce(Sum('quantity'), 0)) \
         .order_by('-total_quantity_sold')[:10]
     )
+
+
+
+def calculate_sales_percentage_input(start_date=None, end_date=None):
+    # Set default values if start_date and end_date are not provided
+ 
+
+    # Get sales in the specified date range
+    total_sales_number = Sale.objects.filter(
+        status="completed",
+        date_created__range=(start_date, end_date)
+    ).count()
+
+
+    total_cost_price = Sale.objects.filter(
+        status="completed",
+         date_created__range=(start_date, end_date)
+    ).aggregate(total_cost_price=Sum('total_cost_price'))
+    total_gross_profit= Sale.objects.filter(
+        status="completed",
+         date_created__range=(start_date, end_date)
+    ).aggregate(total_gross_profit=Sum('total_gross_profit'))
+
+    top_products_10= SaleProduct.objects.filter(
+    sale__status='completed',
+    sale__date_created__range=( start_date , end_date)
+        ).values('product__name', 'product__product_image') \
+        .annotate(total_quantity_sold=Coalesce(Sum('quantity'), 0)) \
+        .order_by('-total_quantity_sold')[:10]
+    sales= Sale.objects.filter(
+        status="completed",
+         date_created__range=(start_date, end_date)
+    )
+    
+   
+        
+
+
+    return {
+        'total_sales_number': total_sales_number,
+        'total_cost_price': total_cost_price,
+         'total_gross_profit': total_gross_profit,
+        'top_products_10': top_products_10,
+        'sales':sales
+            }

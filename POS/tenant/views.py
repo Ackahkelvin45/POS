@@ -9,7 +9,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from product.models import Product_Item, Package
 from datetime import datetime, timedelta
-from .utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_sales_by_all_months_in_year,get_sales_by_current_week,get_top_products
+from .utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_sales_by_all_months_in_year,get_sales_by_current_week,get_top_products,calculate_sales_percentage_input
 
 # Create your views here.
 

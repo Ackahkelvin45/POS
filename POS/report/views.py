@@ -2,8 +2,9 @@ from django.shortcuts import render
 from sales.models import Sale
 from django.db.models import Sum
 from django.utils import timezone
+from datetime import datetime
 from product.models import Product_Item, Package
-from tenant.utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_top_products_all
+from tenant.utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_top_products_all,calculate_sales_percentage_input
 
 # Create your views here.
 
@@ -89,7 +90,10 @@ def inventoryreport(request):
 
 
 def showdatepicker(request):
-    return render(request, "report/datepicker.html")
+    context = {
+        "date":True
+    }
+    return render(request, "report/datepicker.html",context=context)
    
 
 
@@ -113,3 +117,20 @@ def getpackages(request):
             'products':selected_products
         }
         return render (request,"report/productreport.html",context=context)
+
+
+def getdate(request):
+    if request.method == 'POST':
+        start = request.POST['start']
+        end = request.POST['end']
+        start = datetime.strptime(start, '%m/%d/%Y').date()
+        end = datetime.strptime(end, '%m/%d/%Y').date()
+        data = calculate_sales_percentage_input(start_date=start, end_date=end)
+        context = {
+            "total_cost_price": data['total_cost_price'],
+            'total_gross_profit': data['total_gross_profit'],
+            "total_sales_number": data['total_sales_number'],
+            "top_10_products": data['top_products_10'],
+            "sales":data['sales']
+        }
+        return render(request,'report/report.html',context=context)
