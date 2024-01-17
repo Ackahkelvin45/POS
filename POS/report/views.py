@@ -3,11 +3,13 @@ from sales.models import Sale
 from django.db.models import Sum
 from django.utils import timezone
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 from product.models import Product_Item, Package
 from tenant.utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_top_products_all,calculate_sales_percentage_input
 
 # Create your views here.
 
+@login_required(login_url='tenant:login')
 def daily_report(request):
     now = timezone.now()
     twenty_four_hours_ago = now - timezone.timedelta(hours=24)
@@ -79,7 +81,7 @@ def daily_report(request):
     }
     return render(request,"report/dailyreport.html",context=context)
 
-
+@login_required(login_url='tenant:login')
 def inventoryreport(request):
     context = {
         "products": Product_Item.objects.all(),
@@ -88,7 +90,7 @@ def inventoryreport(request):
     return render(request, "report/inventoryreport.html", context=context)
     
 
-
+@login_required(login_url='tenant:login')
 def showdatepicker(request):
     context = {
         "date":True
@@ -96,7 +98,7 @@ def showdatepicker(request):
     return render(request, "report/datepicker.html",context=context)
    
 
-
+@login_required(login_url='tenant:login')
 def getproducts(request):
     if request.method == 'POST':
         checked_products = request.POST.getlist('product')
@@ -106,7 +108,7 @@ def getproducts(request):
             'products':selected_products
         }
         return render (request,"report/productreport.html",context=context)
-
+@login_required(login_url='tenant:login')
 def getpackages(request):
     if request.method == 'POST':
         checked_products = request.POST.getlist('package')
@@ -118,7 +120,7 @@ def getpackages(request):
         }
         return render (request,"report/productreport.html",context=context)
 
-
+@login_required(login_url='tenant:login')
 def getdate(request):
     if request.method == 'POST':
         start = request.POST['start']

@@ -4,6 +4,7 @@ from sales.models import Sale,SaleProduct
 from django.db.models.functions import TruncMonth,TruncYear, TruncDay,TruncWeek,Coalesce
 from calendar import monthrange
 from django.db.models import Sum, Count, F
+from settings.models import AppSettings
 
 
 
@@ -244,3 +245,9 @@ def calculate_sales_percentage_input(start_date=None, end_date=None):
         'top_products_10': top_products_10,
         'sales':sales
             }
+
+
+
+
+def create_user_app_settings():
+    user_settings, created = AppSettings.objects.get_or_create()

@@ -57,81 +57,74 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <a  href="{% url 'users:usersadd' %}" type="button" class="relative  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'users:usersadd' %}" type="button" class="relative w-[20%] max-md:w-[30%] max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-plus text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Add User</span>
+                <span class="pl-2 mx-1 text-xs text-white">Add Group</span>
         </a>
 
-             <a href="{% url 'users:permissions'%}" type="button" class=" flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+             <a href="{% url 'users:permissions'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%] flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
                 <i class="mdi mdi-view-module-outline text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">group list</span>
+                <span class="pl-2 mx-1 text-xs text-white">Permission List</span>
              </a>
         </div>
 
-<form method="post" action="{% url 'users:editpermissionsprocess' group.id %}"  class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
-  {% csrf_token %}
-    <div class="text-gray-700 my-2">Edit Group</div>
-    <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
-
-    <div class="w-full  mb-2  flex-col flex items-start justify-start">
-        <label for="" class="text-sm text-gray-700   px-1">Group Name</label>
-        <div class="flex w-full">
-
-{{groupform.custom_name}}                    </div>
+<hr class="h-[1px] w-full bg-gray-600 mb-2"/>
+<div class="p-0">
+<div class="p-8 bg-white shadow mt-24 rounded-md">
+  <div class="grid grid-cols-1 md:grid-cols-3">
+    <div class="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">
+      <div>
+      
+      </div>
+      <div>
+      
+      </div>
+          <div>
+      
+      </div>
     </div>
-   
+    <div class="relative mb-6 ">
+      <div class="w-48 h-48 bg-indigo-100 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-indigo-500">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+</svg>
+      </div>
+    </div>
+
+    <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
 
 
-    <input  type="checkbox" id="selectall" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 focus:ring-gray-50" />
-    <label  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> select all</label>
-      
-    <div  class="w-full grid  grid-cols-2 my-2 ">
-     <ul class="list-none list-inside">
-         
-                {% for permission in allpermissions %}
-                    <li class="">
-                        
-                     
-                    
-                   
-                        <span>
-                            <input  type="checkbox" value="{{permission}}"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 focus:ring-gray-50"  {% if permission in  group_permissions %} checked {%endif%} name="permissions[]"/>
-                            <label  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ permission}}</label>
-                        </span>
-                      
-                    </li>
-                
-            
-        {% endfor %}
-      </ul>
-      
-          </div>
-
-
-<hr class="my-2 border-b-1 border-blueGray-300">
-      
-<div class="  flex  justify-start items-start ">
-    <button type="submit" class="  max-w-xs  text-base  bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-5 py-2 ">save</button>
-
-</div>
-
-</form>
-
-<section class=" py-1  w-full">
-<div class="w-full   ">
-  <div class="relative flex flex-col min-w-0 break-words w-full mb-6 srounded-lg  border-0">
-
-   
-  
-
- 
     </div>
   </div>
 
+  <div class="mt-20 text-center border-b pb-12">
+    <h1 class="text-4xl font-medium text-gray-700">{{user.first_name}} {{user.last_name}}, <span class="font-light text-gray-500">27</span></h1>
+    <p class="font-light text-gray-600 mt-3 break-words">{{user.email}}/{{user.phone_number}}</p>
+
+    <p class="mt-8 text-gray-500">
+      {%if group%}
+      {{group}}
+      {%else%}
+      No position
+      {%endif%}
+     
+      - {{pharmacy.name}}</p>
+    <p class="mt-2 text-gray-500"></p>
+  </div>
+
+  <div class="mt-12 flex flex-col justify-center">
+    <p class="text-gray-600 text-center font-light lg:px-16"></p>
+    <button
+  class="text-indigo-500 py-2 px-4  font-medium mt-4"
+>
+
+</button>
+  </div>
+
 </div>
-</section>
+</div>
     </div>
 
  
@@ -264,6 +257,7 @@ img {
     text-align: center;
     color: #fff;
 }
+
 .slow-animation-show {
   animation: swal2-show 0.5s; 
 }
@@ -271,5 +265,6 @@ img {
 .slow-animation-hide {
   animation: swal2-hide 0.5s; 
 }
+
 </style>
 {%endblock%}

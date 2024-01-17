@@ -20,7 +20,9 @@ class Pharmacy(TenantMixin):
     contact = models.CharField(max_length=100, null=True)
     is_mainbranch = models.BooleanField(default=False)
     address = models.CharField(max_length=255, null=True)
+    profile_picture=models.ImageField(null=True,blank=True,upload_to='profile_pics/')
     workers = models.ManyToManyField(User, related_name="pharmacy_working")
+
    
 
    

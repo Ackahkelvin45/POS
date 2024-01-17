@@ -32,8 +32,8 @@ class UserForm(forms.ModelForm):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = ("name",)
+        fields = ("custom_name",)
         widgets = {
-            "name": forms.TextInput(attrs={'class': 'w-[50%] pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300',"required": "True"}),
+            "custom_name": forms.TextInput(attrs={'class': 'w-[50%] pl-5 pr-3 py-2 rounded-lg border border-gray-300 outline-none   focus:outline-none focus:ring-0 focus:border-gray-300',"required": "True"}),
 
         }

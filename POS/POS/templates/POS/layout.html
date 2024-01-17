@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     {% tailwind_css %}
-
+    {% load group %}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.js"></script>
 
-
+{% load permission %}
 </head>
 <body class="w-full ">
     <div class="flex h-screen bg-gray-50 w-full"  :class="{ 'overflow-hidden': isSideMenuOpen }">
@@ -88,7 +88,9 @@
                         </div>
                        
                     </div>
-                    <p class="w-full justify-center items-center flex"> Administrator
+                    <p class="w-full justify-center items-center flex">  
+                     
+                      {% get_user_group request.user  %}
                     
                   
                      
@@ -104,9 +106,15 @@
                                  
                                   </div>
                             </li>
+                            {% if   request.user|has_global_permission:"product"%}
                             <li class="relative px-2 py-1 flex" >
+                              
+                          
+                           
+
                                
-                                <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
+                              
+                                          <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
                                   
                                     <button onclick="showMenu1(true)" class="focus:outline-none focus:text-indigo-400 text-left  text-white flex justify-between items-center w-full py-1 space-x-14  ">
                                         <div class=" flex flex-row justify-start items-center  pl-4  space-x-4  ">
@@ -168,8 +176,12 @@
                                     </div>
                                 </div>
                                   </div>
+                                 
                             </li>
+                            {%endif%}
+                            {% if   request.user|has_global_permission:"suppliers"%}
                             <li class="relative px-2 py-1 flex" >
+                            
                                
                               <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
                                 
@@ -212,7 +224,10 @@
                                   </div>
                               </div>
                                 </div>
+                              
                           </li>
+                          {%endif%}
+                          {% if   request.user|has_global_permission:"purchases"%}
 
                           <li class="relative px-2 py-1 flex" >
                                
@@ -258,7 +273,8 @@
                             </div>
                               </div>
                         </li>
-
+                        {%endif%}
+                        {% if   request.user|has_global_permission:"stock"%}
                             <li class="relative px-2 py-1 flex" >
                                
                                 <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
@@ -305,7 +321,8 @@
                                 </div>
                                   </div>
                             </li>
-
+                            {%endif%}
+                            {% if   request.user|has_global_permission:"sales"%}
                             <li class="relative px-2 py-1 flex" >
                                
                               <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
@@ -354,7 +371,8 @@
                           </li>
 
 
-
+                          {%endif%}
+                          {% if   request.user|has_global_permission:"report"%}
                           <li class="relative px-2 py-1 flex" >
                                
                             <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
@@ -404,7 +422,8 @@
                               </div>
                         </li>
 
-
+                        {%endif%}
+                        {% if   request.user|has_global_permission:"settings"%}
                           <li class="relative px-2 py-1 flex" >
                                
                             <div class="flex flex-col  justify-start items-center   w-full border-gray-600 border-b space-y-3   ">
@@ -457,7 +476,7 @@
                             </div>
                               </div>
                         </li>
-
+                        {%endif%}
                        
                         </ul>
                     </div>
@@ -719,15 +738,20 @@
                                   <div id="mobilemenu3" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
                                       <div class="h-full w-[1px]  bg-white"></div>
                                       <div>
-                                    <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
-                                     
-                                      <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
-                                      <p class="text-sm leading-4   ">add sale</p>
-                                    </button>
-                                    <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
-                                      <i class="mdi  mdi-view-list-outline text-gray-400 text-lg "></i>
-                                      <p class="text-sm leading-4  ">sale history</p>
-                                    </button>
+                                        <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                          <a  href="{% url 'sales:add_sales'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
+    
+                                          <i class="mdi  mdi-plus-box text-gray-400 text-lg "></i>
+                                          <p class="text-sm leading-4   ">add sale</p>
+                                        </a>
+                                        </button>
+                                        <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3 py-[0.15rem]  w-full md:w-52">
+                                          <a  href="{% url 'sales:sales_history'%}" class="flex justify-start items-center space-x-6  w-full" href="{% url 'inventory:change_inventory'%}">
+    
+                                          <i class="mdi  mdi-history text-gray-400 text-lg "></i>
+                                          <p class="text-sm leading-4  ">sale history</p>
+                                          </a>
+                                        </button>
                                   
                                   </div>
                               </div>
@@ -755,18 +779,34 @@
                                 <div id="mobilemenu4" class=" justify-start  flex-row flex  w-full md:w-auto items-start pb-1 hidden pl-10  ">
                                     <div class="h-full w-[1px]  bg-white"></div>
                                     <div>
-                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
-                                    <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'users:permissions'%}">
-                                    <i class="mdi  mdi-security text-gray-400 text-lg "></i>
-                                    <p class="text-sm leading-4   ">Permissions</p>
-                                    </a>
-                                  </button>
-                                  <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
-                                    <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'settings:emailsettings'%}">
-                                    <i class="mdi  mdi-email-lock text-gray-400 text-lg "></i>
-                                    <p class="text-sm leading-4   ">Email settings</p>
-                                    </a>
-                                  </button>
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                        <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'users:permissions'%}">
+                                        <i class="mdi  mdi-security text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Permissions</p>
+                                        </a>
+                                      </button>
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                        <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'settings:emailsettings'%}">
+                                        <i class="mdi  mdi-email-lock text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Email settings</p>
+                                        </a>
+                                      </button>
+    
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                        <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'settings:salessettings'%}">
+                                        
+                                      <i class="mdi mdi-point-of-sale text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">Sale Settings</p>
+                                        </a>
+                                      </button>
+                                      <button class="flex justify-start items-center space-x-6 hover:text-white focus:bg-gray-700 focus:text-white hover:bg-gray-700 text-gray-400 rounded px-3  py-[0.15rem] w-full md:w-52">
+                                        <a class="flex justify-start items-center space-x-6 w-full  " href="{% url 'settings:generalsettings'%}">
+                                        
+                                      <i class="mdi mdi-toolbox-outline text-gray-400 text-lg "></i>
+                                        <p class="text-sm leading-4   ">General Settings</p>
+                                        </a>
+                                      </button>
+                                     
                                  
                               
                                 </div>
@@ -898,7 +938,7 @@
                                     aria-label="submenu">
                                     <li class="flex border-b border-gray-200 pb-1">
                                         <a class=" text-white inline-flex items-center w-full px-2   py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800"
-                                            href="#">
+                                            href="{% url 'users:profilepage'%}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1156,9 +1196,7 @@
               }
             };
 
-            $(document).ready( function () {
-    $('.myTable').DataTable();
-} );
+   
             </script>
                <style>
                 @import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css');

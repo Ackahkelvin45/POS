@@ -15,7 +15,7 @@ urlpatterns = [
     path("permissions/list/", views.showPermissions, name='permissions'),
     path("permissions/edit/<int:pk>/", views.editPermissions, name='editpermissions'),
     path("permissions_process/edit/<int:pk>/", views.editPermissionProcess, name='editpermissionsprocess'),
-
+ path("profile/", views.profilepage, name='profilepage'),
 
     
 ]

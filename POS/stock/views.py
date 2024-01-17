@@ -6,22 +6,24 @@ from django.http import JsonResponse
 from django.contrib import messages
 from .models import StockEntry
 from product.models import Package
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required(login_url='tenant:login')
 def showaddstock(request):
     context = {
         "stockform":StockEntryForm()
     }
     return render(request, "stock/addstock.html", context=context)
     
-
+@login_required(login_url='tenant:login')
 def showchangestock(request):
     context = {
         "stockform":StockEntryForm()
     }
     return render(request, "stock/stockcorrection.html", context=context)
-    
+
+
 class GetAvailableQuantityView(View):
     def get(self, request, *args, **kwargs):
         try:
@@ -49,7 +51,7 @@ class GetAvailablePackageQuantityView(View):
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-
+@login_required(login_url='tenant:login')
 def add_stock_process(request):
     if request.method == "POST":
         stockentryform = StockEntryForm(request.POST)
@@ -71,7 +73,7 @@ def add_stock_process(request):
 
             messages.success(request,'Inventory added succesfully')
             return redirect('inventory:history')
-
+@login_required(login_url='tenant:login')
 def change_stock_process(request):
     if request.method == "POST":
         stockentryform = StockEntryForm(request.POST)
@@ -97,6 +99,7 @@ def change_stock_process(request):
             messages.success(request,'Inventory Corrected  succesfully')
             return redirect('inventory:history')
 
+@login_required(login_url='tenant:login')
 def stockEntryList(request):
     context = {
         "stockentry":StockEntry.objects.all().order_by('-id'),

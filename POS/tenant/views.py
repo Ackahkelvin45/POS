@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django_tenants.utils import get_tenant
+from django_tenants.utils import get_tenant,schema_context
 from main.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -9,7 +9,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from product.models import Product_Item, Package
 from datetime import datetime, timedelta
-from .utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_sales_by_all_months_in_year,get_sales_by_current_week,get_top_products,calculate_sales_percentage_input
+from .utils import calculate_sales_percentage,calculate_sales_number,calculate_gross_proft_percentage,get_sales_by_all_months_in_year,get_sales_by_current_week,get_top_products,calculate_sales_percentage_input,create_user_app_settings
 
 # Create your views here.
 
@@ -17,6 +17,7 @@ from .utils import calculate_sales_percentage,calculate_sales_number,calculate_g
       
 @login_required(login_url='tenant:login')
 def viewDashboard(request):
+        create_user_app_settings()
         now = timezone.now()
         twenty_four_hours_ago = now - timezone.timedelta(hours=24)
         daily_sales=Sale.objects.filter(status="completed",date_created__gte=twenty_four_hours_ago)  

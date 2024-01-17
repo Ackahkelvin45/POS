@@ -19,7 +19,7 @@ from django.utils import timezone
 
 # Create your views here.
 
-
+@login_required(login_url='tenant:login')
 def showAddCategory(request):
     context = {
         "categorys": Category.objects.all().order_by("-id"),
@@ -27,7 +27,7 @@ def showAddCategory(request):
     }
     return render(request, "product/addcategory.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def showCategoryList(request):
     context = {
         "categorys": Category.objects.all().order_by("-id"),
@@ -35,7 +35,7 @@ def showCategoryList(request):
 
     return render(request, "product/categorylist.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def showAddSubCategory(request):
     context = {
         "subcategorys": Subcategory.objects.all().order_by("-id"),
@@ -43,14 +43,14 @@ def showAddSubCategory(request):
     }
     return render(request, "product/subcategory.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def showSubCategoryList(request):
     context = {
         "subcategorys": Subcategory.objects.all().order_by("-id"),
     }
     return render(request, "product/subcategorylist.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def showAddProduct(request):
 
     # suppliers = Supplier.objects.all()
@@ -61,7 +61,7 @@ def showAddProduct(request):
 
     return render(request, "product/addproduct.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def addProductProcess(request):
     if request.method == "POST":
         productform = ProductForm(request.POST,request.FILES)
@@ -72,7 +72,7 @@ def addProductProcess(request):
         messages.error(request, str(productform.errors))
         return redirect("product:productpage")
 
-
+@login_required(login_url='tenant:login')
 def showProducts(request):
     context = {
         'products':Product_Item.objects.all().order_by("-id")
@@ -80,7 +80,7 @@ def showProducts(request):
 
     return render(request, "product/productlist.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def editProduct(request, pk):
     product = Product_Item.objects.get(id=pk)
     # suppliers = Supplier.objects.all()
@@ -92,7 +92,7 @@ def editProduct(request, pk):
     }
 
     return render(request, "product/addproduct.html", context=context)
-
+@login_required(login_url='tenant:login')
 def edit_product_process(request, pk):
      if request.method == "POST":
         product = Product_Item.objects.get(id=pk)
@@ -105,7 +105,7 @@ def edit_product_process(request, pk):
         return redirect("product:productpage")
 
 
-
+@login_required(login_url='tenant:login')
 def delete_product(request, pk):
     if Product_Item.objects.filter(id=pk).exists():
         product = Product_Item.objects.get(id=pk)
@@ -114,17 +114,18 @@ def delete_product(request, pk):
         return redirect("product:productlist")
     messages.error(request, "Error Try Agian")
     return redirect("product:productlist")
-    
+
+@login_required(login_url='tenant:login')   
 def showAddUnit(request):
     context = {"form": UnitForm, "units": Unit.objects.all().order_by("-id")}
     return render(request, "product/unit.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def showUnitList(request):
     context = {"units": Unit.objects.all().order_by("-id")}
     return render(request, "product/unitlist.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def add_unit_process(request):
     if request.method == "POST":
         unitform = UnitForm(request.POST)
@@ -135,7 +136,7 @@ def add_unit_process(request):
         messages.error(request, str(unitform.errors))
         return redirect("product:unitpage")
 
-
+@login_required(login_url='tenant:login')
 def edit_unit(request, pk):
     if Unit.objects.filter(id=pk).exists():
         unit = Unit.objects.get(id=pk)
@@ -147,7 +148,7 @@ def edit_unit(request, pk):
         }
         return render(request, "product/unit.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def edit_unit_process(request, pk):
     if request.method == "POST":
         if Unit.objects.filter(id=pk).exists():
@@ -160,7 +161,7 @@ def edit_unit_process(request, pk):
             messages.error(request, str(unitform.errors))
             return redirect("product:unitlist")
 
-
+@login_required(login_url='tenant:login')
 def delete_unit(request, pk):
     if Unit.objects.filter(id=pk).exists():
         unit = Unit.objects.get(id=pk)
@@ -170,7 +171,7 @@ def delete_unit(request, pk):
     messages.error(request, "Error Try Agian")
     return redirect("product:unitlist")
 
-
+@login_required(login_url='tenant:login')
 def add_subcategory(request):
     if request.method == "POST":
         subcategoryform = SubcategoryForm(request.POST)
@@ -181,7 +182,7 @@ def add_subcategory(request):
         messages.error(request, str(subcategoryform.errors))
         return redirect("product:subcategorypage")
 
-
+@login_required(login_url='tenant:login')
 def delete_subcategory(request, pk):
     if Subcategory.objects.filter(id=pk).exists():
         subcategory = Subcategory.objects.get(id=pk)
@@ -191,7 +192,7 @@ def delete_subcategory(request, pk):
     messages.error(request, "Error Try Agian")
     return redirect("product:subcategory_list")
 
-
+@login_required(login_url='tenant:login')
 def edit_subcategory(request, pk):
     if Subcategory.objects.filter(id=pk).exists():
         subcategory = Subcategory.objects.get(id=pk)
@@ -216,7 +217,7 @@ def edit_subcategory_process(request, pk):
             messages.error(request, str(subcategoryform.errors))
             return redirect("product:subcategory_list")
 
-
+@login_required(login_url='tenant:login')
 def add_category(request):
     if request.method == "POST":
         categoryform = CategoryForm(request.POST)
@@ -227,7 +228,7 @@ def add_category(request):
         messages.error(request, str(categoryform.errors))
         return redirect("product:categorypage")
 
-
+@login_required(login_url='tenant:login')
 def delete_category(request, pk):
     if Category.objects.filter(id=pk).exists():
         category = Category.objects.get(id=pk)
@@ -237,7 +238,7 @@ def delete_category(request, pk):
     messages.error(request, "Error Try Agian")
     return redirect("product:categorylist")
 
-
+@login_required(login_url='tenant:login')
 def edit_category(request, pk):
     if Category.objects.filter(id=pk).exists():
         category = Category.objects.get(id=pk)
@@ -249,7 +250,7 @@ def edit_category(request, pk):
         }
         return render(request, "product/addcategory.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def edit_category_process(request, pk):
     if request.method == "POST":
         if Category.objects.filter(id=pk).exists():
@@ -262,7 +263,7 @@ def edit_category_process(request, pk):
             messages.error(request, str(categoryform.errors))
             return redirect("product:categorylist")
 
-
+@login_required(login_url='tenant:login')
 def add_unit(request):
     if request.method == "POST":
         unitform = UnitForm(request.POST)
@@ -272,7 +273,7 @@ def add_unit(request):
             return redirect("product:unitpage")
         messages.error(request, str(unitform.errors))
         return redirect("product:unitpage")
-
+@login_required(login_url='tenant:login')
 def create_categories_from_excel(request):
     try:
         if request.method == "POST":
@@ -303,7 +304,7 @@ def create_categories_from_excel(request):
         return redirect("product:categorypage")
 
 
-
+@login_required(login_url='tenant:login')
 def create_subcategories_from_excel(request):
     try:
         if request.method == "POST":
@@ -333,7 +334,7 @@ def create_subcategories_from_excel(request):
         messages.error(request, f"{str(e)}")
         return redirect("product:subcategorypage")
 
-
+@login_required(login_url='tenant:login')
 def create_units_from_excel(request):
     try:
         if request.method == "POST":
@@ -369,7 +370,7 @@ def create_units_from_excel(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def showAddPackage(request):
     context = {
         "packageform": PackageForm,
@@ -381,7 +382,7 @@ def showAddPackage(request):
 
 
     
-
+@login_required(login_url='tenant:login')
 def addPackage(request):
     if request.method == 'POST':
         packageform = PackageForm(request.POST)
@@ -396,7 +397,7 @@ def addPackage(request):
         
 
 
-
+@login_required(login_url='tenant:login')
 def export_products_as_pdf(request):
     template = get_template('product/pdf.html')  
     html_content = template.render({
@@ -418,7 +419,7 @@ def export_products_as_pdf(request):
     response['Content-Disposition'] = 'inline; filename="products.pdf"'
     return response
 
-
+@login_required(login_url='tenant:login')
 def export_packages_as_pdf(request):
     template = get_template('product/packagespdf.html')  
     html_content = template.render({
@@ -440,7 +441,7 @@ def export_packages_as_pdf(request):
     response['Content-Disposition'] = 'inline; filename="packages.pdf"'
     return response
 
-
+@login_required(login_url='tenant:login')
 def export_categories_as_pdf(request):
     template = get_template('product/categorypdf.html')  
     html_content = template.render({
@@ -461,7 +462,7 @@ def export_categories_as_pdf(request):
     response = HttpResponse(pdf_data, content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="categories.pdf"'
     return response
-
+@login_required(login_url='tenant:login')
 def export_subcategories_as_pdf(request):
     template = get_template('product/subcategorypdf.html')  
     html_content = template.render({
@@ -483,7 +484,7 @@ def export_subcategories_as_pdf(request):
     response['Content-Disposition'] = 'inline; filename="subcategories.pdf"'
     return response
 
-
+@login_required(login_url='tenant:login')
 def export_units_as_pdf(request):
     template = get_template('product/unitpdf.html')  
     html_content = template.render({
@@ -506,7 +507,7 @@ def export_units_as_pdf(request):
     return response
 
 
-
+@login_required(login_url='tenant:login')
 def export_products_to_excel(request):
     
     products = Product_Item.objects.all()
@@ -545,7 +546,7 @@ def export_products_to_excel(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def export_package_to_excel(request):
     
     products = Package.objects.all()
@@ -580,7 +581,7 @@ def export_package_to_excel(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def export_categories_to_excel(request):
     
     categories=Category.objects.all()
@@ -612,7 +613,7 @@ def export_categories_to_excel(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def export_subcategories_to_excel(request):
     
     subcategories=Subcategory.objects.all()
@@ -641,7 +642,7 @@ def export_subcategories_to_excel(request):
 
     return response
 
-
+@login_required(login_url='tenant:login')
 def export_units_to_excel(request):
     
     units=Unit.objects.all()
@@ -669,7 +670,7 @@ def export_units_to_excel(request):
     response['Content-Disposition'] = 'attachment; filename=units.xlsx'
 
     return response
-
+@login_required(login_url='tenant:login')
 def reset_product_to_zero(request):
     products = Product_Item.objects.all()
     for product in products:
@@ -677,7 +678,7 @@ def reset_product_to_zero(request):
         product.save()
     messages.success(request, "Quantity has been reset ")
     return redirect("product:productlist")
-
+@login_required(login_url='tenant:login')
 def reset_package_to_zero(request):
     products = Package.objects.all()
     for product in products:
@@ -687,14 +688,14 @@ def reset_package_to_zero(request):
     return redirect("product:add_package")
 
 
-
+@login_required(login_url='tenant:login')
 def delete_all_categories(request):
     categories = Category.objects.all()
     for category in categories:
         category.delete()
     messages.success(request, "All catgories Deleted Successfully")
     return redirect("product:categorylist")
-
+@login_required(login_url='tenant:login')
 def delete_all_subcategories(request):
     subcategories = Subcategory.objects.all()
     for subcategory in subcategories:
@@ -702,7 +703,7 @@ def delete_all_subcategories(request):
     messages.success(request, "All subcatgories Deleted Successfully")
     return redirect("product:subcategory_list")
 
-
+@login_required(login_url='tenant:login')
 def delete_all_units(request):
     units = Unit.objects.all()
     for unit in units:
@@ -711,7 +712,7 @@ def delete_all_units(request):
     return redirect("product:unitlist")
 
 
-
+@login_required(login_url='tenant:login')
 def update_quantity_in_bulk(request):
     if request.method == 'POST':
         percentage = request.POST['percentage']
@@ -763,7 +764,7 @@ def update_quantity_in_bulk(request):
         return redirect("product:productlist")        
 
 
-
+@login_required(login_url='tenant:login')
 def update_packages_quantity_in_bulk(request):
     if request.method == 'POST':
         percentage = request.POST['percentage']

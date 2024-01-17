@@ -21,11 +21,12 @@ from  settings.models import EmailBackend, AppSettings
 from django.core.mail import EmailMessage
 import pdfkit
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
-
+@login_required(login_url='tenant:login')
 def showOrderPage(request):
     
     purchase_order = request.session.get('active_purchase_order')
@@ -59,7 +60,7 @@ def showOrderPage(request):
             
         }
     return render(request,'purchases/addpurchaseorder.html',context=context)
-
+@login_required(login_url='tenant:login')
 def remove_from_session(request):
     if 'active_purchase_order' in request.session:
         del request.session['active_purchase_order']           
@@ -67,7 +68,7 @@ def remove_from_session(request):
     return redirect('purchases:order')
 
 
-
+@login_required(login_url='tenant:login')
 def searchProduct(request):
      if request.method == "POST":
         product_name = request.POST['product_name']
@@ -84,7 +85,7 @@ def searchProduct(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def search_product(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name', '')
@@ -101,7 +102,7 @@ def search_product(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-
+@login_required(login_url='tenant:login')
 def order_item(request, pk):
     product = Product_Item.objects.get(pk=pk)
     packages = Package.objects.filter(product_id=product.id)
@@ -119,7 +120,7 @@ def order_item(request, pk):
     return render(request, 'purchases/addpurchaseorder.html', context=context)
     
 
-
+@login_required(login_url='tenant:login')
 def purchase_item(request):
     
 
@@ -181,7 +182,7 @@ def purchase_item(request):
 
         
 
-
+@login_required(login_url='tenant:login')
 def delete_ordered_product(request, pk):
     product = OrderedProduct.objects.get(pk=pk)
     if product.purchase_order and product.purchase_order.orderedproduct_set.count() <= 1:      
@@ -197,7 +198,7 @@ def delete_ordered_product(request, pk):
         messages.success(request,'product removed successfully')
         return redirect('purchases:order')
 
-  
+@login_required(login_url='tenant:login') 
 def edit_item(request, pk):
     product_item = OrderedProduct.objects.get(pk=pk)
     packages = Package.objects.filter(product_id=product_item.product.id)
@@ -216,7 +217,7 @@ def edit_item(request, pk):
     }
     return render(request, 'purchases/addpurchaseorder.html', context=context)
 
-
+@login_required(login_url='tenant:login')
 def edit_item_process(request,pk):
     if request.method == 'POST':
         product_id = request.POST['product']
@@ -239,7 +240,7 @@ def edit_item_process(request,pk):
         messages.error(request,str(form.errors))
         return redirect('purchases:order')
 
-
+@login_required(login_url='tenant:login')
 def save_purchase_order(request):
     if request.method == "POST":
         purchase_order = PurchaseOrder.objects.get(id=request.session.get('active_purchase_order'))
@@ -253,7 +254,7 @@ def save_purchase_order(request):
             
 
             
-
+@login_required(login_url='tenant:login')
 def preview_as_pdf(request):
     purchaseorder = PurchaseOrder.objects.get(id=request.session.get('active_purchase_order'))
     tenant=get_tenant(request)
@@ -279,7 +280,7 @@ def preview_as_pdf(request):
     return response
    
 
-
+@login_required(login_url='tenant:login')
 def delete_purchaseorder(request):
     purchaseorder = PurchaseOrder.objects.get(pk=request.session.get('active_purchase_order'))
     del request.session['active_purchase_order']
@@ -289,13 +290,13 @@ def delete_purchaseorder(request):
     return redirect('purchases:order')
 
     
-
+@login_required(login_url='tenant:login')
 def view_purchase_order_list(request):
     context = {
         "purchaseorders":PurchaseOrder.objects.all().order_by("-id")
     }
     return render(request, "purchases/purchaseorderlist.html", context=context)
-    
+@login_required(login_url='tenant:login')   
 def edit_purchase_order(request, pk):
         purchase_order_item = PurchaseOrder.objects.get(pk=pk)
         request.session['active_purchase_order'] = purchase_order_item.id
@@ -313,7 +314,7 @@ def edit_purchase_order(request, pk):
         
 
 
-
+@login_required(login_url='tenant:login')
 def delete_purchaseorder2(request,pk):
     purchaseorder = PurchaseOrder.objects.get(pk=pk)
     del request.session['active_purchase_order']
@@ -323,7 +324,7 @@ def delete_purchaseorder2(request,pk):
     return redirect('purchases:purchaseorderlist')
 
 
-
+@login_required(login_url='tenant:login')
 def recieve_order(request, pk):
     purchase_order_item = PurchaseOrder.objects.get(pk=pk)
     context = {
@@ -338,7 +339,7 @@ def recieve_order(request, pk):
 
 
 
-
+@login_required(login_url='tenant:login')
 def preview_as_pdf2(request,pk):
     purchaseorder = PurchaseOrder.objects.get(id=pk)
     tenant=get_tenant(request)
@@ -364,7 +365,7 @@ def preview_as_pdf2(request,pk):
     return response
    
    
-
+@login_required(login_url='tenant:login')
 def receive_stock_process(request, pk):
     purchase_order = get_object_or_404(PurchaseOrder, id=pk)
     if request.method == 'POST':
@@ -393,7 +394,7 @@ def receive_stock_process(request, pk):
 
 
 
-
+@login_required(login_url='tenant:login')
 def recieve_all_stock(request, pk):
     purchase_order = get_object_or_404(PurchaseOrder, id=pk)
     orderedproduct = OrderedProduct.objects.filter(purchase_order=purchase_order.id)
@@ -404,7 +405,7 @@ def recieve_all_stock(request, pk):
     messages.success(request, 'All items recievd succesfully')
     return redirect(reverse('purchases:recieve_order',args=[pk]))      
 
-
+@login_required(login_url='tenant:login')
 def send_purhase_order_as_email(request, pk):
     purchaseorder = PurchaseOrder.objects.get(id=request.session.get('active_purchase_order'))
     tenant=get_tenant(request)
@@ -440,7 +441,7 @@ def send_purhase_order_as_email(request, pk):
     messages.success(request, 'Purchase Order sent  succesfully')
     return redirect('purchases:order') 
             
-    
+@login_required(login_url='tenant:login')   
 def get_costprice_of_package(request):
     package_id = request.GET.get('package_id', None)
 

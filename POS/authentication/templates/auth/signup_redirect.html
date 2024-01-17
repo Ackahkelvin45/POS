@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Verification</title>
+    <style>
+      body {
+        /*    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+        color: #333;
+      }
+
+      header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      section {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #007bff;
+      }
+
+      p {
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #videoLink {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      #videoLink:hover {
+        text-decoration: underline;
+      }
+    </style>
+    {% load static %}
+  </head>
+  <body>
+    <header>
+      <h1>Account Verification</h1>
+    </header>
+
+    <section>
+      <h2>Thank you for choosing us!</h2>
+
+      <img
+        class="h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-indigo-600"
+        src="{% static 'img/upgrade.pn'%}"
+        alt=""
+        height="300"
+        width="300"
+      />
+      <p>Please allow up to 24 hours for our team to verify your account.</p>
+      <p>Once verified, you can get started on your service needs.</p>
+      <p>We’ve prepared a quick intro video to help you get started:</p>
+      <a href="#" id="videoLink" onclick="watchVideo()">Watch the video</a>
+      <p>
+        Thanks,<br />
+        SAMSOFT PHARMACIES
+      </p>
+    </section>
+
+    <script>
+      function watchVideo() {
+        // Add your logic here to open the video or redirect to the video page
+        alert("Redirecting to the intro video...");
+      }
+    </script>
+  </body>
+</html>

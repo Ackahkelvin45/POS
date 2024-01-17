@@ -58,16 +58,6 @@ SHARED_APPS = [
 
 
 TENANT_APPS = [
-    
-    'product',
-    'tenant',
-    'users',
-    'suppliers',
-    'purchases',
-    'stock', 
-    'settings',
-    'sales',
-    'report',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,6 +67,16 @@ TENANT_APPS = [
     'django_tenants',
     'tailwind',
     'theme',
+    'product',
+    'tenant',
+    'users',
+    'suppliers',
+    'purchases',
+    'stock', 
+    'settings',
+    'sales',
+    'report',
+
     'django_browser_reload',
     ]
 
@@ -88,9 +88,15 @@ INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in S
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
-TAILWIND_APP_NAME='theme'
+
+TAILWIND_APP_NAME = 'theme'
+
+
 STATIC_URL = 'theme/static/'
+
+
 MIDDLEWARE = [
     'django_tenants.middleware.main.TenantMainMiddleware',
     'tenant.middleware.VerifyTenantMiddleware',
@@ -163,6 +169,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST_USER ='samsoftpharmacies@gmail.com' 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'kttt knuc mcvd wpsu'
+EMAIL_USE_TLS = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -193,11 +206,7 @@ AUTH_USER_MODEL= "authentication.User"
 PUBLIC_SCHEMA_URLCONF = "main.urls"
 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_PORT='587'
-EMAIL_HOST_USER='fooseplug835@gmail.com'
-EMAIL_HOST_PASSWORD='edls nnhm ooag zfhj'
-EMAIL_USE_TLS=True
+
+
 
 os.environ['WKHTMLTOPDF_BIN'] = "C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"

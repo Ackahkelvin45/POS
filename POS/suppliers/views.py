@@ -10,16 +10,16 @@ from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django_tenants.utils import get_tenant
 import pdfkit
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-
+@login_required(login_url='tenant:login')
 def showAddSuppliers(request):
     context = {"supplierform": SupplierForm}
 
     return render(request, "suppliers/addsuppliers.html", context=context)
 
-
+@login_required(login_url='tenant:login')
 def addSuppliersProcess(request):
     if request.method == "POST":
         supplierform = SupplierForm(request.POST)
@@ -35,14 +35,14 @@ def addSuppliersProcess(request):
         request, "suppliers/addsuppliers.html", {"supplierform": supplierform}
     )
 
-
+@login_required(login_url='tenant:login')
 def supplierslist(request):
     context = {"suppliers": Supplier.objects.all().order_by("-id")}
     return render(request, "suppliers/supplierslist.html", context=context)
 
 
 
-
+@login_required(login_url='tenant:login')
 def export_suppliers_as_pdf(request):
     template = get_template('suppliers/suppliers_pdf.html')  
     html_content = template.render({
@@ -67,7 +67,7 @@ def export_suppliers_as_pdf(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def delete_supplier(request, pk):
     if Supplier.objects.filter(id=pk).exists():
         supplier =Supplier.objects.get(id=pk)
@@ -79,7 +79,7 @@ def delete_supplier(request, pk):
 
 
 
-
+@login_required(login_url='tenant:login')
 def edit_supplier(request, pk):
     if Supplier.objects.filter(id=pk).exists():
         supplier = Supplier.objects.get(id=pk)
@@ -91,7 +91,7 @@ def edit_supplier(request, pk):
         }
         return render(request, 'suppliers/addsuppliers.html', context=context)
         
-
+@login_required(login_url='tenant:login')
 def edit_supplier_process(request, pk):
     if request.method == "POST":
         if Supplier.objects.filter(id=pk).exists():

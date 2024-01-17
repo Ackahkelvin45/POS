@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from .models import AppSettings,EmailBackend
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 # Create your views here.
-
+@login_required(login_url='tenant:login')
 def showEmailSettings(request):
     context = {
         "emailbackendform": EmailbackendForm(),
@@ -15,7 +16,7 @@ def showEmailSettings(request):
 
 
 
-
+@login_required(login_url='tenant:login')
 def editEmailSettings(request, pk):
     
     email=EmailBackend.objects.get(id=pk)
@@ -28,7 +29,7 @@ def editEmailSettings(request, pk):
     return render(request, "settings/email_settings.html", context=context)
 
 
-    
+@login_required(login_url='tenant:login')    
 def showGeneralSettings(request):
     setting=AppSettings.objects.first()
     context = {
@@ -40,7 +41,7 @@ def showGeneralSettings(request):
     
 
 
-    
+@login_required(login_url='tenant:login')   
 def showSalesSettings(request):
     setting=AppSettings.objects.first()
     context = {
@@ -52,7 +53,7 @@ def showSalesSettings(request):
     
 
 
-
+@login_required(login_url='tenant:login')
 def edit_email_process(request,pk):
     if request.method == "POST":
         email=EmailBackend.objects.get(id=pk)
@@ -68,7 +69,7 @@ def edit_email_process(request,pk):
         messages.error(request,emailbackendform.errors)
         return redirect('settings:emailsettings')
             
-
+@login_required(login_url='tenant:login')
 def add_email_process(request):
     if request.method == "POST":
         emailbackendform = EmailbackendForm(request.POST)
@@ -82,7 +83,8 @@ def add_email_process(request):
                 return redirect('settings:emailsettings')
         messages.error(request,emailbackendform.errors)
         return redirect('settings:emailsettings')
-            
+
+@login_required(login_url='tenant:login')           
 def change_settings(request):
     if request.method == 'POST':
         setting=AppSettings.objects.first()
@@ -94,7 +96,7 @@ def change_settings(request):
         messages.error(request,"try again")
         return redirect('settings:salessettings')
         
-
+@login_required(login_url='tenant:login')
 def change_general_settings(request):
     if request.method == 'POST':
         setting=AppSettings.objects.first()

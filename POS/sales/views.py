@@ -15,11 +15,12 @@ from datetime import datetime
 from django.utils import timezone
 from settings.models import AppSettings
 from django.views import View
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
-
+@login_required(login_url='tenant:login')
 def show_add_sales(request):
     sale = request.session.get('active_sale')
     setting = AppSettings.objects.first()
@@ -53,7 +54,9 @@ def show_add_sales(request):
         }
  
     return render(request, 'sales/addsales.html',context=context)
-    
+
+
+@login_required(login_url='tenant:login')
 def show_sales_history(request):
     context = {
         "sales":Sale.objects.filter(status="completed").order_by('-id')
@@ -87,7 +90,7 @@ class GetProductCostView(View):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
-
+@login_required(login_url='tenant:login')
 def search_product(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name', '')
@@ -103,6 +106,8 @@ def search_product(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+@login_required(login_url='tenant:login')
 def order_item(request, pk):
     product = Product_Item.objects.get(pk=pk)
     saleform = SaleProductForm(initial={'product': product})
@@ -116,7 +121,7 @@ def order_item(request, pk):
     }
     return render(request, 'sales/addsales.html', context=context)
 
-
+@login_required(login_url='tenant:login')
 def sell_item(request):
     
     sale= request.session.get('active_sale')
@@ -184,7 +189,7 @@ def sell_item(request):
    
 
         
-
+@login_required(login_url='tenant:login')
 def delete_sale_product(request, pk):
     product = SaleProduct.objects.get(pk=pk)
     sale=product.sale
@@ -202,7 +207,7 @@ def delete_sale_product(request, pk):
         messages.success(request,'product removed successfully')
         return redirect('sales:add_sales')
 
-
+@login_required(login_url='tenant:login')
 def update_quantity(request,pk):
     if request.method == "POST":
         quantity=request.POST['quantity']
@@ -217,7 +222,7 @@ def update_quantity(request,pk):
         messages.success(request,'product updated successfully')
         return redirect('sales:add_sales')
     
-
+@login_required(login_url='tenant:login')
 def add_discount(request):
     if request.method == 'POST':
         discount=request.POST['discountpercentage']
@@ -234,7 +239,7 @@ def add_discount(request):
 
 
 
-    
+@login_required(login_url='tenant:login')    
 def create_tax(request):
     if request.method == 'POST':
         sale = request.session.get('active_sale')
@@ -256,7 +261,7 @@ def create_tax(request):
         return redirect('sales:add_sales')
 
 
-
+@login_required(login_url='tenant:login')
 def add_tax(request, pk):
     sale = request.session.get('active_sale')
     if Sale.objects.filter(pk=sale).exists():
@@ -273,6 +278,7 @@ def add_tax(request, pk):
     messages.error(request,"can not add tax")
     return redirect('sales:add_sales')
 
+@login_required(login_url='tenant:login')
 def remove_tax(request, pk):
     sale = request.session.get('active_sale')
     if Sale.objects.filter(pk=sale).exists():
@@ -287,7 +293,7 @@ def remove_tax(request, pk):
 
 
 
-
+@login_required(login_url='tenant:login')
 def add_payment(request):
     if request.method=="POST":
         sale = request.session.get('active_sale')
@@ -318,7 +324,7 @@ def add_payment(request):
 
         
 
-
+@login_required(login_url='tenant:login')
 def pause_sale(request):
     sale = request.session.get('active_sale')
     if Sale.objects.filter(pk=sale).exists():
@@ -335,7 +341,7 @@ def pause_sale(request):
     return redirect('sales:add_sales')
 
 
-
+@login_required(login_url='tenant:login')
 def showpausedsale(request):
     context = {
         "sales": PausedSale.objects.all(),
@@ -344,14 +350,14 @@ def showpausedsale(request):
     return render(request,"sales/pausedsales.html",context=context)
 
 
-
+@login_required(login_url='tenant:login')
 def resume_sale(request, pk):
     if Sale.objects.filter(pk=pk).exists():
             request.session['active_sale'] = pk
             return redirect('sales:add_sales')
 
 
-    
+@login_required(login_url='tenant:login')    
 def complete_sale(request):
     if request.method == 'POST':
 
@@ -427,7 +433,7 @@ def complete_sale(request):
         return redirect('sales:add_sales')
    
 
-
+@login_required(login_url='tenant:login')
 def view_sale_details(request, pk):
     sale_item = Sale.objects.get(pk=pk)
     context = {
@@ -437,7 +443,7 @@ def view_sale_details(request, pk):
     return render(request,"sales/saledetails.html",context=context)
 
 
-
+@login_required(login_url='tenant:login')
 def receipt(request, pk):
     if 'active_sale' in request.session:
         del request.session['active_sale']
@@ -472,6 +478,7 @@ def receipt(request, pk):
     response['Content-Disposition'] = 'inline; filename="preview.pdf"'
     return response
 
+@login_required(login_url='tenant:login')
 def delete_sale(request):
     if  Sale.objects.filter(pk=request.session.get('active_sale')).exists():
         sale= Sale.objects.get(pk=request.session.get('active_sale'))

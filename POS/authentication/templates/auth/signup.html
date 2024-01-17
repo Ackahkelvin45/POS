@@ -10,7 +10,163 @@
     <title>Document</title>
     
 </head>
-<body class="w-full h-full ">
+
+<body class="w-full h-full 
+{% if messages %}
+{%for message in messages%}
+
+{% if message.tags == 'success'%} 
+overflow-hidden
+
+{%endif%}
+{%endfor%}
+{%endif%}"
+>
+    {% if messages %}
+    {%for message in messages%}
+
+    {% if message.tags == "success"%}
+    <style>
+        .body{
+         /*    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+         margin: 0;
+         padding: 0;
+         background-color: #f8f8f8;
+         color: #333;
+       }
+ 
+       header {
+         background-color: #007bff;
+         color: #fff;
+         padding: 20px 0;
+         text-align: center;
+       }
+ 
+       section {
+         max-width: 800px;
+         margin: 20px auto;
+         background-color: #fff;
+         padding: 30px;
+         border-radius: 8px;
+         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+         text-align: center;
+       }
+ 
+       h2 {
+         color: #007bff;
+       }
+ 
+       p {
+         line-height: 1.6;
+         margin-bottom: 10px;
+       }
+ 
+       button {
+         background-color: #007bff;
+         color: #fff;
+         padding: 12px 24px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 16px;
+       }
+ 
+       button:hover {
+         background-color: #0056b3;
+       }
+ 
+       #videoLink {
+         color: #007bff;
+         text-decoration: none;
+         font-weight: bold;
+       }
+ 
+       #videoLink:hover {
+         text-decoration: underline;
+       }
+     </style>
+   <div class="body absolute  w-screen  h-screen z-50  overflow-x-hidden overflow-y-scroll my-64                                                                            ">
+       <header>
+         <h1 class="font-bold text-3xl">Account Verification</h1>
+       </header>
+   
+       <section class="">
+         <h2>Thank you for choosing us!</h2>
+   <div class="w-full justify-center items-center flex ">
+         <img
+           class="w-80 h-80"
+           src="{% static 'img/upgrade.png'%}"
+           alt=""
+         
+         />
+        </div>
+         <p>Please allow up to 24 hours for our team to verify your account.</p>
+         <p>Once verified, you can get started on your service needs.</p>
+         <p>We’ve prepared a quick intro video to help you get started:</p>
+         <a href="#" id="videoLink" onclick="watchVideo()">Watch the video</a>
+         <p>
+           Thanks,<br />
+           SAMSOFT PHARMACIES
+         </p>
+       </section>
+   
+       <script>
+         function watchVideo() {
+           // Add your logic here to open the video or redirect to the video page
+           alert("Redirecting to the intro video...");
+         }
+       </script>
+     </div>
+    
+    <!-- Modal  -->
+  
+        {%else%}
+        <div class="w-full h-full" id="modal-box" >
+            <div id="modal-bg" class="w-full h-full bg-gray-700 top-0 absolute hidden"></div>
+            <div class="sm:w-[385px]  z-50  sm:min-w-[40vw] min-w-[80vw] min-h-[50vh] flex flex-col items-center gap-2 -translate-y-1/2 p-6 bg-[#FFFFEB] rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
+            
+              <i class="mdi mdi-cancel  text-red-400 text-lg"></i>
+              
+            
+           
+              <span class="text-2xl font-medium text-center">
+              
+                Error
+             
+                </span>
+              <p class="text-center flex justify-center items-center">
+                 
+                  {{message}}
+                  </p>
+                  
+                  <br>
+                  
+              <button id="modal-close" type="reset" class="p-3 bg-[#4F46E5] rounded-lg w-full text-white">OK</button>
+            </div>
+          </div>
+          
+          <script> 
+              const modalbg = document.getElementById('modal-bg');
+              
+              const modalBox = document.getElementById('modal-box');
+              const modalClose = document.getElementById('modal-close');
+              modalbg.addEventListener("click", function() {
+                modalBox.classList.toggle('hidden')
+                modalbg.classList.toggle('hidden')
+              });
+           
+              modalClose.addEventListener("click", function() {
+                modalBox.classList.toggle('hidden')
+                modalbg.classList.toggle('hidden')
+              });
+              </script>
+        {%endif%}
+    
+        {%endfor%}
+        {%endif%}
+
+
+
     <div class="h-[115vh] md:flex">
         <div
             class="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
@@ -137,61 +293,10 @@
 <!-- component -->
 <script src="https://cdn.tailwindcss.com/"></script>
 
-{% if messages %}
-{%for message in messages%}
 
 
-<!-- Modal  -->
-<div class="w-full h-full" id="modal-box" >
-  <div id="modal-bg" class="w-full h-full bg-gray-700 top-0 absolute hidden"></div>
-  <div class="sm:w-[385px]  z-50  sm:min-w-[40vw] min-w-[80vw] min-h-[50vh] flex flex-col items-center gap-2 -translate-y-1/2 p-6 bg-[#FFFFEB] rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
-    {%if message.tags == "success"%}
-    <svg xmlns="http://www.w3.org/2000/svg" class="text-[#059669] mx-auto h-11 rounded-full bg-[#edf6f1] w-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 13l4 4L19 7" />
-    </svg>
-    {%else%}
-    <i class="mdi mdi-cancel  text-red-400 text-lg"></i>
-    
-    {%endif%}
- 
-    <span class="text-2xl font-medium text-center">
-        {%if message.tags == "success"%}
-      Registration successful!
-      {% else %}
-      Error
-     {%endif%}
-      </span>
-    <p class="text-center flex justify-center items-center">
-       
-        {{message}}
-        </p>
-        
-        <br>
-        {% if message.tags == "success" %}
-        You will receive an email once your account has been verified.</p>
-        {%endif%}
-    <button id="modal-close" type="reset" class="p-3 bg-[#4F46E5] rounded-lg w-full text-white">OK</button>
-  </div>
-</div>
 
-<script>
-    const modalbg = document.getElementById('modal-bg');
-    
-    const modalBox = document.getElementById('modal-box');
-    const modalClose = document.getElementById('modal-close');
-    modalbg.addEventListener("click", function() {
-      modalBox.classList.toggle('hidden')
-      modalbg.classList.toggle('hidden')
-    });
- 
-    modalClose.addEventListener("click", function() {
-      modalBox.classList.toggle('hidden')
-      modalbg.classList.toggle('hidden')
-    });
-    </script>
 
-    {%endfor%}
-    {%endif%}
 
 </body>
 </html>
