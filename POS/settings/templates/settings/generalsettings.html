@@ -18,7 +18,7 @@
 {% if message.tags == 'success'%}
 
       
-        <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800 absolute z-50  right-5" role="alert">
+        <div id="alert" class="  flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50  absolute z-50  right-5" role="alert">
            
             <svg   class="flex-shrink-0 w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <path d="M8.445 12.6675A.9.9 0 0 0 7.1424 13.91l2.5726 2.7448c.3679.3856.9884.3689 1.335-.036l5.591-7.0366a.9.9 0 0 0-1.3674-1.1705l-4.6548 5.9132a.4.4 0 0 1-.607.0252l-1.567-1.6826zM1.9995 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z"></path>
@@ -26,7 +26,7 @@
             <div class="ml-3 text-sm font-medium">
               {{message}}
             </div>
-            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-0  p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" id="close">
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-0  p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 "  data-dismiss-target="#alert-border-3" id="close">
               <span class="sr-only">Dismiss</span>
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -35,14 +35,14 @@
         </div>
 
         {%else%}
-        <div id="alert" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800  absolute z-50  right-5" role="alert">
+        <div id="alert" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50  absolute z-50  right-5" role="alert">
             <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
             </svg>
             <div class="ml-3 text-sm font-medium">
               {{message}}
             </div>
-            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg   p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" id="close">
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg   p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8"  data-dismiss-target="#alert-border-2" id="close">
               <span class="sr-only">Dismiss</span>
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -56,18 +56,18 @@
     <div class="rounded-3xl  border h-fit border-indigo-200  mx-4 mb-4 ">
       
         <div class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 ">
-            <button type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
+            <a href="{% url 'settings:salessettings'%}" type="button" class="relative w-[20%] max-md:w-[30%]  max-vs:w-[50%]  flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
             
-                <i class="mdi mdi-plus text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">permissions</span>
-             </button>
+                <i class="mdi mdi-point-of-sale  text-white text-base"></i>
+                <span class="pl-2 mx-1 text-xs text-white">sale settings</span>
+             </a>
 
           
         </div>
      <!-- component -->
 <!-- component -->
 <div class=" mb-4 pb-10 px-8 max-vs:px-2  mx-4">
-    <div class="text-gray-700 my-2">Sales Settings</div>
+    <div class="text-gray-700 my-2">General Settings</div>
     <hr class="h-[1px] w-full bg-gray-600 mb-2"/>
 
 
@@ -75,8 +75,8 @@
     <div class="relative overflow-x-auto">
         <form class="w-full " method="post" action="{% url 'settings:change_general_settings'%}">
             {% csrf_token %}
-        <table class="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-600 ">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                       Setting
@@ -94,7 +94,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr class="bg-white border-b ">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900  ">
                        Allow typeahead
                     </th>

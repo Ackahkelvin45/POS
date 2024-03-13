@@ -3088,6 +3088,10 @@ select {
 }
 
 @media not all and (min-width: 768px) {
+  .max-md\:h-1\/5 {
+    height: 20%;
+  }
+
   .max-md\:w-\[30\%\] {
     width: 30%;
   }
@@ -3128,6 +3132,10 @@ select {
 
   .max-sm\:items-end {
     align-items: flex-end;
+  }
+
+  .max-sm\:justify-center {
+    justify-content: center;
   }
 
   .max-sm\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -3239,6 +3247,10 @@ select {
     display: block;
   }
 
+  .sm\:flex {
+    display: flex;
+  }
+
   .sm\:w-\[385px\] {
     width: 385px;
   }
@@ -3249,6 +3261,10 @@ select {
 
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sm\:items-center {
+    align-items: center;
   }
 
   .sm\:justify-between {

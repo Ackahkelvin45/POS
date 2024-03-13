@@ -11,7 +11,7 @@ class VerifyTenantMiddleware(TenantMainMiddleware):
     def process_request(self, request):
         tenant = get_tenant(request)       
         try:
-            if not tenant.is_verified and tenant.name != "public" :
+            if not tenant.is_verified and tenant.name != "public":
                 return HttpResponseForbidden("This pharmacy is not verified. Access denied.")
         except tenant.DoesNotExist:
             return HttpResponseForbidden("No tenant found for this domain. Access denied.")

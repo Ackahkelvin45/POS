@@ -52,7 +52,8 @@ def signupprocess(request):
                     pharmacy.is_mainbranch = True
                     name = pharmacy.name.replace("-", "")
                     name = name.replace(" ", "")
-                    pharmacy.schema_name = name
+                    pharmacy.schema_name = name.lower()
+                    pharmacy.name=pharmacy.name.lower()
                     pharmacy.save()
                     user.set_password(password1)
                     user.save()

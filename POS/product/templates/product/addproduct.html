@@ -14,13 +14,13 @@
     <div
       class="w-full flex flex-row py-2 bg-gray-200 rounded-t-3xl px-8 space-x-4 flex-wrap"
     >
-      <button
-        type="button"
+      <a href="{% url 'product:unitpage' %}"
+        
         class="relative  my-1 flex justify-center items-center px-2 py-1 text-white bg-indigo-700 rounded-md focus:outline-none"
       >
         <i class="mdi mdi-plus text-white text-base max-sm:text-xs"></i>
-        <span class=" mx-1 text-xs text-white">Add Product</span>
-      </button>
+        <span class=" mx-1 text-xs text-white">Add Unit</span>
+      </a>
 
       <a href="{% url 'product:productlist' %}"
        
@@ -92,9 +92,9 @@
               >
               <div class="flex">
                 {{ form.category }}
-                <div class="-ml-1 p-2 h-full bg-indigo-600 rounded-r-lg z-20">
+                <a href="{% url 'product:categorypage' %}" class="-ml-1 p-2 h-full bg-indigo-600 rounded-r-lg z-20">
                   <i class="mdi mdi-plus text-white text-lg"></i>
-                </div>
+                </a>
               </div>
             </div>
           </div>
@@ -106,9 +106,9 @@
               >
               <div class="flex">
                 {{form.subcategory}}
-                <div class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
+                <a href="{% url 'product:subcategorypage' %}" class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
                   <i class="mdi mdi-plus text-white text-lg "></i>
-                </div>
+                </a>
               </div>
             </div>
           </div>
@@ -120,9 +120,9 @@
               >
               <div class="flex">
                 {{ form.item_unit}}
-                <div class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
+                <a href="{% url 'product:unitpage' %}" class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
                   <i class="mdi mdi-plus text-white text-lg  "></i>
-                </div>
+                </a>
               </div>
             </div>
           </div>
@@ -134,9 +134,9 @@
               >
               <div class="flex ">
                 {{ form.supplier }}
-                <div class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
+                <a href="{% url 'suppliers:add_supplier' %}" class="p-2 h-full bg-indigo-600 rounded-r-lg -ml-1 z-20">
                   <i class="mdi mdi-plus text-white text-lg "></i>
-                </div>
+                </a>
               </div>
             </div>
           </div>
@@ -249,7 +249,7 @@
                   {%else%}
                   {{ form.product_image.product_image }}
                   {%endif%}
-                  <!-- <input id="dropzone-file" type="file" class="hidden" /> -->
+                  <input id="dropzone-file" type="file" class="hidden" /> 
                 </label>
               </div>
               <div class="relative flex flex-col w-fit mt-2  ">

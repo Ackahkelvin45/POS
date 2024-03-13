@@ -35,12 +35,14 @@ SECRET_KEY = 'django-insecure-(z_5po9msb6&$oy7csz4y%e^d=9rc+nh@*m^s2@x%r^w$#!73o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('ENVIRONMENT') == 'DEV' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 SHARED_APPS = [
+    "daphne",
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,16 +56,20 @@ SHARED_APPS = [
     'main',
     'POS',
     "authentication",
+   
 ]
 
 
 TENANT_APPS = [
+     "daphne",
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+  
     'django_tenants',
     'tailwind',
     'theme',
@@ -76,8 +82,10 @@ TENANT_APPS = [
     'settings',
     'sales',
     'report',
-
+    'accounts',
+    'notifications',
     'django_browser_reload',
+    
     ]
 
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
@@ -94,7 +102,7 @@ NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 TAILWIND_APP_NAME = 'theme'
 
 
-STATIC_URL = 'theme/static/'
+
 
 
 MIDDLEWARE = [
@@ -129,7 +137,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'POS.wsgi.application'
-
+ASGI_APPLICATION = "POS.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -207,6 +215,11 @@ PUBLIC_SCHEMA_URLCONF = "main.urls"
 
 
 
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 os.environ['WKHTMLTOPDF_BIN'] = "C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"
+

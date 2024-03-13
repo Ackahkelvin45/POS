@@ -61,7 +61,7 @@ def edit_email_process(request,pk):
         if emailbackendform.is_valid():
             try :
                 emailbackend = emailbackendform.save()
-                messages.success(request,'Eamil editted successfully')
+                messages.success(request,'Email editted successfully')
                 return redirect('settings:emailsettings')
             except ValidationError as e:
                 messages.error(request,str(e))

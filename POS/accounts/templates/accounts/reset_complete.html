@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Verification</title>
+    <style>
+      body {
+        /*    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+        color: #333;
+      }
+
+      header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 3px 0;
+        text-align: center;
+        font-family: sans-serif;
+      }
+
+      section {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #007bff;
+      }
+
+      p {
+        line-height: 1.6;
+        margin-bottom: 5px;
+      }
+
+      button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #videoLink {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      #videoLink:hover {
+        text-decoration: underline;
+      }
+    </style>
+    {% load static %}
+  </head>
+  <body>
+    <header>
+      <h3>Password Reset Complete</h3>
+    </header>
+
+    <section>
+    
+      <img
+        class="h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-indigo-600"
+        src="{% static 'img/done.png'%}"
+        alt=""
+        height="200"
+        width="200"
+      />
+      <p>Your passed word has been set .You may go ahead and login now</p>
+      <a href="{% url 'tenant:login'%}" class="button-4" role="button">login</a>
+    </section>
+ <!-- HTML !-->
+
+<style>
+
+
+
+/* CSS */
+.button-4 {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button-4:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button-4:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button-4:focus {
+  outline: 1px transparent;
+}
+
+.button-4:before {
+  display: none;
+}
+
+.button-4:-webkit-details-marker {
+  display: none;
+}
+</style>
+  </body>
+</html>

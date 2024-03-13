@@ -64,12 +64,7 @@
                 <span class="pl-2 mx-1 text-xs text-white">Add Supplier</span>
              </a>
 
-             <a href="{% url 'suppliers:suppliers_list'%}"
-             type="button" class="relative flex justify-center items-center px-2 py-1  text-white   bg-indigo-700 rounded-md   focus:outline-none   ">
-            
-                <i class="mdi mdi-view-module-outline text-white text-base"></i>
-                <span class="pl-2 mx-1 text-xs text-white">Supplier list</span>
-             </a>
+         
         </div>
      <!-- component -->
 <!-- component -->
@@ -250,6 +245,12 @@ document.getElementById("close").addEventListener("click",(item)=>{
 
 }
 
+$(document).ready( function () {
+    $('.myTable').DataTable({
+      "order": []
+    });
+} );
+
 </script>
 <style>
     /* preloader.css */
@@ -301,4 +302,7 @@ img {
 }
 
 </style>
+<style >
+    .dataTables_length select{width: 100px !important;}
+ </style>
 {%endblock%}

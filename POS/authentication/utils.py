@@ -18,8 +18,6 @@ def create_admin_group(pharmacy):
 
     return admin_group.id 
 
-
-
 def send_verification_email(user):
     template = render_to_string("auth/email_message.html", {"name": user.first_name})
     email = EmailMessage(

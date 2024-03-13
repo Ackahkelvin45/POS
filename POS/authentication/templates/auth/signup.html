@@ -121,7 +121,7 @@ overflow-hidden
     <!-- Modal  -->
   
         {%else%}
-        <div class="w-full h-full" id="modal-box" >
+        <div class="w-full h-full hidden" id="modal-box" >
             <div id="modal-bg" class="w-full h-full bg-gray-700 top-0 absolute hidden"></div>
             <div class="sm:w-[385px]  z-50  sm:min-w-[40vw] min-w-[80vw] min-h-[50vh] flex flex-col items-center gap-2 -translate-y-1/2 p-6 bg-[#FFFFEB] rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
             
@@ -180,7 +180,7 @@ overflow-hidden
             <div class="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
         </div>
         <div class="flex md:w-1/2 justify-center  items-center bg-white h-full   overflow-hidden">
-            <form  class="w-[90%] h-full  flex justify-center items-center flex-col  " method="post"  action="{% url 'auth:signup_process'%}">
+            <form  class="w-[90%] h-full  flex justify-center items-center flex-col" method="post"  action="{% url 'auth:signup_process'%}">
                 <div>
                     {% csrf_token%}
                 <div class="flex -mx-3">
@@ -277,7 +277,7 @@ overflow-hidden
                    
                 <div class="flex -mx-3">
                     <div class="w-full px-3 ">
-                        <button type="submit" class="block w-full max-w-xs mx-auto text-sm bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">JOIN US</button>
+                        <button value="submit" type="submit" class="block w-full max-w-xs mx-auto text-sm bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">JOIN US</button>
                     </div>
                 </div>
             </div>
@@ -287,11 +287,8 @@ overflow-hidden
     
  
 
-    <style>
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css');
-    </style>
-<!-- component -->
-<script src="https://cdn.tailwindcss.com/"></script>
+   
+
 
 
 
